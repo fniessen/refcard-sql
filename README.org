@@ -5,7 +5,7 @@
 #+DESCRIPTION:
 #+KEYWORDS:  sql, emacs, yasnippet, snippets, code templates
 #+LANGUAGE:  en
-#+OPTIONS:   H:4 num:nil toc:2
+#+OPTIONS:   H:4 num:nil toc:3
 #+EXCLUDE_TAGS: noexport
 
 #+PROPERTY:  header-args :eval never :padline no :tangle yes
@@ -22,7 +22,161 @@ http://www.red-gate.com/products/sql-development/sql-prompt/
 
 /cygdrive/c/Users/f.niessen/AppData/Local/Red Gate/SQL Prompt 7/Snippets/
 
-* SQL YASnippets
+* Sqsh
+
+#+name: current-year
+#+begin_src emacs-lisp :eval yes :results silent :tangle no :exports none
+(format-time-string "%Y")
+#+end_src
+
+#+begin_src conf :tangle ~/.sqshrc
+# Hey Emacs, this is a -*- conf -*- file
+## .sqshrc - My sqsh initialization file
+
+# Copyright (C) 2013-<<current-year()>> Fabrice Niessen
+
+# Author: Fabrice Niessen <(concat "fni" at-symbol "pirilampo.org")>
+# Keywords: sqsh, dotfile, config
+
+#* Connections
+
+# Setting your password within your `.sqshrc' is probably the most secure method
+# of using sqsh.  However, make sure that you `chmod go-rwx ~/.sqshrc',
+# otherwise you leave yourself wide open to attacks.
+
+\set username="sa"
+\set password="mysecret"
+\set hostname="localhost"
+\set database=[ARCHIBUS_23_2_HQ]
+
+#* Aliasing
+
+#** Display styles
+
+# \set colsep='| '
+
+# Currently supported styles are:
+# - horiz (or hor or horizontal) (*) = default
+# - vert (or vertical) (*),
+# - bcp,
+# - csv,
+# - html,
+# - meta,
+# - pretty (*), and
+# - none.
+
+\alias goh='\go -m horiz | ${PAGER}'
+
+\alias gov='\go -m vert | ${PAGER}'
+
+# *Very* useful for doing quick bcp commands from command line, and using
+# re-direction directly to a file!
+\alias gob='\go -m bcp | ${PAGER}'
+
+# Firefox.
+\alias gof='\go -m html | (cat > /tmp/sqsh-output.html; /mnt/c/Windows/explorer.exe file:///tmp/sqsh-output.html)'
+
+\alias gom='\go -m meta | ${PAGER}'
+
+\alias gop='\go -m pretty -w80 | ${PAGER}'
+
+#** Aliases for T-SQL commands
+
+\alias statson='\loop -e "SET STATISTICS IO ON; SET STATISTICS TIME ON"'
+\alias statsoff='\loop -e "SET STATISTICS IO OFF; SET STATISTICS TIME OFF"'
+
+\alias planon='\loop -e "SET SHOWPLAN ON"'
+\alias planoff='\loop -e "SET SHOWPLAN OFF"'
+
+\alias ton='\loop -e "DBCC TRACEON(3604)"'
+\alias toff='\loop -e "DBCC TRACEOFF(3604)"'
+
+\alias tempdb='\loop -e "USE tempdb"'
+\alias master='\loop -e "USE master"'
+
+#** Aliases for sqsh commands
+
+\alias DEV='\reconnect -SDEV -Usa -Pmysecret'
+\alias STG='\reconnect -SSTG -Usa -Pmysecret'
+\alias PRD='\reconnect -c -SPRD -Usa -Pmysecret'
+
+# Clear screen within sqsh session.
+\alias clear="\shell clear"
+
+# Read a file into sqsh session.
+\alias :r='\buf-load -a !*'
+\alias r="\buf-load "
+
+# Drop you into a shell out of sqsh.
+\alias sh="\shell "
+
+\alias h="\history"
+
+\alias xx='\reset'
+
+\alias q="\exit"
+
+#* Miscellaneous
+
+# Turn off the sqsh banner; cosmetic only
+\set banner=no
+
+\set width=65535
+
+# Have semicolons executing commands (sort of inline "go")...
+\set semicolon_hack=on
+
+# Turn on ability to have !-recall commands.
+\set history_shorthand=on
+
+# This variable causes sqsh to exit with an exit status of the total number of
+# batches that failed during the current session.  This is useful for use within
+# shell scripts and the such.
+\set exit_failcount=on
+
+\set prompt_color='{0;34;47}'
+\set text_color='{0;33}'
+\set prompt='$prompt_color{{$username@$DSQUERY:$database}}>$text_color '
+
+# This is for the sake of Emacs.
+# Local Variables:
+# mode: outline-minor
+# End:
+
+## .sqshrc ends here
+#+end_src
+
+* Mssql-cli
+
+** Features
+
+New and interactive command line query tool for SQL Server. This open source
+tool works cross-platform and is a proud member of the dbcli community.
+
+Features
+- Mssql-cli auto-completion that is context aware
+- T-SQL IntelliSense
+- Syntax highlighting
+- Pretty formatting for query results, including Vertical Format
+- Multi-line edit mode
+- Configuration file support
+
+https://cloudblogs.microsoft.com/sqlserver/2017/12/12/try-mssql-cli-a-new-interactive-command-line-tool-for-sql-server/
+
+** Setup
+
+#+begin_src shell :tangle no
+sudo apt install python-pip python-dev
+sudo pip install --upgrade pip
+sudo pip install mssql-cli
+#+end_src
+
+#+begin_src shell :tangle no
+mssql-cli -E
+kinit.exe user@domain.com
+#+end_src
+
+* Emacs YASnippets
 
 A *SQL snippet* is a frequently used *code template* which can be inserted into
 a code you are typing by pressing the TAB key.
