@@ -20,7 +20,77 @@ http://www.red-gate.com/products/sql-development/sql-prompt/
 
 ** TODO Look at RedGate snippets
 
-/cygdrive/c/Users/f.niessen/AppData/Local/Red Gate/SQL Prompt 7/Snippets/
+=/cygdrive/c/Users/f.niessen/AppData/Local/Red Gate/SQL Prompt 7/Snippets/=
+
+* Help
+
+** [d] Describe object
+
+List or describe database objects. Calls ~sp_help~.
+
+#+begin_src sql
+EXEC sp_help '${1:object}';
+#+end_src
+
+** [ld] List Databases
+
+List databases.
+
+** [lf] List Functions
+
+List functions.
+
+** [li] List Indexes
+
+List indexes.
+
+#+begin_src sql
+SELECT
+    t.name                              AS "TableName",
+    i.name                              AS "IndexName",
+    col.name                            AS "ColumnName",
+    i.index_id                          AS "IndexId",
+    ic.index_column_id                  AS "ColumnId"
+FROM sys.indexes                        i
+INNER JOIN sys.index_columns            ic
+    ON i.object_id = ic.object_id AND i.index_id = ic.index_id
+INNER JOIN sys.columns                  col
+    ON ic.object_id = col.object_id AND ic.column_id = col.column_id
+INNER JOIN sys.tables                   t
+    ON i.object_id = t.object_id
+WHERE i.is_primary_key = 0
+    AND i.is_unique = 0
+    AND i.is_unique_constraint = 0
+    AND t.is_ms_shipped = 0
+    AND i.name LIKE '%%'                -- Index name.
+ORDER BY
+    t.name,
+    i.name,
+    i.index_id,
+    ic.index_column_id;
+#+end_src
+
+A *comma-separated list* of index columns could be an improvement...
+
+** [ll] List Logins
+
+List logins and associated roles.
+
+** [ls] List Schemas
+
+List schemas.
+
+** [lt] List Tables
+
+List tables.
+
+** [lv] List Views
+
+List views.
+
+** [sf] Show Function
+
+Show a function's definition.
 
 * Sqsh
 
