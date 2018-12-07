@@ -36,6 +36,30 @@ EXEC sp_help '${1:object}';
 
 List databases.
 
+#+begin_src sql
+SELECT
+    name,
+    create_date,
+    compatibility_level,
+    collation_name
+FROM sys.databases
+WHERE name LIKE '%%';
+#+end_src
+
+A *collation* consists of an enumeration of data and their equivalence to deduce
+therefrom the processing behavior of the strings especially in the *comparison*
+and *sorting* operations.
+
+- *Code Page --* 1-4 digit number specifying code page.
+- *Case Sensitivity --* CS = case sensitive, CI = insensitive.
+- *Accent Sensitivity --* AI = accent insensitive, AS = accent sensitive.
+
+Collation ~SQL_Latin1_General_CP1_CI_AI~:
+
+- CP1 = Code Page 1252, that is Latin(ANSI).
+- Case-Insensitive.
+- Accent-Insensitive.
+
 ** [lf] List Functions
 
 List functions.
@@ -71,6 +95,58 @@ ORDER BY
 #+end_src
 
 A *comma-separated list* of index columns could be an improvement...
+
+*** List unused indexes
+
+#+begin_src sql
+USE MASTER;
+GO
+GRANT VIEW SERVER STATE TO afm;
+#+end_src
+
+#+begin_src sql
+SELECT
+    OBJECT_NAME(s.object_id)            AS "table_name",
+    i.name                              AS "index_name",
+    i.index_id,
+    user_seeks + user_scans + user_lookups AS "reads",
+    user_updates                        AS "writes",
+    SUM(p.rows)                         AS "rows",
+    last_user_update
+FROM sys.dm_db_index_usage_stats        s
+JOIN sys.indexes                        i
+    ON s.object_id = i.object_id AND i.index_id = s.index_id
+JOIN sys.partitions                     p
+    ON s.object_id = p.object_id AND p.index_id = s.index_id
+WHERE OBJECTPROPERTY(s.object_id, 'IsUserTable') = 1
+    AND s.index_id > 0
+    AND s.database_id = DB_ID() -- Database ID of the current database.
+    AND user_seeks + user_scans + user_lookups = 0
+GROUP BY
+    OBJECT_NAME(s.object_id),
+    i.name,
+    i.index_id,
+    user_seeks + user_scans + user_lookups,
+    user_updates,
+    last_user_update
+ORDER BY
+    writes DESC,
+    reads ASC;
+#+end_src
+
+If you see indexes where:
+
+- there are no seeks, scans or lookups, but
+- there are updates,
+
+this means that SQL Server has not used the index to satisfy a query but still
+needs to maintain the index.
+
+#+begin_tip
+Remember that the data from these DMVs is reset when SQL Server is restarted, so
+make sure you have collected data for a long enough period of time to determine
+which indexes may be good candidates to be dropped.
+#+end_tip
 
 ** [ll] List Logins
 
@@ -152,8 +228,8 @@ Show a function's definition.
 
 #** Aliases for T-SQL commands
 
-\alias statson='\loop -e "SET STATISTICS IO ON; SET STATISTICS TIME ON"'
-\alias statsoff='\loop -e "SET STATISTICS IO OFF; SET STATISTICS TIME OFF"'
+\alias statson='\loop -e "SET STATISTICS IO ON; SET STATISTICS TIME ON;"'
+\alias statsoff='\loop -e "SET STATISTICS IO OFF; SET STATISTICS TIME OFF;"'
 
 \alias planon='\loop -e "SET SHOWPLAN ON"'
 \alias planoff='\loop -e "SET SHOWPLAN OFF"'
