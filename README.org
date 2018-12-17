@@ -175,7 +175,7 @@ Show a function's definition.
 (format-time-string "%Y")
 #+end_src
 
-#+begin_src conf :tangle ~/.sqshrc
+#+begin_src conf :tangle ~/.dotfiles/home/.sqshrc
 # Hey Emacs, this is a -*- conf -*- file
 ## .sqshrc - My sqsh initialization file
 
@@ -227,10 +227,42 @@ Show a function's definition.
 \alias gop='\go -m pretty -w80 | ${PAGER}'
 
 #** Aliases for T-SQL commands
+#+end_src
 
+#+begin_src conf :tangle ~/.dotfiles/home/.sqshrc
 \alias statson='\loop -e "SET STATISTICS IO ON; SET STATISTICS TIME ON;"'
 \alias statsoff='\loop -e "SET STATISTICS IO OFF; SET STATISTICS TIME OFF;"'
+#+end_src
 
+SQL Server Execution Time: This refers to the time taken by SQL server to
+complete the execution of the compiled plan.
+
+*CPU time* refers to the actual time spent on CPU.
+
+The *elapsed time* is the total time to complete the execution which includes
+signal wait time, wait time to complete the IO operation and time taken to
+transfer the output to the client.
+
+*CPU time* is really where you want to pay attention for *performance tuning*, as it
+can be
+- higher than the *elapsed time* if the query goes parallel, or
+- lower if the procedure spends time sleeping on wait signals and I/O
+  operations.
+
+The *CPU time* can be used to baseline the performance tuning. This value will not
+vary much from execution to execution unless you modify the query or data. The
+load on the server will not impact much on this value.
+
+The *elapsed time* will depend on many factors, like load on the server, IO load,
+network bandwidth between server and client.
+
+So always use the CPU time as baseline while doing the performance tuning.
+
+Want to *format your output* online in a web browser?  The [[http://statisticsparser.com/index.html][Statistics Parser]] will
+help with that. Just paste in the output of Statistics IO and/or Statistics Time
+and press Parse. Your output will be formatted and totaled. Enjoy.
+
+#+begin_src conf :tangle ~/.dotfiles/home/.sqshrc
 \alias planon='\loop -e "SET SHOWPLAN ON"'
 \alias planoff='\loop -e "SET SHOWPLAN OFF"'
 
