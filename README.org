@@ -33,7 +33,7 @@ http://www.red-gate.com/products/sql-development/sql-prompt/
 # Hey Emacs, this is a -*- conf -*- file
 ## .sqshrc - My sqsh initialization file
 
-# Copyright (C) 2013-<<current-year()>> Fabrice Niessen
+# Copyright (C) 2010-<<current-year()>> Fabrice Niessen
 
 # Author: Fabrice Niessen <(concat "fni" at-symbol "pirilampo.org")>
 # Keywords: sqsh, dotfile, config
@@ -858,26 +858,82 @@ which indexes may be good candidates to be dropped.
 
 List logins and associated roles.
 
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/ll.yasnippet
+# name: List Logins
+# --
+SELECT
+    name,
+    type_desc,
+    default_database_name,
+    type,
+    create_date
+FROM sys.server_principals
+WHERE type_desc = 'SQL_LOGIN'
+    AND name LIKE '%%'
+ORDER BY name;
+#+end_src
+
 **** [ls] List Schemas
 
 List schemas.
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/ls.yasnippet
+# name: List Schemas
+# --
+SELECT
+    name,
+    schema_id,
+    principal_id
+FROM sys.schemas
+WHERE name LIKE '%%'
+#+end_src
 
 **** [lt] List Tables
 
 List tables.
 
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/lt.yasnippet
+# name: List Tables
+# --
+SELECT
+    TABLE_CATALOG,
+    TABLE_SCHEMA,
+    TABLE_NAME,
+    TABLE_TYPE
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_TYPE = 'BASE TABLE'
+    AND TABLE_NAME LIKE '%%';
+#+end_src
+
 **** [lv] List Views
 
 List views.
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/lv.yasnippet
+# name: List Views
+# --
+SELECT
+    table_catalog AS catalog,
+    TABLE_SCHEMA AS schema_name,
+    TABLE_NAME AS view_name
+FROM INFORMATION_SCHEMA.VIEWS
+WHERE TABLE_NAME LIKE '%%';
+#+end_src
 
 **** [sf] Show Function
 
 Show a function's definition.
 
-**** [sis] Search In Schema
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/sf.yasnippet
+# name: Show Function
+# --
+SELECT OBJECT_DEFINITION(OBJECT_ID('${1:funcname}'));
+#+end_src
+
+**** [sis] Search In Sources
 
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/sis.yasnippet
-# name: Search in schema
+# name: Search In Sources
 # --
 /*
 This is an easy way to look through the sources of all objects in the database
