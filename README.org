@@ -22,152 +22,6 @@ http://www.red-gate.com/products/sql-development/sql-prompt/
 
 =/cygdrive/c/Users/f.niessen/AppData/Local/Red Gate/SQL Prompt 7/Snippets/=
 
-* Help
-
-** [d] Describe object
-
-List or describe database objects. Calls ~sp_help~.
-
-#+begin_src sql
-EXEC sp_help '${1:object}';
-#+end_src
-
-** [ld] List Databases
-
-List databases.
-
-#+begin_src sql
-SELECT
-    name,
-    create_date,
-    compatibility_level,
-    collation_name
-FROM sys.databases
-WHERE name LIKE '%%';
-#+end_src
-
-A *collation* consists of an enumeration of data and their equivalence to deduce
-therefrom the processing behavior of the strings especially in the *comparison*
-and *sorting* operations.
-
-- *Code Page --* 1-4 digit number specifying code page.
-- *Case Sensitivity --* CS = case sensitive, CI = insensitive.
-- *Accent Sensitivity --* AI = accent insensitive, AS = accent sensitive.
-
-Collation ~SQL_Latin1_General_CP1_CI_AI~:
-
-- CP1 = Code Page 1252, that is Latin(ANSI).
-- Case-Insensitive.
-- Accent-Insensitive.
-
-** [lf] List Functions
-
-List functions.
-
-** [li] List Indexes
-
-List indexes.
-
-#+begin_src sql
-SELECT
-    t.name                              AS "TableName",
-    i.name                              AS "IndexName",
-    col.name                            AS "ColumnName",
-    i.index_id                          AS "IndexId",
-    ic.index_column_id                  AS "ColumnId"
-FROM sys.indexes                        i
-INNER JOIN sys.index_columns            ic
-    ON i.object_id = ic.object_id AND i.index_id = ic.index_id
-INNER JOIN sys.columns                  col
-    ON ic.object_id = col.object_id AND ic.column_id = col.column_id
-INNER JOIN sys.tables                   t
-    ON i.object_id = t.object_id
-WHERE i.is_primary_key = 0
-    AND i.is_unique = 0
-    AND i.is_unique_constraint = 0
-    AND t.is_ms_shipped = 0
-    AND i.name LIKE '%%'                -- Index name.
-ORDER BY
-    t.name,
-    i.name,
-    i.index_id,
-    ic.index_column_id;
-#+end_src
-
-A *comma-separated list* of index columns could be an improvement...
-
-*** List unused indexes
-
-#+begin_src sql
-USE MASTER;
-GO
-GRANT VIEW SERVER STATE TO afm;
-#+end_src
-
-#+begin_src sql
-SELECT
-    OBJECT_NAME(s.object_id)            AS "table_name",
-    i.name                              AS "index_name",
-    i.index_id,
-    user_seeks + user_scans + user_lookups AS "reads",
-    user_updates                        AS "writes",
-    SUM(p.rows)                         AS "rows",
-    last_user_update
-FROM sys.dm_db_index_usage_stats        s
-JOIN sys.indexes                        i
-    ON s.object_id = i.object_id AND i.index_id = s.index_id
-JOIN sys.partitions                     p
-    ON s.object_id = p.object_id AND p.index_id = s.index_id
-WHERE OBJECTPROPERTY(s.object_id, 'IsUserTable') = 1
-    AND s.index_id > 0
-    AND s.database_id = DB_ID() -- Database ID of the current database.
-    AND user_seeks + user_scans + user_lookups = 0
-GROUP BY
-    OBJECT_NAME(s.object_id),
-    i.name,
-    i.index_id,
-    user_seeks + user_scans + user_lookups,
-    user_updates,
-    last_user_update
-ORDER BY
-    writes DESC,
-    reads ASC;
-#+end_src
-
-If you see indexes where:
-
-- there are no seeks, scans or lookups, but
-- there are updates,
-
-this means that SQL Server has not used the index to satisfy a query but still
-needs to maintain the index.
-
-#+begin_tip
-Remember that the data from these DMVs is reset when SQL Server is restarted, so
-make sure you have collected data for a long enough period of time to determine
-which indexes may be good candidates to be dropped.
-#+end_tip
-
-** [ll] List Logins
-
-List logins and associated roles.
-
-** [ls] List Schemas
-
-List schemas.
-
-** [lt] List Tables
-
-List tables.
-
-** [lv] List Views
-
-List views.
-
-** [sf] Show Function
-
-Show a function's definition.
-
 * Sqsh
 
 #+name: current-year
@@ -240,8 +94,9 @@ complete the execution of the compiled plan.
 *CPU time* refers to the actual time spent on CPU.
 
 The *elapsed time* is the total time to complete the execution which includes
-signal wait time, wait time to complete the IO operation and time taken to
-transfer the output to the client.
+- signal wait time,
+- wait time to complete the IO operation and
+- time taken to transfer the output to the client.
 
 *CPU time* is really where you want to pay attention for *performance tuning*, as it
 can be
@@ -356,8 +211,9 @@ kinit.exe user@domain.com
 
 * Emacs YASnippets
 
-A *SQL snippet* is a frequently used *code template* which can be inserted into
-a code you are typing by pressing the TAB key.
+A *SQL "snippet"* (or auto-replacement) is a frequently used *code template* which
+can be inserted into a code you are typing by pressing the TAB key.  It allows
+you to write frequently used SQL commands more quickly.
 
 Snippets are categorized into 2 types:
 
@@ -367,6 +223,11 @@ Snippets are categorized into 2 types:
 
 - *Surround Snippets:* These are code templates that help you implement code
   constructs such as ~BEGIN...END~, ~IF~, ~WHILE~ and so on.
+
+See https://github.com/gvohra/sqlpromptsnippets or sharing the best Red Gate SQL
+Prompt snippets.
+
+https://www.ssmsboost.com/
 
 ** Insert Snippet...
 
@@ -588,6 +449,14 @@ GROUP BY $0
 ORDER BY $0
 #+end_src
 
+**** [upd] Update
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/upd.yasnippet
+# name: UPDATE fragment
+# --
+UPDATE $0 SET WHERE
+#+end_src
+
 **** [df] Delete From
 
 Delete statement.
@@ -597,6 +466,30 @@ Delete statement.
 # --
 DELETE FROM ${1:[schema].[table_name]}
 WHERE $0
+#+end_src
+
+**** [deci] Declare Int
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/deci.yasnippet
+# name: DECLARE int fragment
+# --
+DECLARE @$0 int
+#+end_src
+
+**** [decv] Declare Varchar
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/decv.yasnippet
+# name: DECLARE varchar fragment
+# --
+DECLARE @$0 varchar(256)
+#+end_src
+
+**** [now] Now
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/now.yasnippet
+# name: Now fragment
+# --
+'{Timestamp:yyyy-MM-dd HH:mm:ss.fff}'
 #+end_src
 
 **** [be] Begin...End
@@ -827,6 +720,215 @@ ALTER FUNCTION $0
 # name: Drop function
 # --
 DROP FUNCTION $0
+#+end_src
+
+*** Help
+
+**** [d] Describe object
+
+List or describe database objects. Calls ~sp_help~.
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/d.yasnippet
+# name: Describe object
+# --
+EXEC sp_help '${1:object}';
+#+end_src
+
+**** [ld] List Databases
+
+List databases.
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/ld.yasnippet
+# name: List Databases
+# --
+SELECT
+    name,
+    create_date,
+    compatibility_level,
+    collation_name
+FROM sys.databases
+WHERE name LIKE '%%';
+#+end_src
+
+A *collation* consists of an enumeration of data and their equivalence to deduce
+therefrom the processing behavior of the strings especially in the *comparison*
+and *sorting* operations.
+
+- *Code Page --* 1-4 digit number specifying code page.
+- *Case Sensitivity --* CS = case sensitive, CI = insensitive.
+- *Accent Sensitivity --* AI = accent insensitive, AS = accent sensitive.
+
+Collation ~SQL_Latin1_General_CP1_CI_AI~:
+
+- CP1 = Code Page 1252, that is Latin(ANSI).
+- Case-Insensitive.
+- Accent-Insensitive.
+
+**** [lf] List Functions
+
+List functions.
+
+**** [li] List Indexes
+
+List indexes.
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/li.yasnippet
+# name: List Indexes
+# --
+SELECT
+    t.name                              AS "TableName",
+    i.name                              AS "IndexName",
+    col.name                            AS "ColumnName",
+    i.index_id                          AS "IndexId",
+    ic.index_column_id                  AS "ColumnId"
+FROM sys.indexes                        i
+INNER JOIN sys.index_columns            ic
+    ON i.object_id = ic.object_id AND i.index_id = ic.index_id
+INNER JOIN sys.columns                  col
+    ON ic.object_id = col.object_id AND ic.column_id = col.column_id
+INNER JOIN sys.tables                   t
+    ON i.object_id = t.object_id
+WHERE i.is_primary_key = 0
+    AND i.is_unique = 0
+    AND i.is_unique_constraint = 0
+    AND t.is_ms_shipped = 0
+    AND i.name LIKE '%%'                -- Index name.
+ORDER BY
+    t.name,
+    i.name,
+    i.index_id,
+    ic.index_column_id;
+#+end_src
+
+A *comma-separated list* of index columns could be an improvement...
+
+***** List unused indexes
+
+#+begin_src sql :tangle no
+USE MASTER;
+GO
+GRANT VIEW SERVER STATE TO afm;
+#+end_src
+
+#+begin_src sql :tangle no
+SELECT
+    OBJECT_NAME(s.object_id)            AS "table_name",
+    i.name                              AS "index_name",
+    i.index_id,
+    user_seeks + user_scans + user_lookups AS "reads",
+    user_updates                        AS "writes",
+    SUM(p.rows)                         AS "rows",
+    last_user_update
+FROM sys.dm_db_index_usage_stats        s
+JOIN sys.indexes                        i
+    ON s.object_id = i.object_id AND i.index_id = s.index_id
+JOIN sys.partitions                     p
+    ON s.object_id = p.object_id AND p.index_id = s.index_id
+WHERE OBJECTPROPERTY(s.object_id, 'IsUserTable') = 1
+    AND s.index_id > 0
+    AND s.database_id = DB_ID() -- Database ID of the current database.
+    AND user_seeks + user_scans + user_lookups = 0
+GROUP BY
+    OBJECT_NAME(s.object_id),
+    i.name,
+    i.index_id,
+    user_seeks + user_scans + user_lookups,
+    user_updates,
+    last_user_update
+ORDER BY
+    writes DESC,
+    reads ASC;
+#+end_src
+
+If you see indexes where:
+
+- there are no seeks, scans or lookups, but
+- there are updates,
+
+this means that SQL Server has not used the index to satisfy a query but still
+needs to maintain the index.
+
+#+begin_tip
+Remember that the data from these DMVs is reset when SQL Server is restarted, so
+make sure you have collected data for a long enough period of time to determine
+which indexes may be good candidates to be dropped.
+#+end_tip
+
+**** [ll] List Logins
+
+List logins and associated roles.
+
+**** [ls] List Schemas
+
+List schemas.
+
+**** [lt] List Tables
+
+List tables.
+
+**** [lv] List Views
+
+List views.
+
+**** [sf] Show Function
+
+Show a function's definition.
+
+**** [sis] Search In Schema
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/sis.yasnippet
+# name: Search in schema
+# --
+/*
+This is an easy way to look through the sources of all objects in the database
+if you need to find particular string. This script can be used, for example,
+to find references of some specific object by other objects. Depending on the
+size of your database you might want to limit the search scope to particular
+object type. Just comment unneeded object types in WHERE statement.
+Enter search string between %% marks in @SearchPattern initialisation statement.
+When you get the results you can copy object name from "FullName" column and
+use SSMSBoost to quickly locate it in the object explorer, or you can continue
+searching in results using "Find in ResultsGrid" function.
+
+This script is provided to you by SSMSBoost as is. Improvements and comments are welcome.
+Redistribution with reference to SSMSBoost project website is welcome.
+SSMSBoost team, 2014
+*/
+DECLARE @SearchPattern NVARCHAR(128);
+
+SET @SearchPattern = '%$0%';
+
+SELECT
+    SCHEMA_NAME(o.schema_id) AS [schema],
+    o.[name],
+    o.[type],
+    '['+SCHEMA_NAME(o.schema_id)+'].['+o.[name]+']' AS [FullName],
+    OBJECT_DEFINITION(object_id) AS [Source]
+FROM sys.objects AS o
+WHERE LOWER(OBJECT_DEFINITION(o.object_id)) LIKE LOWER(@SearchPattern)
+    AND o.[type] IN (
+    'C', --- = Check constraint
+    'D', --- = Default (constraint or stand-alone)
+    'P', --- = SQL stored procedure
+    'FN', --- = SQL scalar function
+    'R', --- = Rule
+    'RF', --- = Replication filter procedure
+    'TR', --- = SQL trigger (schema-scoped DML trigger, or DDL trigger at either the database or server scope)
+    'IF', --- = SQL inline table-valued function
+    'TF', --- = SQL table-valued function
+    'V') --- = View
+UNION ALL
+SELECT
+    SCHEMA_NAME(q.schema_id) AS [schema],
+    q.[name],
+    'SQ' AS [type],
+    '['+SCHEMA_NAME(q.schema_id)+'].['+q.[name]+']' AS [FullName],
+    activation_procedure AS [Source]
+FROM sys.service_queues q
+WHERE q.activation_procedure LIKE LOWER(@SearchPattern)
+ORDER BY
+    o.[type],
+    o.[name];
 #+end_src
 
 *** Index
