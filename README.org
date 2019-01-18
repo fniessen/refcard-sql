@@ -229,6 +229,8 @@ Prompt snippets.
 
 https://www.ssmsboost.com/
 
+https://www.ssmstoolspack.com/Download
+
 ** Insert Snippet...
 
 *** Cursor
@@ -275,7 +277,7 @@ Create database.
 USE master
 go
 
--- Drop the database if it already exists
+-- Drop the database if it already exists.
 IF EXISTS (SELECT name
         FROM sys.databases
         WHERE name = N'${1:database_name}')
@@ -317,14 +319,14 @@ Create snapshot.
 USE master
 go
 
--- Drop snapshot database if it already exists
+-- Drop snapshot database if it already exists.
 IF EXISTS (SELECT name
         FROM sys.databases
         WHERE name = N'${1:source_database}_${2:snapshot_id}')
     DROP DATABASE $1_$2
 go
 
--- Create the snapshot database
+-- Create the snapshot database.
 CREATE DATABASE $1_$2 ON
 ( NAME = $1_$2_data,
   FILENAME = '$1_$2.ss')
@@ -340,7 +342,7 @@ go$0
 USE master
 go
 
--- Drop the database if it already exists
+-- Drop the database if it already exists.
 IF EXISTS (SELECT name
         FROM sys.databases
         WHERE name = N'${1:database_name}')
@@ -401,7 +403,20 @@ INSERT INTO $0
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/ssf.yasnippet
 # name: SELECT * FROM frag...
 # --
-SELECT * FROM $0
+SELECT *
+FROM $0
+WHERE
+#+end_src
+
+**** [sst] Select Top 10
+
+Select top 10 rows.
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/sst.yasnippet
+# name: SELECT top 10 rows
+# --
+SELECT TOP 10 *
+FROM $0
 #+end_src
 
 **** [st100] Select Top 100
@@ -422,8 +437,16 @@ Count number of records returned by query.
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/scf.yasnippet
 # name: Count number of rec...
 # --
-SELECT COUNT(*) FROM $0
+SELECT FORMAT(COUNT(*),'#,##0') FROM $0
 #+end_src
+
+**** [num]
+
+FORMAT($CURSOR$,'#,##0')
+
+**** [smf]
+
+SELECT SUM($CURSOR$) FROM
 
 **** [is] INFORMATION_SCHEMA
 
@@ -431,6 +454,30 @@ SELECT COUNT(*) FROM $0
 # name: INFORMATION_SCH...
 # --
 INFORMATION_SCHEMA$0
+#+end_src
+
+**** [lk] Like
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/lk.yasnippet
+# name: LIKE fragment
+# --
+LIKE '%$0%'
+#+end_src
+
+**** [today] Today
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/today.yasnippet
+# name: Today fragment
+# --
+CAST(GETDATE() AS DATE)
+#+end_src
+
+**** [now] Now
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/now.yasnippet
+# name: Now fragment
+# --
+`(format-time-string "'%Y-%m-%d %H:%M:%S.%3N'")`
 #+end_src
 
 **** [gb] Group By
@@ -454,7 +501,9 @@ ORDER BY $0
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/upd.yasnippet
 # name: UPDATE fragment
 # --
-UPDATE $0 SET WHERE
+UPDATE $0
+SET
+WHERE
 #+end_src
 
 **** [df] Delete From
@@ -467,6 +516,18 @@ Delete statement.
 DELETE FROM ${1:[schema].[table_name]}
 WHERE $0
 #+end_src
+
+**** [lin]
+
+to split up code
+
+**** [linn]
+
+as above, with space for commentary
+
+**** [header]
+
+as above, with even  more space
 
 **** [deci] Declare Int
 
@@ -482,14 +543,6 @@ DECLARE @$0 int
 # name: DECLARE varchar fragment
 # --
 DECLARE @$0 varchar(256)
-#+end_src
-
-**** [now] Now
-
-#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/now.yasnippet
-# name: Now fragment
-# --
-'{Timestamp:yyyy-MM-dd HH:mm:ss.fff}'
 #+end_src
 
 **** [be] Begin...End
@@ -1407,7 +1460,9 @@ ALTER TABLE $0
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/ata.yasnippet
 # name: Add column
 # --
-ALTER TABLE ${1:[schema].[table_name]} ADD [${2:column_name}] ${3:data_type} ${4:column_nullability};
+-- Add a new column to the table.
+ALTER TABLE ${1:[schema].[table_name]}
+    ADD [${2:new_column_name}] ${3:data_type} ${4:new_column_nullability};
 go$0
 #+end_src
 
@@ -1431,7 +1486,9 @@ go
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/atd.yasnippet
 # name: Drop column
 # --
-ALTER TABLE ${1:[schema].[table_name]} DROP COLUMN $0;
+-- Drop a column from the table.
+ALTER TABLE ${1:[schema].[table_name]}
+    DROP COLUMN $0;
 go
 #+end_src
 
