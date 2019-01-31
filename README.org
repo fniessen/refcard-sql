@@ -390,12 +390,37 @@ go
 
 *** Fragment
 
+**** [cr] Create
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/cr.yasnippet
+# name: Create fragment
+# --
+CREATE $0
+#+end_src
+
+**** [i] Insert
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/i.yasnippet
+# name: INSERT fragment
+# --
+INSERT
+#+end_src
+
 **** [ii] Insert Into
 
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/ii.yasnippet
 # name: INSERT INTO fragment
 # --
-INSERT INTO $0
+INSERT INTO $0 ()
+VALUES ()
+#+end_src
+
+**** [s] Select
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/s.yasnippet
+# name: SELECT fragment
+# --
+SELECT
 #+end_src
 
 **** [ssf] Select Star From
@@ -437,16 +462,34 @@ Count number of records returned by query.
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/scf.yasnippet
 # name: Count number of rec...
 # --
-SELECT FORMAT(COUNT(*),'#,##0') FROM $0
+SELECT FORMAT(COUNT(*), '#,##0')
+FROM $0
 #+end_src
 
-**** [num]
+**** [num] Format Number
 
-FORMAT($CURSOR$,'#,##0')
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/num.yasnippet
+# name: Format number
+# --
+FORMAT($0,'#,##0')
+#+end_src
 
-**** [smf]
+**** [smf] Select Sum From
 
-SELECT SUM($CURSOR$) FROM
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/smf.yasnippet
+# name: SELECT SUM(*) FROM...
+# --
+SELECT SUM($0)
+FROM
+#+end_src
+
+**** [f] From
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/f.yasnippet
+# name: FROM fragment
+# --
+FROM
+#+end_src
 
 **** [is] INFORMATION_SCHEMA
 
@@ -454,6 +497,14 @@ SELECT SUM($CURSOR$) FROM
 # name: INFORMATION_SCH...
 # --
 INFORMATION_SCHEMA$0
+#+end_src
+
+**** [w] Where
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/w.yasnippet
+# name: WHERE fragment
+# --
+WHERE $0
 #+end_src
 
 **** [lk] Like
@@ -488,12 +539,36 @@ CAST(GETDATE() AS DATE)
 GROUP BY $0
 #+end_src
 
+**** [ha] Having
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/ha.yasnippet
+# name: HAVING fragment
+# --
+HAVING
+#+end_src
+
 **** [ob] Order By
 
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/ob.yasnippet
 # name: ORDER BY fragment
 # --
 ORDER BY $0
+#+end_src
+
+**** [rwn] Row Number
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/rwn.yasnippet
+# name: ROW_NUMBER fragment
+# --
+ROW_NUMBER() OVER(PARTITION BY  ORDER BY )
+#+end_src
+
+**** [up] Update
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/up.yasnippet
+# name: UPDATE fragment
+# --
+UPDATE $0
 #+end_src
 
 **** [upd] Update
@@ -506,6 +581,14 @@ SET
 WHERE
 #+end_src
 
+**** [d] Delete
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/d.yasnippet
+# name: DELETE frag...
+# --
+DELETE
+#+end_src
+
 **** [df] Delete From
 
 Delete statement.
@@ -515,6 +598,16 @@ Delete statement.
 # --
 DELETE FROM ${1:[schema].[table_name]}
 WHERE $0
+#+end_src
+
+**** [tt] Truncate Table
+
+Truncate statement.
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/tt.yasnippet
+# name: TRUNCATE fragment
+# --
+TRUNCATE TABLE $0
 #+end_src
 
 **** [lin]
@@ -591,6 +684,22 @@ BEGIN
 END
 #+end_src
 
+**** [ex] Exists
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/ex.yasnippet
+# name: EXISTS fragment
+# --
+EXISTS
+#+end_src
+
+**** [nex] Not Exists
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/nex.yasnippet
+# name: NOT EXISTS fragment
+# --
+NOT EXISTS
+#+end_src
+
 **** If Exists
 
 Perform an operation if a selected object exists.
@@ -633,6 +742,14 @@ WITH ${1:cte_name} AS
 SELECT $0
 FROM $1;
 go
+#+end_src
+
+**** [wtf] What The Fuck
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/wtf.yasnippet
+# name: WTF fragment
+# --
+WTF???!??!  AAAAAARRRRRRRRRRGGGGGGGGHHHHHHHHHHHHHHHHHHH!!!!!!!!!!!!!!!!!!
 #+end_src
 
 *** Function
@@ -1042,18 +1159,27 @@ ORDER BY
 
 *** Index
 
-**** [cni] Create Non-Clustered Index
+**** [crunq] Create Unique Index
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/crunq.yasnippet
+# name: Create unique index
+# --
+CREATE UNIQUE INDEX unq_$0
+ON
+#+end_src
+
+**** [cni] Create Non-Clustered Index (crnci)
 
 Creates a basic, non-clustered index.
 
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/cni.yasnippet
 # name: Create non-unique n...
 # --
-IF EXISTS (SELECT name FROM sys.indexes WHERE name = N'${3:index_name}')
-    DROP INDEX $3 ON ${1:[schema].[owner_name]};
+IF EXISTS (SELECT name FROM sys.indexes WHERE name = N'nci_${3:index_name}')
+    DROP INDEX nci_$3 ON ${1:[schema].[owner_name]};
 go
 
-CREATE NONCLUSTERED INDEX $3
+CREATE NONCLUSTERED INDEX nci_$3
 ON $1 (${2:column})
 --WITH PAD_INDEX
 --    | FILLFACTOR = fillfactor
@@ -1073,11 +1199,11 @@ Creates a unique, non-clustered index.
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/cuni.yasnippet
 # name: Create unique nonclu...
 # --
-IF EXISTS (SELECT name FROM sys.indexes WHERE name = N'${3:index_name}')
-    DROP INDEX $3 ON ${1:[schema].[owner_name]};
+IF EXISTS (SELECT name FROM sys.indexes WHERE name = N'unq_${3:index_name}')
+    DROP INDEX unq_$3 ON ${1:[schema].[owner_name]};
 go
 
-CREATE UNIQUE NONCLUSTERED INDEX $3
+CREATE UNIQUE NONCLUSTERED INDEX unq_$3
 ON $1 (${2:column})
 --WITH
 --    PAD_INDEX,
@@ -1086,21 +1212,21 @@ ON $1 (${2:column})
 --    DROP_EXISTING = OFF,
 --    STATISTICS_NORECOMPUTE,
 --    SORT_IN_TEMPDB = OFF, .. as required
-ON ${3:filegroup_name}
+ON ${4:filegroup_name}
 go
 $0
 #+end_src
 
-**** [cci] Create Clustered Index
+**** [cci] Create Clustered Index (crci)
 
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/cci.yasnippet
 # name: Create non-unique cl...
 # --
-IF EXISTS (SELECT name FROM sys.indexes WHERE name = N'${3:index_name}')
-    DROP INDEX $3 ON ${1:[schema].[owner_name]};
+IF EXISTS (SELECT name FROM sys.indexes WHERE name = N'ci_${3:index_name}')
+    DROP INDEX ci_$3 ON ${1:[schema].[owner_name]};
 go
 
-CREATE CLUSTERED INDEX $3
+CREATE CLUSTERED INDEX ci_$3
 ON $1 (${2:column})
 --WITH PAD_INDEX
 --    | FILLFACTOR = fillfactor
@@ -1120,15 +1246,15 @@ Create index full syntax.
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/cuci.yasnippet
 # name: Create unique cluster...
 # --
-IF EXISTS (SELECT name FROM sys.indexes WHERE name = N'${3:index_name}')
-    DROP INDEX $3 ON ${1:[schema].[owner_name]};
+IF EXISTS (SELECT name FROM sys.indexes WHERE name = N'unq_${3:index_name}')
+    DROP INDEX unq_$3 ON ${1:[schema].[owner_name]};
 go
 
-CREATE UNIQUE CLUSTERED INDEX $3
+CREATE UNIQUE CLUSTERED INDEX unq_$3
 ON $1 (${2:column})
 WITH
 PAD_INDEX,
-FILLFACTOR = ${3:fillfactor_value},
+FILLFACTOR = ${5:fillfactor_value},
 IGNORE_DUP_KEY,
 DROP_EXISTING,
 STATISTICS_NORECOMPUTE
@@ -1147,6 +1273,14 @@ DROP INDEX $0
 #+end_src
 
 *** Join fragment
+
+**** [j] Join
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/j.yasnippet
+# name: JOIN fragment
+# --
+JOIN $0
+#+end_src
 
 **** [cj] Cross Join
 
@@ -1427,7 +1561,7 @@ go$0
 
 *** Table
 
-**** [ct] Create Table
+**** [ct] Create Table (crt)
 
 Creates a table (and drop previous one with the same name).
 
@@ -1445,6 +1579,33 @@ CREATE TABLE $1
     CONSTRAINT /* contraint_name */ PRIMARY KEY (/* columns_in_primary_key */)
 );
 go
+#+end_src
+
+**** [ctt] Create Temporary Table (crtt)
+
+Creates a temporary table.
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/ctt.yasnippet
+# name: Create temp table
+# --
+CREATE TABLE #temp
+(
+    $0
+);
+go
+#+end_src
+
+**** [ctv] Create Table Variable (crtv)
+
+Creates a table variable.
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/ctv.yasnippet
+# name: Create table var
+# --
+DECLARE @tbl TABLE
+(
+    $0
+)
 #+end_src
 
 **** [at] Alter Table fragment
@@ -1466,7 +1627,7 @@ ALTER TABLE ${1:[schema].[table_name]}
 go$0
 #+end_src
 
-**** [atac] modify Column
+**** [atac] Modify Column
 
 #+begin_warning
 Running ~ALTER COLUMN~ without mentioning attribute ~NOT NULL~ will result in the
@@ -1477,7 +1638,8 @@ column being changed to *nullable*, if it is already not.
 # name: Modify column
 # --
 -- WARNING: If the column is not nullable, specify attribute NOT NULL.
-ALTER TABLE ${1:[schema].[table_name]} ALTER COLUMN $0;
+ALTER TABLE ${1:[schema].[table_name]}
+    ALTER COLUMN $0;
 go
 #+end_src
 
@@ -1492,13 +1654,13 @@ ALTER TABLE ${1:[schema].[table_name]}
 go
 #+end_src
 
-**** Add Constraint
+**** [crc] Add Constraint
 
-#+begin_src sql :tangle no
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/crc.yasnippet
 # name: Add constraint
 # --
 ALTER TABLE ${1:[schema].[table_name]}
-ADD CONSTRAINT ${2:constraint_name};
+    ADD CONSTRAINT ${2:constraint_name};
 go
 #+end_src
 
@@ -1508,7 +1670,7 @@ go
 # name: Drop constraint
 # --
 ALTER TABLE ${1:[schema].[table_name]}
-DROP CONSTRAINT ${2:constraint_name};
+    DROP CONSTRAINT ${2:constraint_name};
 go
 #+end_src
 
@@ -1517,7 +1679,6 @@ go
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/dt.yasnippet
 # name: Drop table
 # --
-
 IF EXISTS (SELECT *
              FROM sys.tables
              JOIN sys.schemas
@@ -1729,6 +1890,14 @@ DROP VIEW $0
 
 *** --- Miscellaneous ---
 
+**** [e] Execute
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/e.yasnippet
+# name: EXECUTE fragment
+# --
+EXECUTE
+#+end_src
+
 **** [sph] sp_help
 
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/sph.yasnippet
@@ -1822,9 +1991,7 @@ END
 # --
 IF (${1:Condition})
 BEGIN
-
 `yas-selected-text`
-
 END
  #+end_src
 
@@ -1835,8 +2002,6 @@ END
 # --
 WHILE (${1:Condition})
 BEGIN
-
 `yas-selected-text`
-
 END
  #+end_src
