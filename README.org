@@ -22,6 +22,10 @@ http://www.red-gate.com/products/sql-development/sql-prompt/
 
 =/cygdrive/c/Users/f.niessen/AppData/Local/Red Gate/SQL Prompt 7/Snippets/=
 
+** TODO Look at SQL Query syntax checker & validator
+
+https://www.eversql.com/sql-syntax-check-validator/
+
 * Sqsh
 
 #+name: current-year
@@ -211,7 +215,7 @@ kinit.exe user@domain.com
 
 * Emacs YASnippets
 
-A *SQL "snippet"* (or auto-replacement) is a frequently used *code template* which
+A *SQL "snippet"* (or *auto-replacement*) is a frequently used *code template* which
 can be inserted into a code you are typing by pressing the TAB key.  It allows
 you to write frequently used SQL commands more quickly.
 
@@ -464,6 +468,14 @@ Count number of records returned by query.
 # --
 SELECT FORMAT(COUNT(*), '#,##0')
 FROM $0
+#+end_src
+
+**** [scgb] Select Count with Group By
+
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/scgb.yasnippet
+# name: Count with group by
+# --
+SELECT ${1:col}, COUNT(*) FROM $0 GROUP BY $1
 #+end_src
 
 **** [num] Format Number
@@ -732,7 +744,7 @@ Temporary inline view.
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/cte.yasnippet
 # name: WITH cte fragment
 # --
-WITH ${1:cte_name} AS
+;WITH ${1:cte_name} AS
 (
     -- SELECT
     -- FROM
