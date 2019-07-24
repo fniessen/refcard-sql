@@ -1132,9 +1132,9 @@ This script is provided to you by SSMSBoost as is. Improvements and comments are
 Redistribution with reference to SSMSBoost project website is welcome.
 SSMSBoost team, 2014
 */
-DECLARE @SearchPattern NVARCHAR(128);
+DECLARE @SearchPattern NVARCHAR(128)
 
-SET @SearchPattern = '%$0%';
+SET @SearchPattern = '%$0%'
 
 SELECT
     SCHEMA_NAME(o.schema_id) AS [schema],
