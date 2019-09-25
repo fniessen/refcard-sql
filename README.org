@@ -1100,6 +1100,11 @@ SELECT
     TABLE_NAME AS view_name
 FROM INFORMATION_SCHEMA.VIEWS
 WHERE TABLE_NAME LIKE '%%';
+
+-- SELECT owner, view_name
+-- FROM sys.all_views
+-- WHERE owner = 'AFM'
+--     AND view_name LIKE '%%';
 #+end_src
 
 **** [sf] Show Function
@@ -2017,3 +2022,1113 @@ BEGIN
 `yas-selected-text`
 END
  #+end_src
+
+* General SQL
+:PROPERTIES:
+:header-args+: :tangle no
+:END:
+
+https://www.red-gate.com/simple-talk/sql/t-sql-programming/ten-common-sql-programming-mistakes/
+
+Some good reading:
+- [[https://sqlblog.org/2009/10/11/bad-habits-to-kick-avoiding-the-schema-prefix][Always specify the schema]]
+- [[https://sqlblog.org/2008/10/30/my-stored-procedure-best-practices-checklist][Stored Procedure Best Practices]]
+- [[https://blogs.sentryone.com/aaronbertrand/bad-habits-revival/][Bad habits to avoid]]
+
+XXX Check out https://dataedo.com/kb/query/sql-server!!! (+ version for Oracle !!!)
+
+- http://codereview.stackexchange.com/!!!
+
+- SQL Fiddle: http://sqlfiddle.com/#!3/e7875/5
+  (MS SQL Server, Oracle, etc.)
+
+- http://sqlblog.com/blogs/aaron_bertrand/archive/2008/10/30/my-stored-procedure-best-practices-checklist.aspx
+
+- [[https://blogs.sentryone.com/aaronbertrand/backtobasics-ctes][Common Table Expressions (CTEs)]]
+
+** TODO Tips and Tricks to Make SQL Server Management Studio Awesome
+
+- http://blogs.lessthandot.com/index.php/datamgmt/dbprogramming/tips-and-tricks-to-make/
+  Shortcuts, defaults, etc.
+
+** SQL Server - Trace SQL
+
+#+begin_src sql
+DROP EVENT SESSION [afm-session-sql] ON SERVER;
+
+CREATE EVENT SESSION [afm-session-sql] ON SERVER
+ADD EVENT sqlserver.sp_statement_completed(SET collect_statement=(1)
+    ACTION(sqlserver.sql_text,sqlserver.username)
+    WHERE ([sqlserver].[like_i_sql_unicode_string]([sqlserver].[username],N'%afm%'))
+       AND ([sqlserver].[like_i_sql_unicode_string]([sqlserver].[sql_text],N'SELECT%') OR
+            [sqlserver].[like_i_sql_unicode_string]([sqlserver].[sql_text],N'DELETE%') OR
+              [sqlserver].[like_i_sql_unicode_string]([sqlserver].[sql_text],N'UPDATE%')
+             )
+             ),
+ADD EVENT sqlserver.sql_statement_completed(SET collect_statement=(1)
+    ACTION(sqlserver.sql_text,sqlserver.username)
+    WHERE ([sqlserver].[like_i_sql_unicode_string]([sqlserver].[username],N'%afm%'))
+       AND ([sqlserver].[like_i_sql_unicode_string]([sqlserver].[sql_text],N'SELECT%') OR
+            [sqlserver].[like_i_sql_unicode_string]([sqlserver].[sql_text],N'DELETE%') OR
+              [sqlserver].[like_i_sql_unicode_string]([sqlserver].[sql_text],N'UPDATE%')
+             )
+             )
+ADD TARGET package0.event_file(SET filename=N'c:\temp\afm-session-sql')
+WITH (MAX_MEMORY=2048 KB,EVENT_RETENTION_MODE=ALLOW_SINGLE_EVENT_LOSS,MAX_DISPATCH_LATENCY=3 SECONDS,MAX_EVENT_SIZE=0 KB,MEMORY_PARTITION_MODE=NONE,TRACK_CAUSALITY=OFF,STARTUP_STATE=OFF)
+go
+#+END_SRC
+
+** SQL Dates
+
+https://www.sqldates.com/
+
+** Code formatting
+
+- http://programmers.stackexchange.com/questions/160522/should-i-put-newlines-before-or-after-binary-operators
+
+  The "joining" condition is very important and it tends to get overlooked at
+  the end of the previous line.
+
+- [[http://sqlformat.org/][Online SQL formatting service]]
+  [[http://www.sql-format.com/][SQL Formatter for SQL Server]]
+
+  The [[http://www.ssmsboost.com/][SSMSBoost]] plugin allows, among others, to reformat SQL code.
+
+  In Oracle SQL Developer, use ~C-F7~ to format SQL.
+  http://www.thatjeffsmith.com/archive/2012/11/keyboard-shortcuts-in-oracle-sql-developer/
+
+  It also exists in SQL Management Studio (other key binding)!
+
+  *Read http://stackoverflow.com/questions/101079/sql-server-management-studio-tips-for-improving-the-tsql-coding-process!*
+
+- Arjan Kemeling is a big fan of *DBVisualizer Pro*. Works great on all databases,
+  allows SQL code formatting, import data from txt, Excel,... straight into the
+  database (new or existing table), you can also create SQL queries by selecting
+  tables, fields in de query builder or start from an existing SQL query, it
+  draws interactive database schemas (based on FKs), it has very handy "copy
+  selection as" features, launch SQL query and modify resulting data which you
+  can either save immediately or export to SQL queries or files, .... the list
+  goes on and on. The only thing it does not do is compare databases, tables or
+  data.
+
+** Table name as variable
+
+Table names and column names need to be static, if the query is static.  For
+dynamic table or column names, you should generate the full SQL dynamically, and
+use ~EXEC sp_executesql~ to execute it.
+
+More details here: [[http://www.sommarskog.se/dynamic_sql.html][The curse and blessings of dynamic SQL]].
+
+** SQL Loop
+
+*** While loop with temporary table
+
+#+begin_src sql
+-- Create a new table using the schema of another.
+SELECT TABLE_NAME
+INTO #TablesToControl
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_TYPE = 'BASE TABLE' -- OR TABLE_TYPE = 'VIEW'
+
+DECLARE @TableName varchar(128)
+
+WHILE EXISTS (SELECT 1 FROM #TablesToControl)
+BEGIN
+    -- SET NOCOUNT ON added to prevent extra result sets from interfering with
+    -- SELECT statements.
+    SET NOCOUNT ON;
+
+    SELECT @TableName = (SELECT TOP 1 TABLE_NAME
+                         FROM #TablesToControl
+                         ORDER BY TABLE_NAME)
+
+    -- Do something with your @TableName.
+    DECLARE @Sql nvarchar(4000);
+    SELECT @Sql = N' SELECT ''' + QUOTENAME(@TableName) + ''', COUNT(*) ' +
+                   ' FROM ' + QUOTENAME(@TableName);
+                                        -- QUOTENAME is important for security.
+    SELECT @Sql = N' IF EXISTS (SELECT 1 FROM ' + QUOTENAME(@TableName) + ') ' +
+                   '     PRINT ''' + @TableName + '''';
+    EXEC sp_executesql @Sql
+
+    -- Remove the table name from the temporary table.
+    DELETE FROM #TablesToControl
+    WHERE TABLE_NAME = @TableName
+END
+
+DROP TABLE #TablesToControl;
+#+end_src
+
+Other info at
+http://stackoverflow.com/questions/18513986/how-to-write-a-foreach-in-sql-server
+
+*** Cursor-like FETCH-NEXT logic
+
+https://stackoverflow.com/questions/11852782/t-sql-loop-over-query-results
+
+*** Cursor
+
+Cursors are slower than while loops?
+
+** SQL error on update: The UPDATE statement conflicted with the FOREIGN KEY constraint
+
+https://stackoverflow.com/questions/23856420/sql-error-on-update-the-update-statement-conflicted-with-the-foreign-key-const
+
+** Debugging triggers
+
+The login for the developer must be a *member of the sysadmin server role*.
+
+SQL Debugging significantly exposes the SQL Server Process - this is why it
+requires sysadmin permission. If you don't want your developers to be sysadmin,
+then you probably don't want them to be debugging in this way.
+
+This feature was really designed for developers working on their own
+workstations, not for use on production servers or other scenarios where there
+are reasons you wouldn't want your developers to be sysadmin on the sql server
+being debugged.
+
+** Conversion failed when converting date and/or time from character string while inserting datetime
+
+Whenever possible one should avoid culture specific date/time literals. There
+are some secure formats:
+
+All examples for 2016-09-15 17:30:00
+
+ODBC (my favorite, as it is handled as the real type immediately)
+{ts'2016-09-15 17:30:00'} --Time Stamp
+{d'2016-09-15'} --Date only
+{t'17:30:00'} --Time only
+
+ISO8601 (the best for everywhere)
+2016-09-15T17:30:00 --be aware of the T in the middle!
+
+Unseparated (tiny risk to get misinterpreted as number)
+20160915 --only for pure date
+
+Invalid dates tend to show up with strange errors
+There is no 31st of June or 30th of February...
+
+One more reason: Order of execution!
+
+SQL-Server is well know to do things in an order of execution one might not have
+expected. Here is a great article: Rusano.com:
+"t-sql-functions-do-no-imply-a-certain-order-of-execution" and here is the
+related question.
+
+** Retrieve DB version information
+
+*** SQL Server
+
+#+begin_src sql
+SELECT @@version;
+#+end_src
+
+@EPO: Microsoft SQL Server 2012 (SP1) - 11.0.3000.0 (X64) Oct 19 2012 13:38:57
+(c) Microsoft Corporation Enterprise Edition (64-bit) on Windows NT 6.1 <X64>
+(Build 7601: Service Pack 1) (Hypervisor)
+
+*** Oracle
+
+#+begin_src sql
+SELECT *
+FROM v$version
+WHERE banner LIKE 'Oracle%';
+#+end_src
+
+@CSPO: Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production.
+
+** List all columns (sfss, afm-fields, for all the fields in the SQL Database Schema)
+
+#+begin_src sql
+SELECT
+    sys.objects.name                    AS TABLE_NAME,
+    sys.columns.name                    AS COLUMN_NAME
+FROM sys.objects
+LEFT OUTER JOIN sys.columns
+    ON sys.objects.object_id = sys.columns.object_id
+WHERE type = 'U'
+    -- AND sys.objects.name LIKE 'int_%' -- Table name.
+ORDER BY sys.objects.name, sys.columns.name;
+#+end_src
+
+#+begin_note
+In SQL Server, column aliases should use brackets as using single quotes is
+deprecated (not to mention easily confused with string literals).
+
+But the only portable notation is using double quotes...
+#+end_note
+
+#+begin_src sql
+SELECT
+    OBJECT_NAME(c.object_id)            AS TABLE_NAME,
+    c.name                              AS COLUMN_NAME,
+    CASE i.is_primary_key
+        WHEN 1 THEN '!'
+        ELSE ''
+    END                                 AS PRIMARY_KEY_DESC,
+    CASE c.is_nullable
+        WHEN 0 THEN '*'
+        ELSE ''
+    END                                 AS REQUIRED_DESC,
+    t.name                              AS DATA_TYPE,
+    CASE
+        WHEN t.name IN ('char', 'varchar', 'nvarchar', 'decimal') THEN c.max_length
+        ELSE NULL
+    END                                 AS SIZE,
+    CASE
+        WHEN c.default_object_id = 0 OR OBJECT_DEFINITION(c.default_object_id) = '(NULL)' THEN ''
+        ELSE OBJECT_DEFINITION(c.default_object_id)
+    END                                 AS DEFAULT_DESC,
+    CASE c.is_identity
+        WHEN 1 THEN 'IDENTITY'
+        ELSE ''
+    END                                 AS IS_IDENTITY_DESC
+    -- XXX Add referenced table.
+    -- ,CASE
+    --     WHEN fk.name IS NOT NULL THEN '=> ' + OBJECT_NAME(fk.object_id) + '.' + fk.name
+    --     ELSE ''
+    -- END                                 AS Foreign_Key
+FROM sys.columns                        c
+INNER JOIN sys.objects                  o
+    ON (o.object_id = c.object_id
+        AND type IN ('U','V'))          -- User Tables and Views. XXX Test it!
+INNER JOIN sys.types                    t
+    ON c.user_type_id = t.user_type_id
+-- Remove the duplicate results (because some tables have more than one index
+-- with the same leading key column) by applying a filter in the JOIN to
+-- sys.indexes to only return the primary keys).
+-- https://stackoverflow.com/questions/21759295/get-list-of-all-columns-with-complete-details-identity-nullabel-primary-key-i
+LEFT OUTER JOIN (sys.index_columns      ic
+                INNER JOIN sys.indexes  i
+                    ON ic.object_id = i.object_id AND ic.index_id = i.index_id
+                    AND i.is_primary_key = 1)
+    ON ic.object_id = c.object_id AND ic.column_id = c.column_id
+-- LEFT JOIN sys.foreign_key_columns    fkc
+--     ON fkc.parent_object_id = c.object_id AND fkc.parent_column_id = c.column_id
+-- LEFT JOIN sys.columns                fk
+--     ON fk.object_id = fkc.referenced_object_id AND fk.column_id = fkc.referenced_column_id
+WHERE
+    OBJECT_NAME(c.object_id) LIKE '%%'  -- Table name.
+    AND c.name LIKE '%%'                -- Column name.
+    -- AND fk.name LIKE '%%'            -- Foreign column name.  (Limit to FK constraints only.)
+ORDER BY
+    OBJECT_NAME(c.object_id),
+    c.name;
+#+end_src
+
+#+begin_note
+Join to *user* ~_type_id~ in the ~sys.types~ table.  ~user_type_id~ is identical to
+~system_type_id~ for system types -- See
+https://msdn.microsoft.com/en-gb/library/ms188021.aspx
+#+end_note
+
+** 6 Useful SQL Server Data Dictionary Queries Every DBA Should Have
+
+https://dataedo.com/blog/useful-sql-server-data-dictionary-queries-every-dba-should-have
+
+1. List of tables with number of rows and comments
+2. List of views with definition and comments
+3. Table columns details
+4. Foreign keys
+5. Views columns
+6. Tables by number of columns
+
+** Over 40 queries to find SQL Server tables with or without a certain property
+
+https://www.mssqltips.com/sqlservertip/3402/over-40-queries-to-find-sql-server-tables-with-or-without-a-certain-property/
+
+** List all constraints
+
+#+begin_src sql
+EXEC sp_help 'rm';
+#+end_src
+
+#+begin_src sql
+-- Return 1 row for each CHECK, UNIQUE, PRIMARY KEY, FOREIGN KEY, and/or DEFAULT.
+SELECT
+    -- SCHEMA_NAME(schema_id)           AS SCHEMA_NAME,
+    OBJECT_NAME(parent_object_id)       AS TABLE_NAME,
+    type_desc                           AS CONSTRAINT_TYPE,
+    OBJECT_NAME(OBJECT_ID)              AS CONSTRAINT_NAME
+FROM sys.objects
+WHERE
+    OBJECT_NAME(parent_object_id) LIKE '%%'
+    AND type_desc LIKE '%CONSTRAINT'    -- Ignore SQL triggers.
+    AND OBJECT_NAME(OBJECT_ID) LIKE '%%'
+ORDER BY
+    table_name,
+    constraint_type DESC,
+    constraint_name;
+#+end_src
+
+If you need even more constraint information, look inside the stored procedure
+~sp_helpconstraint~ to see how to get certain information.  To view the source
+code using SQL Server Management Studio, get into the "Object Explorer".
+
+** List all PRIMARY KEY constraints
+
+#+begin_tip
+~EXEC sp_pkeys~ will return a row for each column that participates in the primary
+key for the table.  The columns you are likely most interested in are
+~COLUMN_NAME~ and ~PK_NAME~.
+#+end_tip
+
+#+begin_src sql
+-- For SQL Server.
+-- Correct results for em (email not in em_PK) or eq (see EPO).
+SELECT
+    KU.TABLE_CATALOG                    AS TABLE_QUALIFIER,
+    KU.TABLE_SCHEMA                     AS TABLE_OWNER,
+    KU.TABLE_NAME,
+    KU.COLUMN_NAME,
+    KU.ORDINAL_POSITION                 AS KEY_SEQ,
+    KU.CONSTRAINT_NAME                  AS PK_NAME
+FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS TC
+INNER JOIN INFORMATION_SCHEMA.KEY_COLUMN_USAGE KU
+    ON (CONSTRAINT_TYPE = 'PRIMARY KEY'
+        AND TC.CONSTRAINT_NAME = KU.CONSTRAINT_NAME)
+WHERE
+    KU.TABLE_SCHEMA = 'afm'
+    AND KU.TABLE_NAME LIKE '%%'
+    AND KU.CONSTRAINT_NAME LIKE '%%'
+ORDER BY
+    KU.TABLE_NAME,
+    KU.ORDINAL_POSITION;
+#+end_src
+
+#+begin_note
+Avoid using ~INFORMATION_SCHEMA~ views.  Worth reading Aaron's post on
+[[http://sqlblog.com/blogs/aaron_bertrand/archive/2011/11/03/the-case-against-information-schema-views.aspx][The case against INFORMATION_SCHEMA views]].
+
+Though, at http://stackoverflow.com/questions/219434/query-to-list-all-stored-procedures,
+they say that the *best way* is to *use the INFORMATION_SCHEMA tables*!???
+
+Using ~INFORMATION_SCHEMA~ (in contrast to the ~sys.~ views) is always a good idea
+as it is the official standard and is implemented in a couple other database
+systems.
+#+end_note
+
+#+begin_src sql
+-- For Oracle.
+SELECT
+    all_cons_columns.owner              AS schema_name,
+    all_cons_columns.table_name,
+    all_cons_columns.column_name,
+    all_cons_columns.position,
+    all_constraints.constraint_name
+FROM all_constraints, all_cons_columns
+WHERE
+    all_constraints.constraint_type = 'P'
+    AND all_constraints.owner = all_cons_columns.owner
+    AND all_constraints.constraint_name = all_cons_columns.constraint_name
+    AND all_constraints.status = 'ENABLED'
+    AND all_cons_columns.owner LIKE '%%'
+    AND all_cons_columns.table_name LIKE '%%'
+    AND all_constraints.constraint_name LIKE '%%'
+ORDER BY
+    all_cons_columns.owner,
+    all_cons_columns.table_name,
+    all_cons_columns.position;
+#+end_src
+
+** List all FOREIGN KEY constraints
+
+#+begin_tip
+~EXEC sp_helpconstraint 'rm'~ will list:
+- all *constraints* for the table,
+- including *foreign keys that reference* the table (see also ~EXEC sp_fkeys~).
+
+In the first recordset, there will only be a column called ~Object Name~ (kind of
+useless, since that's what you passed in).
+
+In the second resultset, there will be the following columns: ~constraint_type~,
+~constraint_name~, and ~constraint_keys~.
+#+end_tip
+
+#+begin_tip
+Reversely, ~EXEC sp_fkeys~ retrieves a list of *foreign keys REFERENCING* a table.
+#+end_tip
+
+#+begin_src sql
+-- This query finds the constraint rm_rm_std in EPO.  Other flavors don't.
+SELECT
+    SCHEMA_NAME(fkt.schema_id)          AS FK_TABLE_SCHEMA_NAME,
+    fkt.name                            AS FK_TABLE_NAME,  -- Referencing table.
+    fkc.name                            AS FK_COLUMN_NAME, -- Referencing column.
+    fkc.max_length                      AS FK_SIZE,
+    fk.name                             AS FK_NAME,        -- Foreign Key CONSTRAINT_NAME.
+    sfkc.constraint_column_id           AS FK_PART,
+    SCHEMA_NAME(pkt.schema_id)          AS PK_TABLE_SCHEMA_NAME,
+    pkt.name                            AS PK_TABLE_NAME,  -- Referenced table.
+    pkc.name                            AS PK_COLUMN_NAME, -- Referenced column.
+    pkc.max_length                      AS PK_SIZE,
+    CASE OBJECTPROPERTY(fk.OBJECT_ID, 'CnstIsDeleteCascade')
+        WHEN 0                          THEN '0 = No Action'
+        WHEN 1                          THEN '1 = Cascade'   -- True.
+        WHEN 2                          THEN '2 = Set Null'
+        WHEN 3                          THEN '3 = Set Default'
+                                        ELSE ''
+    END                                 AS delete_action,
+    CASE OBJECTPROPERTY(fk.OBJECT_ID, 'CnstIsUpdateCascade')
+        WHEN 0                          THEN '0 = No Action'
+        WHEN 1                          THEN '1 = Cascade'   -- True.
+        WHEN 2                          THEN '2 = Set Null'
+        WHEN 3                          THEN '3 = Set Default'
+                                        ELSE ''
+    END                                 AS update_action,
+    CASE is_disabled
+        WHEN 1                          THEN '1 = Disabled'
+                                        ELSE 'Enabled'
+    END                                 AS status_enabled  -- WITH NOCHECK.
+FROM sys.foreign_keys                   fk
+JOIN sys.foreign_key_columns            sfkc
+    ON sfkc.constraint_object_id = fk.object_id
+JOIN sys.tables                         fkt
+    ON fkt.object_id = fk.parent_object_id
+JOIN sys.columns                        fkc
+    ON sfkc.parent_object_id = fkc.object_id AND sfkc.parent_column_id = fkc.column_id
+JOIN sys.tables                         pkt
+    ON pkt.object_id = fk.referenced_object_id
+JOIN sys.columns                        pkc
+    ON sfkc.referenced_object_id = pkc.object_id AND sfkc.referenced_column_id = pkc.column_id
+WHERE
+    fkt.name     LIKE '%%'              AND fkc.name LIKE '%%'
+    AND fk.name  LIKE '%%'
+    AND pkt.name LIKE '%%'              AND pkc.name LIKE '%%'
+ORDER BY
+    SCHEMA_NAME(fkt.schema_id),
+    fkt.name,
+    pkt.name,
+    fk.name,
+    sfkc.constraint_column_id;
+#+end_src
+
+*** The DELETE statement conflicted with the REFERENCE constraint
+
+#+begin_src sql :tangle no
+DELETE FROM reserve_request WHERE datediff(DD, meeting_date, '2018-09-06') >= 380
+-- Query executed successfully.
+
+DELETE FROM reserve WHERE datediff(DD, date_start, '2018-09-06') >= 380
+-- The DELETE statement conflicted with the REFERENCE constraint "res_req_res_id". The conflict occurred in database "EPO_20180129_CAFM_PRD", table "afm.reserve_request", column 'res_id'.
+#+end_src
+
+Find the record from ~FK_TABLE_NAME~ which has a reference in ~PK_TABLE_NAME~:
+
+#+begin_src sql
+SELECT
+    'reserve_request'                   AS FK_TABLE_NAME,
+    FK_TABLE_NAME.res_id                AS FK_COLUMN_NAME,
+    FK_TABLE_NAME.meeting_date,
+    'reserve'                           AS PK_TABLE_NAME,
+    PK_TABLE_NAME.res_id                AS PK_COLUMN_NAME,
+    PK_TABLE_NAME.date_start
+FROM reserve_request                    FK_TABLE_NAME
+LEFT JOIN reserve                       PK_TABLE_NAME
+    ON FK_TABLE_NAME.res_id = PK_TABLE_NAME.res_id
+WHERE
+    -- DATEDIFF(DD, FK_TABLE_NAME.meeting_date, '2018-09-06') >= 380
+    -- OR
+    DATEDIFF(DD, PK_TABLE_NAME.date_start, '2018-09-06') >= 380;
+#+end_src
+
+** Disable/enable all constraints in the database
+
+#+begin_src sql
+-- Disable all constraints for database.
+EXEC sp_MSforeachtable "ALTER TABLE ? NOCHECK CONSTRAINT all"
+#+end_src
+
+To switch them back on, run: (the print is optional of course and it is just
+listing the tables)
+
+#+begin_src sql
+-- Enable all constraints for database.
+EXEC sp_MSforeachtable @command1="print '?'", @command2="ALTER TABLE ? WITH CHECK CHECK CONSTRAINT all"
+#+end_src
+
+I find it useful when populating data from one database to another.  It is much
+better approach than dropping constraints.  It comes handy when dropping all the
+data in the database and repopulating it (say, in test environment).
+
+** Disable/enable all constraints on a table
+
+#+begin_src sql
+-- Disable all table constraints.
+ALTER TABLE MyTable NOCHECK CONSTRAINT ALL
+
+-- Enable all table constraints.
+ALTER TABLE MyTable WITH CHECK CHECK CONSTRAINT ALL
+
+-- Disable single constraint.
+ALTER TABLE MyTable NOCHECK CONSTRAINT MyConstraint
+
+-- Enable single constraint.
+ALTER TABLE MyTable WITH CHECK CHECK CONSTRAINT MyConstraint
+#+end_src
+
+** List all non-NULLABLE columns
+
+#+begin_tip
+SQL will use the *default value* if you do *not declare* the *non-nullable column* in
+the ~INSERT~ statement.
+#+end_tip
+
+#+begin_src sql
+SELECT
+    OBJECT_NAME(object_id)              AS TABLE_NAME,
+    name                                AS COLUMN_NAME,
+    CASE is_nullable
+        WHEN 0 THEN '0 = No'
+        WHEN 1 THEN '1 = Yes'
+        ELSE NULL
+    END                                 AS IS_NULLABLE_DESC
+    -- XXX Add the default value
+FROM sys.columns
+WHERE
+    object_id = OBJECT_ID('rmpct')
+    AND is_nullable = 0                 -- NO.
+ORDER BY
+    OBJECT_NAME(object_id),
+    name;
+#+end_src
+
+** List all DEFAULT constraints (with default value)
+
+#+begin_src sql
+SELECT
+    t.name                              AS TABLE_NAME,
+    c.name                              AS COLUMN_NAME,
+    dc.name                             AS CONSTRAINT_NAME,
+    dc.definition
+FROM sys.tables                         t
+INNER JOIN sys.default_constraints      dc
+    ON t.object_id = dc.parent_object_id
+INNER JOIN sys.columns                  c
+    ON dc.parent_object_id = c.object_id AND dc.parent_column_id = c.column_id
+WHERE
+    t.name LIKE '%%'
+    AND c.name LIKE '%%'
+ORDER BY
+    t.name,
+    c.name;
+#+end_src
+
+** List all IDENTITY columns
+
+#+begin_src sql
+SELECT
+    o.name                              AS TABLE_NAME,
+    c.name                              AS COLUMN_NAME,
+    c.is_identity                       AS IS_IDENTITY
+FROM sys.objects                        o
+INNER JOIN sys.columns                  c
+    ON o.object_id = c.object_id
+WHERE
+    c.is_identity = 1
+    AND o.name LIKE '%%'
+    AND c.name LIKE 'cascading_id'
+ORDER BY o.name;
+#+end_src
+
+~SET IDENTITY_INSERT <table>~
+
+- ON ::
+     *Permit the insertion of an EXPLICIT value for the identity column* of
+     a table.
+
+- OFF ::
+     Revert the granted permission.
+
+If there is an error when inserting (Cannot insert explicit value for identity
+column in table when ~IDENTITY_INSERT~ is set to ~OFF~), the solution is either:
+
+- insert without specifying the value for the identity column, and let SQL
+  Server do (= adviced), or
+
+- ~SET IDENTITY_INSERT~ to ~ON~ for the table (= not adviced).
+
+#+begin_warning
+At any time, *only one table in a session* can have the ~IDENTITY_INSERT~ property
+set to ~ON~.
+#+end_warning
+
+*** How to remove Identity from a column in a table?
+
+https://stackoverflow.com/questions/8230257/remove-identity-from-a-column-in-a-table
+
+If you want to do this *without adding and populating a new column, without
+reordering the columns*, and *with almost no downtime* because no data is changing
+on the table, let's do some magic with partitioning functionality (but since no
+partitions are used you don't need Enterprise edition):
+
+#+begin_src sql
+-- Create new table with no IDENTITY.
+CREATE TABLE [afm].[hrmpct_2](
+    [ac_id] [varchar](32) NULL,
+    [activity_log_id] [int] NULL,
+    [area_chargable] [numeric](7, 2) NOT NULL,
+    [area_comn] [numeric](7, 2) NOT NULL,
+    [area_comn_nocup] [numeric](7, 2) NOT NULL,
+    [area_comn_ocup] [numeric](7, 2) NOT NULL,
+    [area_comn_rm] [numeric](7, 2) NOT NULL,
+    [area_comn_serv] [numeric](7, 2) NOT NULL,
+    [area_rm] [numeric](8, 2) NOT NULL,
+    [bl_id] [varchar](8) NULL,
+    [cost] [numeric](9, 2) NOT NULL,
+    [date_created] [datetime] NULL,
+    [date_deleted] [datetime] NULL,
+    [date_end] [datetime] NULL,
+    [date_start] [datetime] NULL,
+    [day_part] [smallint] NOT NULL,
+    [del_user_name] [varchar](64) NULL,
+    [dp_id] [varchar](60) NULL,
+    [dv_id] [varchar](60) NULL,
+    [em_id] [varchar](60) NULL,
+    [fl_id] [varchar](4) NULL,
+    [from_bl_id] [varchar](8) NULL,
+    [from_fl_id] [varchar](4) NULL,
+    [from_rm_id] [varchar](8) NULL,
+    [mo_id] [int] NULL,
+    [org_id] [varchar](60) NULL,
+    [parent_pct_id] [int] NULL,
+    [pct_space] [numeric](6, 2) NULL,
+    [pct_time] [numeric](6, 2) NULL,
+    [primary_em] [smallint] NULL,
+    [primary_rm] [smallint] NULL,
+    [prorate] [varchar](8) NOT NULL,
+    [resources] [varchar](5000) NULL,
+    [rm_cat] [varchar](12) NULL,
+    [rm_id] [varchar](8) NULL,
+    [rm_type] [varchar](50) NULL,
+    [status] [smallint] NOT NULL,
+    [user_name] [varchar](64) NULL,
+    [visitor_id] [int] NULL,
+    [pct_id] [int] NOT NULL,
+    [confirmed] [smallint] NOT NULL DEFAULT ((0)),
+    CONSTRAINT [hrmpct_PK_2] PRIMARY KEY CLUSTERED
+    (
+        [pct_id] ASC
+    ) WITH (PAD_INDEX = ON, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, FILLFACTOR = 85)
+)
+go
+
+-- Data before switch.
+SELECT 'hrmpct', pct_id, *
+FROM hrmpct
+UNION ALL
+SELECT 'hrmpct_2', pct_id, *
+FROM hrmpct_2;
+
+-- Switch.
+ALTER TABLE hrmpct SWITCH TO hrmpct_2;
+
+-- Data after switch.
+SELECT 'hrmpct', pct_id, *
+FROM hrmpct
+UNION ALL
+SELECT 'hrmpct_2', pct_id, *
+FROM hrmpct_2;
+
+-- Clean up.
+DROP TABLE hrmpct;
+
+EXEC sys.sp_rename 'hrmpct_2.hrmpct_PK_2', 'hrmpct_PK';
+EXEC sys.sp_rename 'hrmpct_2', 'hrmpct', 'OBJECT';
+
+ALTER TABLE hrmpct ADD CONSTRAINT [DF__hrmpct__area_cha__4DD54A14] DEFAULT ((0.0))     FOR [area_chargable];
+ALTER TABLE hrmpct ADD CONSTRAINT [DF__hrmpct__area_com__4EC96E4D] DEFAULT ((0.0))     FOR [area_comn];
+ALTER TABLE hrmpct ADD CONSTRAINT [DF__hrmpct__area_com__4FBD9286] DEFAULT ((0.0))     FOR [area_comn_nocup];
+ALTER TABLE hrmpct ADD CONSTRAINT [DF__hrmpct__area_com__50B1B6BF] DEFAULT ((0.0))     FOR [area_comn_ocup];
+ALTER TABLE hrmpct ADD CONSTRAINT [DF__hrmpct__area_com__51A5DAF8] DEFAULT ((0.0))     FOR [area_comn_rm];
+ALTER TABLE hrmpct ADD CONSTRAINT [DF__hrmpct__area_com__5299FF31] DEFAULT ((0.0))     FOR [area_comn_serv];
+ALTER TABLE hrmpct ADD CONSTRAINT [DF__hrmpct__area_rm__538E236A]  DEFAULT ((0.0))     FOR [area_rm];
+ALTER TABLE hrmpct ADD CONSTRAINT [DF__hrmpct__cost__55766BDC]     DEFAULT ((0.0))     FOR [cost];
+ALTER TABLE hrmpct ADD CONSTRAINT [DF__hrmpct__date_cre__566A9015] DEFAULT (getdate()) FOR [date_created];
+ALTER TABLE hrmpct ADD CONSTRAINT [DF__hrmpct__date_del__575EB44E] DEFAULT (getdate()) FOR [date_deleted];
+ALTER TABLE hrmpct ADD CONSTRAINT [DF__hrmpct__day_part__5A3B20F9] DEFAULT ((0))       FOR [day_part];
+ALTER TABLE hrmpct ADD CONSTRAINT [DF__hrmpct__pct_spac__65ACD3A5] DEFAULT ((100.00))  FOR [pct_space];
+ALTER TABLE hrmpct ADD CONSTRAINT [DF__hrmpct__pct_time__66A0F7DE] DEFAULT ((100.00))  FOR [pct_time];
+ALTER TABLE hrmpct ADD CONSTRAINT [DF__hrmpct__prorate__697D6489]  DEFAULT ('NONE')    FOR [prorate];
+ALTER TABLE hrmpct ADD CONSTRAINT [DF__hrmpct__status__6E4219A6]   DEFAULT ((1))       FOR [status];
+
+-- Test.
+SELECT TOP 10 pct_id, *
+FROM hrmpct;
+
+UPDATE hrmpct
+SET pct_id = pct_id + 1;
+
+SELECT TOP 10 pct_id, *
+FROM hrmpct;
+#+end_src
+
+** List triggers
+
+https://stackoverflow.com/questions/4305691/need-to-list-all-triggers-in-sql-server-database-with-table-name-and-tables-sch
+to *list database triggers* as well!
+
+#+begin_src sql
+SELECT
+    OBJECT_NAME(so.parent_obj)          AS TABLE_NAME,
+    so.name                             AS TRIGGER_NAME,
+    OBJECTPROPERTY(so.id, 'ExecIsInsertTrigger')    AS INSERT,
+    OBJECTPROPERTY(so.id, 'ExecIsUpdateTrigger')    AS UPDATE,
+    OBJECTPROPERTY(so.id, 'ExecIsDeleteTrigger')    AS DELETE,
+    OBJECTPROPERTY(so.id, 'ExecIsAfterTrigger')     AS AFTER,
+    OBJECTPROPERTY(so.id, 'ExecIsInsteadOfTrigger') AS INSTEAD_OF,
+    OBJECTPROPERTY(so.id, 'ExecIsTriggerDisabled')  AS DISABLED
+FROM sysobjects                         so
+INNER JOIN sysobjects                   so2
+    ON so.parent_obj = so2.Id
+WHERE
+    so.type = 'TR'
+    AND OBJECT_NAME(so.parent_obj) LIKE '%%'
+    AND so.name LIKE '%%'
+ORDER BY
+    OBJECT_NAME(so.parent_obj),
+    so.name;
+#+end_src
+
+#+begin_src sql
+SELECT
+    OBJECT_NAME(parent_id)              AS TABLE_NAME,
+    name                                AS TRIGGER_NAME,
+    is_instead_of_trigger               AS INSTEAD_OF,
+    is_disabled                         AS DISABLED
+FROM sys.triggers
+WHERE name LIKE '%%'
+ORDER BY
+    OBJECT_NAME(parent_id),
+    sys.triggers.name;
+#+end_src
+
+#+begin_src sql
+-- List triggers.
+SELECT
+    tbl.name                            AS [table],
+    trg.name                            AS trigger_name,
+    CASE
+        WHEN is_instead_of_trigger = 1  THEN 'Instead of'
+                                        ELSE 'After'
+    END                                 AS [activation],
+   (CASE
+        WHEN OBJECTPROPERTY(trg.object_id, 'ExecIsInsertTrigger') = 1
+                                        THEN 'Insert '
+                                        ELSE ''
+    END
+    +
+    CASE
+        WHEN OBJECTPROPERTY(trg.object_id, 'ExecIsUpdateTrigger') = 1
+                                        THEN 'Update '
+                                        ELSE ''
+    END
+    +
+    CASE
+        WHEN OBJECTPROPERTY(trg.object_id, 'ExecIsDeleteTrigger') = 1
+                                        THEN 'Delete'
+                                        ELSE ''
+    END)                                AS [event],
+    CASE
+        WHEN trg.parent_class = 1       THEN 'Table trigger'
+        WHEN trg.parent_class = 0       THEN 'Database trigger'
+    END [class],
+    CASE
+        WHEN trg.[type] = 'TA'          THEN 'Assembly (CLR) trigger'
+        WHEN trg.[type] = 'TR'          THEN 'SQL trigger'
+                                        ELSE ''
+    END                                 AS [type],
+    CASE
+        WHEN is_disabled = 1            THEN '1 = Disabled'
+                                        ELSE '0 = Enabled'
+    END                                 AS [status],
+    OBJECT_DEFINITION(trg.object_id)    AS [definition]
+FROM sys.triggers                       trg
+LEFT JOIN sys.objects                   tbl
+    ON trg.parent_id = tbl.object_id
+WHERE trg.name <> 'system_status_t'
+ORDER BY
+    tbl.name,
+    trg.name;
+#+end_src
+
+#+begin_warning
+*Non-updating updates* (such as ~UPDATE TableName SET field1 = field1~) do fire
+~UPDATE~ triggers on the table being updated, and indicate that the field was
+updated (if you check using either the ~UPDATE()~ or ~COLUMNS_UPDATED~ functions).
+
+The field in both ~INSERTED~ and ~DELETED~ tables are the same value.
+#+end_warning
+
+How often do Update triggers fire on a multi-record update?
+
+Microsoft SQL Server only supports *statement level* triggers: a statement level
+trigger will *fire once for the whole statement*.
+
+*** Nested triggers (server option)
+
+Check whether nested triggers are turned on or off.
+
+#+begin_src sql
+EXEC sp_configure 'nested triggers';
+#+end_src
+
+- If the ~run_value~ is 0, then the nested triggers are off (~AFTER~ triggers cannot
+  cascade).
+
+- If the value is 1 (the default), then they are on (~AFTER~ triggers can cascade
+  to as many as 32 levels -- If any trigger in the chain sets off an infinite
+  loop, the nesting level is exceeded and the trigger is canceled with error
+  message).
+
+#+begin_note
+~INSTEAD OF~ triggers (which perform their actions /instead of/ the action that
+fired them) can be nested regardless of the setting of this option.
+#+end_note
+
+*** Recursive triggers (database option)
+
+*Direct recursion* only.
+
+#+begin_src sql
+ALTER DATABASE MyDataBase SET RECURSIVE_TRIGGERS ON
+go
+#+end_src
+
+*** For EPO cascading_update/delete triggers
+
+#+begin_src sql
+SELECT
+    'referenced_trigger'                AS trigger_type,
+    t.name
+FROM sys.triggers                       t
+WHERE t.name LIKE '%cascad%'
+
+UNION ALL
+
+SELECT
+    'referencing_trigger'               AS trigger_type,
+    t.name
+FROM sys.triggers                       t
+WHERE EXISTS
+(
+    SELECT 1
+    FROM sys.columns                    c
+    WHERE OBJECT_NAME(c.object_id) + '_' + c.name + '_t' = t.name
+)
+ORDER BY 1, 2;
+#+end_src
+
+** Using a DML trigger with a reminder e-mail message
+
+The following example sends an e-mail message to a specified person (MaryM) when
+the Customer table changes.
+
+#+begin_src sql
+CREATE TRIGGER reminder2
+ON Sales.Customer
+AFTER INSERT, UPDATE, DELETE
+AS
+   EXEC msdb.dbo.sp_send_dbmail
+        @profile_name = 'AdventureWorks2012 Administrator',
+        @recipients = 'danw@Adventure-Works.com',
+        @body = 'Don''t forget to print a report for the sales force.',
+        @subject = 'Reminder';
+go
+#+end_src
+
+** List all stored procedures and functions
+
+#+begin_src sql
+SELECT
+    name,
+    type
+FROM dbo.sysobjects
+WHERE type IN (
+    'P',                                -- Stored Procedures.
+    'TF',                               -- Table-valued Functions.
+    'FN',                               -- Scalar-valued Functions.
+    'IF'                                -- Inline table-valued Functions.
+)
+ORDER BY
+    type,
+    name;
+-- Should order by stored proc first, then by functions (like in object explorer).
+#+end_src
+
+** List all views, stored procedures, functions and triggers REFERENCING a particular table
+
+#+begin_tip
+~EXEC sp_depends~ lists the database objects that depend on a table.  Though, this
+stored procedure will be removed in future versions of Microsoft SQL Server.
+#+end_tip
+
+A non-query way, using SQL Server Management Studio:
+1. locate the table,
+2. right-click and
+3. choose "*View dependencies*".
+
+#+begin_warning
+As commenters said, "View Dependencies" is not very reliable -- and actually
+dangerous to use!
+#+end_warning
+
+Also use *Red Gate SQL Search* or *ApexSQL Search* (FREE) (in SQL Server Management
+Studio) for that...
+
+*View views*, *stored procedures*, *functions* (?) and *triggers* that *depend on*
+a particular table.
+
+#+begin_src sql
+SELECT
+    SCHEMA_NAME(o.SCHEMA_ID) + '.' + o.name AS NAME,
+    o.type_desc                         AS TYPE,
+    referenced_schema_name              AS REFERENCED_SCHEMA,
+    referenced_entity_name              AS REFERENCED_TABLE_NAME,
+    o1.type_desc                        AS REFERENCED_OBJECT_TYPE_DESC
+    --,sed.* -- Uncomment for all the columns.
+FROM sys.sql_expression_dependencies    sed
+INNER JOIN sys.objects                  o
+    ON sed.referencing_id = o.[object_id]
+LEFT OUTER JOIN sys.objects             o1
+    ON sed.referenced_id = o1.[object_id]
+WHERE referenced_entity_name = 'kpi_actuals'
+ORDER BY name;
+#+end_src
+
+(Less results than with ~EXEC sp_depends~, for example for table ~wr~!?)
+
+Find text in views, stored procedures, functions, triggers, default constraints,
+etc.:
+
+#+begin_src sql
+SELECT
+    SCHEMA_NAME(o.schema_id) + '.' + o.name AS NAME,
+    o.type_desc                         AS TYPE,
+    OBJECT_DEFINITION(object_id)        AS SOURCE
+FROM sys.objects                        o
+WHERE
+    UPPER(OBJECT_DEFINITION(o.object_id)) LIKE '%' + UPPER('kpi_actuals') + '%'
+    AND o.[type] IN (
+        'C',                            -- Check constraint.
+        'D',                            -- Default (constraint or stand-alone).
+        'P',                            -- SQL stored procedure.
+        'FN',                           -- SQL scalar function.
+        'R',                            -- Rule.
+        'RF',                           -- Replication filter procedure.
+        'TR',                           -- SQL trigger (schema-scoped DML trigger, or DDL trigger at either the database or server scope).
+        'IF',                           -- SQL inline table-valued function.
+        'TF',                           -- SQL table-valued function.
+        'V')                            -- View.
+ORDER BY o.name;
+#+end_src
+
+(More results than with ~EXEC sp_depends~, for example for table ~wr~.)
+
+** List all indexes and index columns
+
+You can also use ~EXEC sp_helpindex~ to view all the indexes (and index columns)
+of one table:
+
+#+begin_src sql
+EXEC sys.sp_helpindex @objname = N'activity_log'
+#+end_src
+
+(It only includes the index key columns, not the included columns.)
+
+** SQL Collation
+
+#+begin_src sql
+SELECT
+    OBJECT_NAME(object_id)              AS table,
+    col.name,
+    col.collation_name
+FROM sys.columns                        col
+ORDER BY
+    OBJECT_NAME(object_id),
+    col.name;
+#+end_src
+
+*NOTE --* Liste des collations de SQL Server :
+
+#+begin_src sql
+SELECT *
+FROM ::fn_helpcollations();
+#+end_src
+
+** Finding and Eliminating Duplicate or Overlapping Indexes
+
+Effective indexing is the key to keeping your queries running quickly while
+consuming as few resources as possible in the process.  Each index that is added
+to a table will increase the speed of reads that are now able to utilize that
+index, but at the cost of speed whenever that index needs to be updated.  In
+addition, your index maintenance processes (rebuilding/reorganizing) will now
+have an additional index to operate on.
+
+SQL Server has no safeguards against indexes that duplicate behavior, and
+therefore a table could conceivably have any number of duplicate or overlapping
+indexes on it without your ever knowing they were there!  This would constitute
+an unnecessary drain on resources that could easily be avoided.  How do we
+easily view our current indexes and determine if duplicates exist?  What about
+indexes that contain overlapping column lists that could be combined?
+
+http://www.sqlservercentral.com/articles/Indexing/110106/
+
+The best request out of it?
+
+#+begin_src sql
+;WITH CTE_INDEX_DATA AS (
+       SELECT
+              SCHEMA_DATA.name AS schema_name,
+              TABLE_DATA.name AS table_name,
+              INDEX_DATA.name AS index_name,
+              STUFF((SELECT  ', ' + COLUMN_DATA_KEY_COLS.name + ' ' + CASE WHEN INDEX_COLUMN_DATA_KEY_COLS.is_descending_key = 1 THEN 'DESC' ELSE 'ASC' END -- Include column order (ASC / DESC).
+
+                                  FROM    sys.tables AS T
+                                                INNER JOIN sys.indexes INDEX_DATA_KEY_COLS
+                                                ON T.object_id = INDEX_DATA_KEY_COLS.object_id
+                                                INNER JOIN sys.index_columns INDEX_COLUMN_DATA_KEY_COLS
+                                                ON INDEX_DATA_KEY_COLS.object_id = INDEX_COLUMN_DATA_KEY_COLS.object_id
+                                                AND INDEX_DATA_KEY_COLS.index_id = INDEX_COLUMN_DATA_KEY_COLS.index_id
+                                                INNER JOIN sys.columns COLUMN_DATA_KEY_COLS
+                                                ON T.object_id = COLUMN_DATA_KEY_COLS.object_id
+                                                AND INDEX_COLUMN_DATA_KEY_COLS.column_id = COLUMN_DATA_KEY_COLS.column_id
+                                  WHERE   INDEX_DATA.object_id = INDEX_DATA_KEY_COLS.object_id
+                                                AND INDEX_DATA.index_id = INDEX_DATA_KEY_COLS.index_id
+                                                AND INDEX_COLUMN_DATA_KEY_COLS.is_included_column = 0
+                                  ORDER BY INDEX_COLUMN_DATA_KEY_COLS.key_ordinal
+                                  FOR XML PATH('')), 1, 2, '') AS key_column_list ,
+          STUFF(( SELECT  ', ' + COLUMN_DATA_INC_COLS.name
+                                  FROM    sys.tables AS T
+                                                INNER JOIN sys.indexes INDEX_DATA_INC_COLS
+                                                ON T.object_id = INDEX_DATA_INC_COLS.object_id
+                                                INNER JOIN sys.index_columns INDEX_COLUMN_DATA_INC_COLS
+                                                ON INDEX_DATA_INC_COLS.object_id = INDEX_COLUMN_DATA_INC_COLS.object_id
+                                                AND INDEX_DATA_INC_COLS.index_id = INDEX_COLUMN_DATA_INC_COLS.index_id
+                                                INNER JOIN sys.columns COLUMN_DATA_INC_COLS
+                                                ON T.object_id = COLUMN_DATA_INC_COLS.object_id
+                                                AND INDEX_COLUMN_DATA_INC_COLS.column_id = COLUMN_DATA_INC_COLS.column_id
+                                  WHERE   INDEX_DATA.object_id = INDEX_DATA_INC_COLS.object_id
+                                                AND INDEX_DATA.index_id = INDEX_DATA_INC_COLS.index_id
+                                                AND INDEX_COLUMN_DATA_INC_COLS.is_included_column = 1
+                                  ORDER BY INDEX_COLUMN_DATA_INC_COLS.key_ordinal
+                                  FOR XML PATH('')), 1, 2, '') AS include_column_list,
+       INDEX_DATA.is_disabled -- Check if index is disabled before determining which dupe to drop (if applicable).
+       FROM sys.indexes INDEX_DATA
+       INNER JOIN sys.tables TABLE_DATA
+       ON TABLE_DATA.object_id = INDEX_DATA.object_id
+       INNER JOIN sys.schemas SCHEMA_DATA
+       ON SCHEMA_DATA.schema_id = TABLE_DATA.schema_id
+       WHERE TABLE_DATA.is_ms_shipped = 0
+       AND INDEX_DATA.type_desc IN ('NONCLUSTERED', 'CLUSTERED')
+)
+SELECT
+       *
+FROM CTE_INDEX_DATA DUPE1
+WHERE EXISTS
+(SELECT * FROM CTE_INDEX_DATA DUPE2
+ WHERE DUPE1.schema_name = DUPE2.schema_name
+ AND DUPE1.table_name = DUPE2.table_name
+ AND (DUPE1.key_column_list LIKE LEFT(DUPE2.key_column_list, LEN(DUPE1.key_column_list)) OR DUPE2.key_column_list LIKE LEFT(DUPE1.key_column_list, LEN(DUPE2.key_column_list)))
+ AND DUPE1.index_name <> DUPE2.index_name)
+#+end_src
