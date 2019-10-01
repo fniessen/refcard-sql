@@ -998,7 +998,9 @@ INNER JOIN sys.all_ind_columns          ind_col
     ON ind.owner = ind_col.index_owner
         AND ind.index_name = ind_col.index_name
 -- Exclude (some) Oracle default schemas.
-WHERE ind.owner NOT IN ('CTXSYS', 'MDSYS', 'SYS', 'SYSTEM', 'XDB')
+WHERE
+    ind.owner NOT IN ('CTXSYS', 'MDSYS', 'SYS', 'SYSTEM', 'XDB')
+    AND ind.index_name LIKE UPPER('%%')
 ORDER BY
     ind.table_owner,
     ind.table_name,
@@ -1018,7 +1020,9 @@ SELECT
         WITHIN GROUP (ORDER BY aic.column_position) AS COLS
 FROM all_ind_columns                    aic
 -- Exclude (some) Oracle default schemas.
-WHERE aic.index_owner NOT IN ('CTXSYS', 'MDSYS', 'SYS', 'SYSTEM', 'XDB')
+WHERE
+    aic.index_owner NOT IN ('CTXSYS', 'MDSYS', 'SYS', 'SYSTEM', 'XDB')
+    AND aic.index_name LIKE UPPER('%%')
 GROUP BY
     aic.index_owner,
     aic.table_name,
@@ -1027,6 +1031,85 @@ ORDER BY
     aic.index_owner,
     aic.table_name,
     aic.index_name;
+#+end_src
+
+**** List redundant indexes
+
+https://dzone.com/articles/how-to-find-redundant-indexes-in-sql
+
+Don't apply this advice in read-heavy, write-rarely databases.
+
+#+begin_src sql :tangle no
+-- For SQL Server.
+WITH i
+AS (SELECT
+        t.name AS table_name,
+        i.name AS index_name,
+        c.name AS column_name,
+        ic.index_column_id
+    FROM sys.indexes                    i
+    JOIN sys.index_columns              ic
+        ON i.object_id = ic.object_id AND i.index_id = ic.index_id
+    JOIN sys.columns                    c
+        ON ic.object_id = c.object_id AND ic.column_id = c.column_id
+    JOIN sys.tables                     t
+        ON i.object_id = t.object_id),
+
+indexes
+AS (SELECT
+        table_name,
+        index_name,
+        STUFF(
+             (
+                 SELECT ',' + j.column_name
+                 FROM i j
+                 WHERE i.table_name = j.table_name
+                       AND i.index_name = j.index_name
+                 FOR
+                 XML PATH('') -- Yay, XML in SQL!
+             ), 1, 1, '')               columns
+    FROM i
+    GROUP BY
+        table_name,
+        index_name)
+
+SELECT
+    i.table_name,
+    i.index_name AS "Deletion candidate index",
+    i.columns AS "Deletion candidate columns",
+    j.index_name AS "Existing index",
+    j.columns AS "Existing columns"
+FROM indexes i
+JOIN indexes j
+    ON i.table_name = j.table_name
+        AND j.columns LIKE i.columns + ',%';
+#+end_src
+
+#+begin_src sql :tangle no
+-- For Oracle.
+WITH indexes
+AS (SELECT
+        i.index_name,
+        i.table_name,
+        LISTAGG(c.column_name, ', ')
+            WITHIN GROUP (ORDER BY c.column_position) AS columns
+    FROM all_indexes i
+         JOIN all_ind_columns c ON i.index_name = c.index_name
+    GROUP BY
+        i.table_name,
+        i.index_name,
+        i.leaf_blocks)
+
+SELECT
+    i.table_name,
+    i.index_name AS "Deletion candidate index",
+    i.columns AS "Deletion candidate columns",
+    j.index_name AS "Existing index",
+    j.columns AS "Existing columns"
+FROM indexes i
+JOIN indexes j
+    ON i.table_name = j.table_name
+        AND j.columns LIKE i.columns || ',%';
 #+end_src
 
 **** List unused indexes
