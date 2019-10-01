@@ -958,11 +958,11 @@ List indexes.
 # name: List Indexes
 # --
 SELECT
-    t.name                              AS "TableName",
-    i.name                              AS "IndexName",
-    col.name                            AS "ColumnName",
-    i.index_id                          AS "IndexId",
-    ic.index_column_id                  AS "ColumnId"
+    t.name                              AS TableName,
+    i.name                              AS IndexName,
+    col.name                            AS ColumnName,
+    i.index_id                          AS IndexId,
+    ic.index_column_id                  AS ColumnId
 FROM sys.indexes                        i
 INNER JOIN sys.index_columns            ic
     ON i.object_id = ic.object_id AND i.index_id = ic.index_id
@@ -994,12 +994,12 @@ GRANT VIEW SERVER STATE TO afm;
 
 #+begin_src sql :tangle no
 SELECT
-    OBJECT_NAME(s.object_id)            AS "table_name",
-    i.name                              AS "index_name",
+    OBJECT_NAME(s.object_id)            AS table_name,
+    i.name                              AS index_name,
     i.index_id,
-    user_seeks + user_scans + user_lookups AS "reads",
-    user_updates                        AS "writes",
-    SUM(p.rows)                         AS "rows",
+    user_seeks + user_scans + user_lookups AS reads,
+    user_updates                        AS writes,
+    SUM(p.rows)                         AS rows,
     last_user_update
 FROM sys.dm_db_index_usage_stats        s
 JOIN sys.indexes                        i
@@ -2501,6 +2501,50 @@ ORDER BY
     pkt.name,
     fk.name,
     sfkc.constraint_column_id;
+#+end_src
+
+#+begin_src sql
+-- For Oracle.
+SELECT DISTINCT table_name,     column_name,
+                constraint_name, POSITION,
+                r_table_name
+FROM   (SELECT uc.table_name,
+               uc.constraint_name,
+               cols.column_name,
+               (SELECT table_name
+                FROM   user_constraints
+                WHERE  constraint_name = uc.r_constraint_name) r_table_name,
+               (SELECT column_name
+                FROM   user_cons_columns
+                WHERE  constraint_name = uc.r_constraint_name
+                       AND position = cols.position)           r_column_name,
+               cols.position,
+               uc.constraint_type
+        FROM   user_constraints uc
+               inner join user_cons_columns cols
+                       ON uc.constraint_name = cols.constraint_name
+        WHERE  constraint_type != 'C')
+
+CONNECT BY NOCYCLE PRIOR table_name = r_table_name
+                         AND PRIOR column_name = r_column_name
+                         ORDER BY table_name, r_table_name, POSITION;
+#+end_src
+
+#+begin_src sql
+-- For Oracle.
+SELECT owner, table_name, constraint_name, r_owner, r_constraint_name, status
+FROM all_constraints
+WHERE constraint_type = 'R'             -- Referential integrity
+    AND r_constraint_name IN
+    (
+        SELECT constraint_name
+        FROM all_constraints
+        WHERE constraint_type IN ('P', 'U') -- Primary key or Unique
+        AND table_name LIKE UPPER('%')
+    )
+ORDER BY
+    table_name,
+    constraint_name;
 #+end_src
 
 *** The DELETE statement conflicted with the REFERENCE constraint
