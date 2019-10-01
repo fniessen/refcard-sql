@@ -1042,7 +1042,9 @@ Don't apply this advice in read-heavy, write-rarely databases.
 #+begin_src sql :tangle no
 -- For SQL Server.
 WITH i
-AS (SELECT
+AS
+(
+    SELECT
         t.name AS table_name,
         i.name AS index_name,
         c.name AS column_name,
@@ -1053,63 +1055,66 @@ AS (SELECT
     JOIN sys.columns                    c
         ON ic.object_id = c.object_id AND ic.column_id = c.column_id
     JOIN sys.tables                     t
-        ON i.object_id = t.object_id),
+        ON i.object_id = t.object_id
+),
 
 indexes
-AS (SELECT
+AS
+(
+    SELECT
         table_name,
         index_name,
-        STUFF(
-             (
-                 SELECT ',' + j.column_name
-                 FROM i j
-                 WHERE i.table_name = j.table_name
-                       AND i.index_name = j.index_name
-                 FOR
-                 XML PATH('') -- Yay, XML in SQL!
-             ), 1, 1, '')               columns
+        STUFF((
+                  SELECT ',' + j.column_name
+                  FROM i j
+                  WHERE i.table_name = j.table_name
+                        AND i.index_name = j.index_name
+                  FOR XML PATH('')      -- Yay, XML in SQL!
+              ), 1, 1, '')              AS columns
     FROM i
     GROUP BY
         table_name,
-        index_name)
+        index_name
+)
 
 SELECT
     i.table_name,
-    i.index_name AS "Deletion candidate index",
-    i.columns AS "Deletion candidate columns",
-    j.index_name AS "Existing index",
-    j.columns AS "Existing columns"
-FROM indexes i
-JOIN indexes j
-    ON i.table_name = j.table_name
-        AND j.columns LIKE i.columns + ',%';
+    i.index_name                        AS "Deletion candidate index",
+    i.columns                           AS "Deletion candidate columns",
+    j.index_name                        AS "Existing index",
+    j.columns                           AS "Existing columns"
+FROM indexes                            i
+JOIN indexes                            j
+    ON i.table_name = j.table_name AND j.columns LIKE i.columns + ',%';
 #+end_src
 
 #+begin_src sql :tangle no
 -- For Oracle.
 WITH indexes
-AS (SELECT
+AS
+(
+    SELECT
         i.index_name,
         i.table_name,
         LISTAGG(c.column_name, ', ')
             WITHIN GROUP (ORDER BY c.column_position) AS columns
-    FROM all_indexes i
+    FROM all_indexes                    i
          JOIN all_ind_columns c ON i.index_name = c.index_name
     GROUP BY
         i.table_name,
         i.index_name,
-        i.leaf_blocks)
+        i.leaf_blocks
+)
 
 SELECT
     i.table_name,
-    i.index_name AS "Deletion candidate index",
-    i.columns AS "Deletion candidate columns",
-    j.index_name AS "Existing index",
-    j.columns AS "Existing columns"
-FROM indexes i
-JOIN indexes j
-    ON i.table_name = j.table_name
-        AND j.columns LIKE i.columns || ',%';
+    i.index_name                        AS "Deletion candidate index",
+    i.columns                           AS "Deletion candidate columns",
+    j.index_name                        AS "Existing index",
+    j.columns                           AS "Existing columns"
+FROM indexes                            i
+JOIN indexes                            j
+    ON i.table_name = j.table_name AND j.columns LIKE i.columns || ',%';
 #+end_src
 
 **** List unused indexes
