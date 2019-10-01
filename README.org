@@ -970,10 +970,10 @@ INNER JOIN sys.columns                  col
     ON ic.object_id = col.object_id AND ic.column_id = col.column_id
 INNER JOIN sys.tables                   t
     ON i.object_id = t.object_id
-WHERE i.is_primary_key = 0
+WHERE /* i.is_primary_key = 0
     AND i.is_unique = 0
     AND i.is_unique_constraint = 0
-    AND t.is_ms_shipped = 0
+    AND */ t.is_ms_shipped = 0
     AND i.name LIKE '%%'                -- Index name.
 ORDER BY
     t.name,
@@ -982,7 +982,49 @@ ORDER BY
     ic.index_column_id;
 #+end_src
 
-A *comma-separated list* of index columns could be an improvement...
+*Comma-separated list* of index columns:
+
+#+begin_src sql :tangle no
+-- List Indexes (for SQL Server).  Idem as above, with columns concatenated per index.
+SELECT
+    -- SCHEMA_NAME(t.schema_id)            AS "schema",
+    t.name                              AS table_name,
+    i.name                              AS index_name,
+    SUBSTRING(column_names, 1, LEN(column_names) - 1) AS columns,
+    CASE
+        WHEN i.type = 1                 THEN 'Clustered index'
+        WHEN i.type = 2                 THEN 'Nonclustered unique index'
+        WHEN i.type = 3                 THEN 'XML index'
+        WHEN i.type = 4                 THEN 'Spatial index'
+        WHEN i.type = 5                 THEN 'Clustered columnstore index'
+        WHEN i.type = 6                 THEN 'Nonclustered columnstore index'
+        WHEN i.type = 7                 THEN 'Nonclustered hash index'
+    END                                 AS index_type,
+    CASE
+        WHEN i.is_unique = 1            THEN 'Unique'
+                                        ELSE 'Not unique'
+    END                                 AS "unique"
+FROM sys.objects                        t
+INNER JOIN sys.indexes                  i
+    ON t.object_id = i.object_id
+CROSS APPLY
+(
+    SELECT col.name + ', '
+    FROM sys.index_columns              ic
+    INNER JOIN sys.columns              col
+        ON ic.object_id = col.object_id AND ic.column_id = col.column_id
+    WHERE ic.object_id = t.object_id
+        AND ic.index_id = i.index_id
+    ORDER BY index_column_id
+    FOR XML PATH('')
+)                                       D(column_names)
+WHERE t.is_ms_shipped = 0
+    AND index_id > 0
+    AND i.name LIKE '%%'
+ORDER BY
+    t.name,
+    i.name;
+#+end_src
 
 #+begin_src sql :tangle no
 -- List Indexes (for Oracle).
@@ -1016,7 +1058,7 @@ SELECT
     aic.index_owner,
     aic.table_name,
     aic.index_name,
-    LISTAGG(aic.column_name, ',')
+    LISTAGG(aic.column_name, ', ')
         WITHIN GROUP (ORDER BY aic.column_position) AS COLS
 FROM all_ind_columns                    aic
 -- Exclude (some) Oracle default schemas.
@@ -1277,12 +1319,12 @@ SET @SearchPattern = '%$0%'
 SELECT
     SCHEMA_NAME(o.schema_id) AS [schema],
     o.[name],
-    o.[type],
-    '['+SCHEMA_NAME(o.schema_id)+'].['+o.[name]+']' AS [FullName],
+    o.type,
+    '[' + SCHEMA_NAME(o.schema_id) + '].[' + o.[name] + ']' AS [FullName],
     OBJECT_DEFINITION(object_id) AS [Source]
 FROM sys.objects AS o
 WHERE LOWER(OBJECT_DEFINITION(o.object_id)) LIKE LOWER(@SearchPattern)
-    AND o.[type] IN (
+    AND o.type IN (
     'C', --- = Check constraint
     'D', --- = Default (constraint or stand-alone)
     'P', --- = SQL stored procedure
@@ -1297,13 +1339,13 @@ UNION ALL
 SELECT
     SCHEMA_NAME(q.schema_id) AS [schema],
     q.[name],
-    'SQ' AS [type],
-    '['+SCHEMA_NAME(q.schema_id)+'].['+q.[name]+']' AS [FullName],
+    'SQ' AS type,
+    '[' + SCHEMA_NAME(q.schema_id) + '].[' + q.[name] + ']' AS [FullName],
     activation_procedure AS [Source]
 FROM sys.service_queues q
 WHERE q.activation_procedure LIKE LOWER(@SearchPattern)
 ORDER BY
-    o.[type],
+    o.type,
     o.[name];
 #+end_src
 
@@ -2097,7 +2139,7 @@ Retrieve 20 most recently created objects.
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/mro.yasnippet
 # name: Retrieve 20 most rec...
 # --
-SELECT TOP 20 [name], [type], crdate
+SELECT TOP 20 [name], type, crdate
 FROM sysobjects
 ORDER BY crdate DESC
 #+end_src
@@ -3032,10 +3074,10 @@ SELECT
         WHEN trg.parent_class = 0       THEN 'Database trigger'
     END [class],
     CASE
-        WHEN trg.[type] = 'TA'          THEN 'Assembly (CLR) trigger'
-        WHEN trg.[type] = 'TR'          THEN 'SQL trigger'
+        WHEN trg.type = 'TA'          THEN 'Assembly (CLR) trigger'
+        WHEN trg.type = 'TR'          THEN 'SQL trigger'
                                         ELSE ''
-    END                                 AS [type],
+    END                                 AS type,
     CASE
         WHEN is_disabled = 1            THEN '1 = Disabled'
                                         ELSE '0 = Enabled'
@@ -3207,7 +3249,7 @@ SELECT
 FROM sys.objects                        o
 WHERE
     UPPER(OBJECT_DEFINITION(o.object_id)) LIKE '%' + UPPER('kpi_actuals') + '%'
-    AND o.[type] IN (
+    AND o.type IN (
         'C',                            -- Check constraint.
         'D',                            -- Default (constraint or stand-alone).
         'P',                            -- SQL stored procedure.
