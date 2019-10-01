@@ -991,12 +991,13 @@ SELECT
     ind.table_name,
     ind.index_name,
     ind_col.column_name,
+    ind_col.column_position,
     ind.uniqueness
 FROM sys.all_indexes                    ind
 INNER JOIN sys.all_ind_columns          ind_col
     ON ind.owner = ind_col.index_owner
         AND ind.index_name = ind_col.index_name
--- Exclude some Oracle default schemas.
+-- Exclude (some) Oracle default schemas.
 WHERE ind.owner NOT IN ('CTXSYS', 'MDSYS', 'SYS', 'SYSTEM', 'XDB')
 ORDER BY
     ind.table_owner,
@@ -1008,20 +1009,24 @@ ORDER BY
 Comma-separated list of index columns:
 
 #+begin_src sql :tangle no
--- List Indexes (for Oracle).
+-- List Indexes (for Oracle).  Idem as above, with columns concatenated per index.
 SELECT
     aic.index_owner,
     aic.table_name,
-    LISTAGG(aic.column_name, ',') WITHIN GROUP (ORDER BY aic.column_position) AS COLS
+    aic.index_name,
+    LISTAGG(aic.column_name, ',')
+        WITHIN GROUP (ORDER BY aic.column_position) AS COLS
 FROM all_ind_columns                    aic
--- Exclude some Oracle default schemas.
+-- Exclude (some) Oracle default schemas.
 WHERE aic.index_owner NOT IN ('CTXSYS', 'MDSYS', 'SYS', 'SYSTEM', 'XDB')
 GROUP BY
     aic.index_owner,
-    aic.table_name
+    aic.table_name,
+    aic.index_name
 ORDER BY
     aic.index_owner,
-    aic.table_name;
+    aic.table_name,
+    aic.index_name;
 #+end_src
 
 **** List unused indexes
