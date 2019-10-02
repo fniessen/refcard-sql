@@ -1020,7 +1020,7 @@ CROSS APPLY
 )                                       D(column_names)
 WHERE t.is_ms_shipped = 0
     AND index_id > 0
-    AND i.name LIKE '%%'
+    AND i.name LIKE '%%'                -- Index name.
 ORDER BY
     t.name,
     i.name;
@@ -1073,6 +1073,123 @@ ORDER BY
     aic.index_owner,
     aic.table_name,
     aic.index_name;
+#+end_src
+
+**** List missing indexes
+
+Script supposed to suggest missing indexes to be crated to improve performance.
+
+#+begin_src sql :tangle no
+SELECT TOP 25
+    -- An estimate of the overall value of this index
+    CAST(user_seeks * avg_total_user_cost * (avg_user_impact * 0.01) AS INT) AS [index_advantage],
+    -- The last time another seek was added to this row.
+    migs.last_user_seek,
+    mid.[statement]                     AS [Database.Schema.Table],
+    -- Columns that were part of an exact comparison
+    mid.equality_columns,
+    -- Columns that were part on any other comparison including <, >, <>, or BETWEEN
+    mid.inequality_columns,
+    -- Columns return, but not part of a comparison
+    mid.included_columns,
+    -- Number of times this index would have been used if it had existed
+    migs.user_seeks,
+    -- Cost of query without the index
+    migs.avg_total_user_cost,
+    -- Estimated improvment of previous column cost if this index is created
+    migs.avg_user_impact,
+    'CREATE INDEX IX_' + LEFT(RIGHT(mid.STATEMENT, CHARINDEX('[', REVERSE(mid.[statement]))-1), LEN(RIGHT(mid.STATEMENT, CHARINDEX('[', REVERSE(mid.[statement]))-1))-1) + '_'
+    + CASE
+          WHEN mid.inequality_columns IS NULL THEN REPLACE(REPLACE(REPLACE(mid.equality_columns, ', ', '_'), '[', ''), ']', '')
+          WHEN mid.equality_columns IS NULL THEN REPLACE(REPLACE(REPLACE(mid.inequality_columns, ', ', '_'), '[', ''), ']', '')
+          ELSE REPLACE(REPLACE(REPLACE(mid.equality_columns, ', ', '_'), '[', ''), ']', '') + '_' + REPLACE(REPLACE(REPLACE(mid.inequality_columns, ', ', '_'), '[', ''), ']', '')
+      END + ' ON ' + mid.STATEMENT + ' ('
+    + CASE
+          WHEN mid.inequality_columns IS NULL THEN mid.equality_columns
+          WHEN mid.equality_columns IS NULL THEN mid.inequality_columns
+          ELSE mid.equality_columns + ', ' + mid.inequality_columns
+      END + ')'
+    + CASE
+          WHEN ISNULL(mid.included_columns, '') <> '' THEN ' INCLUDE (' + mid.included_columns + ')'
+          ELSE ''
+      END                               AS CREATE_STATEMENT
+FROM sys.dm_db_missing_index_group_stats migs
+INNER JOIN sys.dm_db_missing_index_groups mig
+    ON migs.group_handle = mig.index_group_handle
+INNER JOIN sys.dm_db_missing_index_details mid
+    ON mig.index_handle = mid.index_handle
+WHERE mid.database_id = DB_ID()
+ORDER BY index_advantage DESC;
+#+end_src
+
+Script to create missing indexes on FK columns.  (Caution -- For performance
+reason, not all FK needs to be indexed!)
+
+#+begin_src sql :tangle no
+-- For Oracle.
+-- BUG: Does not handle properly index names on multiple columns.
+SELECT 'CREATE INDEX ' || fk.table_name || '_' || columns || ' on ' || fk.table_name || '(' || columns || ');' SQL_QUERY
+   -- TABLESPACE afm_ndx; ' --,
+    ,all_tables.num_rows
+   --    , fk.*
+FROM (SELECT DECODE (b.table_name, NULL, '<missing>', 'ok') status,
+             a.table_name,
+             a.columns,
+             b.columns col_index
+      FROM (SELECT substr (a.table_name, 1, 30) table_name,
+                   substr (a.constraint_name, 1, 30) constraint_name,
+                   MAX (DECODE (position, 1, substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (position, 2, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (position, 3, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (position, 4, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (position, 5, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (position, 6, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (position, 7, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (position, 8, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (position, 9, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (position, 10, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (position, 11, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (position, 12, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (position, 13, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (position, 14, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (position, 15, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (position, 16, ', ' || substr (column_name, 1, 30), NULL)) columns
+            FROM user_cons_columns a,
+                 user_constraints b
+            WHERE a.constraint_name = b.constraint_name AND b.constraint_type = 'R'
+            GROUP BY substr (a.table_name, 1, 30),
+                     substr (a.constraint_name, 1, 30)
+           ) a,
+           (SELECT substr (table_name, 1, 30) table_name,
+                   substr (index_name, 1, 30) index_name,
+                   MAX (DECODE (column_position, 1, substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (column_position, 2, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (column_position, 3, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (column_position, 4, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (column_position, 5, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (column_position, 6, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (column_position, 7, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (column_position, 8, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (column_position, 9, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (column_position, 10, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (column_position, 11, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (column_position, 12, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (column_position, 13, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (column_position, 14, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (column_position, 15, ', ' || substr (column_name, 1, 30), NULL)) ||
+                   MAX (DECODE (column_position, 16, ', ' || substr (column_name, 1, 30), NULL)) columns
+            FROM user_ind_columns
+            GROUP BY substr (table_name, 1, 30),
+                     substr (index_name, 1, 30)
+           ) b
+      WHERE a.table_name = b.table_name (+) AND b.columns (+) LIKE a.columns || '%'
+     ) fk,
+     all_tables
+WHERE fk.table_name = all_tables.table_name
+  AND fk.table_name LIKE UPPER('%%')
+  AND fk.status = '<missing>'
+  AND num_rows != 0
+ORDER BY fk.table_name;
 #+end_src
 
 **** List redundant indexes
