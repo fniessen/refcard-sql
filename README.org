@@ -1077,9 +1077,24 @@ ORDER BY
 
 **** List missing indexes
 
-Script supposed to suggest missing indexes to be crated to improve performance.
+SQL script to *help identifying* ways to increase performance based on the most
+commonly-run queries.
+
+It analyzes the recent queries that have been run, and suggests database indexes
+that could be added in order to speed them up. Aside from just straight
+*re-building primary key indexes*, this is the best tool we've seen for *speeding
+up performance* in SQL Server queries, *from minutes down to seconds*.
+
+#+begin_warning
+Each database has different volumes of data on each table in their environment,
+and *adding too many indexes to a database can drastically reduce its
+performance*.  Hence, a DBA should look at the use cases for an environment and
+what tables those uses cases cover, and figure out effective indexes to put on
+the database.
+#+end_warning
 
 #+begin_src sql :tangle no
+-- For SQL Server.
 SELECT TOP 25
     -- An estimate of the overall value of this index
     CAST(user_seeks * avg_total_user_cost * (avg_user_impact * 0.01) AS INT) AS [index_advantage],
@@ -1122,8 +1137,8 @@ WHERE mid.database_id = DB_ID()
 ORDER BY index_advantage DESC;
 #+end_src
 
-Script to create missing indexes on FK columns.  (Caution -- For performance
-reason, not all FK needs to be indexed!)
+Script to create missing indexes on all FK columns.  (*WARNING --* For performance
+reason, not all FK need to be indexed!)
 
 #+begin_src sql :tangle no
 -- For Oracle.
