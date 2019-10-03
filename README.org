@@ -3144,9 +3144,9 @@ to *list database triggers* as well!
 SELECT
     OBJECT_NAME(so.parent_obj)          AS TABLE_NAME,
     so.name                             AS TRIGGER_NAME,
-    OBJECTPROPERTY(so.id, 'ExecIsInsertTrigger')    AS INSERT,
-    OBJECTPROPERTY(so.id, 'ExecIsUpdateTrigger')    AS UPDATE,
-    OBJECTPROPERTY(so.id, 'ExecIsDeleteTrigger')    AS DELETE,
+    OBJECTPROPERTY(so.id, 'ExecIsInsertTrigger')    AS "INSERT",
+    OBJECTPROPERTY(so.id, 'ExecIsUpdateTrigger')    AS "UPDATE",
+    OBJECTPROPERTY(so.id, 'ExecIsDeleteTrigger')    AS "DELETE",
     OBJECTPROPERTY(so.id, 'ExecIsAfterTrigger')     AS AFTER,
     OBJECTPROPERTY(so.id, 'ExecIsInsteadOfTrigger') AS INSTEAD_OF,
     OBJECTPROPERTY(so.id, 'ExecIsTriggerDisabled')  AS DISABLED
@@ -3178,12 +3178,12 @@ ORDER BY
 #+begin_src sql
 -- List triggers.
 SELECT
-    tbl.name                            AS [table],
-    trg.name                            AS trigger_name,
+    tbl.name                            AS "TABLE",
+    trg.name                            AS TRIGGER_NAME,
     CASE
         WHEN is_instead_of_trigger = 1  THEN 'Instead of'
                                         ELSE 'After'
-    END                                 AS [activation],
+    END                                 AS ACTIVATION,
    (CASE
         WHEN OBJECTPROPERTY(trg.object_id, 'ExecIsInsertTrigger') = 1
                                         THEN 'Insert '
@@ -3200,25 +3200,24 @@ SELECT
         WHEN OBJECTPROPERTY(trg.object_id, 'ExecIsDeleteTrigger') = 1
                                         THEN 'Delete'
                                         ELSE ''
-    END)                                AS [event],
+    END)                                AS EVENT,
     CASE
         WHEN trg.parent_class = 1       THEN 'Table trigger'
         WHEN trg.parent_class = 0       THEN 'Database trigger'
-    END [class],
+    END                                 AS CLASS,
     CASE
-        WHEN trg.type = 'TA'          THEN 'Assembly (CLR) trigger'
-        WHEN trg.type = 'TR'          THEN 'SQL trigger'
+        WHEN trg.type = 'TA'            THEN 'Assembly (CLR) trigger'
+        WHEN trg.type = 'TR'            THEN 'SQL trigger'
                                         ELSE ''
-    END                                 AS type,
+    END                                 AS TYPE,
     CASE
         WHEN is_disabled = 1            THEN '1 = Disabled'
                                         ELSE '0 = Enabled'
-    END                                 AS [status],
-    OBJECT_DEFINITION(trg.object_id)    AS [definition]
+    END                                 AS STATUS,
+    OBJECT_DEFINITION(trg.object_id)    AS DEFINITION
 FROM sys.triggers                       trg
 LEFT JOIN sys.objects                   tbl
     ON trg.parent_id = tbl.object_id
-WHERE trg.name <> 'system_status_t'
 ORDER BY
     tbl.name,
     trg.name;
