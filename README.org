@@ -3211,13 +3211,16 @@ SELECT
                                         ELSE ''
     END                                 AS TYPE,
     CASE
-        WHEN is_disabled = 1            THEN '1 = Disabled'
-                                        ELSE '0 = Enabled'
+        WHEN is_disabled = 1            THEN 'Disabled'
+                                        ELSE 'Enabled'
     END                                 AS STATUS,
     OBJECT_DEFINITION(trg.object_id)    AS DEFINITION
 FROM sys.triggers                       trg
 LEFT JOIN sys.objects                   tbl
     ON trg.parent_id = tbl.object_id
+WHERE
+    tbl.name LIKE '%%'
+    AND trg.name LIKE '%%'
 ORDER BY
     tbl.name,
     trg.name;
