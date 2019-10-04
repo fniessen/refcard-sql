@@ -26,7 +26,67 @@ http://www.red-gate.com/products/sql-development/sql-prompt/
 
 https://www.eversql.com/sql-syntax-check-validator/
 
-* Sqsh
+* SQL Clients
+
+** SQL Server Management Studio
+
+Free add-ins for SQL Server Management Studio.
+
+See https://alessandroalpi.blog/2013/07/24/ssms-boost-another-cool-addin-for-sql-server-management-studio/
+
+*** SSMSBoost
+
+- Format SQL Code
+- Auto replacements (or "snippets") allow you to write frequently used SQL
+  commands more quickly
+- Copy as SQL values List
+- Fatal Actions Guard (DELETE without WHERE, UPDATE without WHERE, TRUNCATE)
+- Intellisense Completion Fix
+- Connection management
+- Locate object
+- Go to definition
+- Template scripter
+- Visualizers
+- Grid management
+
+*** SSMS Tools Pack (by Mladen Pradjc)
+
+- Regions - you can create region of code (-#region -#endregion) which can be
+  collapsed/expanded
+- History and session management - you can recover previous sessions or commands
+  from a history tab
+- Debug sections - you can add a comment in order to try a script in "debug" or
+  "release" (different executions with commented areas)
+- Execution plan analyzer - you can watch execution plans with a deeper
+  perspective (with alerting and more statistics)
+
+*** SQL Prompt (by Red-Gate)
+
+- Format SQL and coding style - you can choose how to format your T-SQL with
+  a huge set of options (uppercase/lowercase, joins, aliases, indentation and so
+  on)
+- Tab coloring (experimental) - your tab will change color based on
+  environment. Actually this is simpler than the window connection coloring by
+  SSMSToolsPack, but more useful for me.  I suggest the SSMSToolsPack one if you
+  need more customizations.
+- Point to synonyms (experimental) - when autocompletes, the plugin suggests and
+  inspects also the synonyms.
+- Enhanced intellisense - your autocomplete experience will be improved
+  a lot. You can also go to a definition/summary of an object in a popup
+  (without changing tabs) and pick the columns in case of tables.
+
+** DBeaver
+
+- Supports any database that has a JDBC or ODBC driver: *SQL Server*, *Oracle*,
+  PostgreSQL, MySQL, DB2 and many others.
+- Windows, Linux, macOS
+- Free (community)
+- *SQL Templates* -- snippets of SQL code that you use frequently
+- Data and metadata search
+- C-S-SPC for words completion (so-called "hippie autocomplete") -- it completes
+  word trying to find any identifiers matching you input in all open editors.
+
+** Sqsh
 
 #+name: current-year
 #+begin_src emacs-lisp :eval yes :results silent :tangle no :exports none
@@ -183,9 +243,9 @@ and press Parse. Your output will be formatted and totaled. Enjoy.
 ## .sqshrc ends here
 #+end_src
 
-* Mssql-cli
+** Mssql-cli
 
-** Features
+*** Features
 
 New and interactive command line query tool for SQL Server. This open source
 tool works cross-platform and is a proud member of the dbcli community.
@@ -200,7 +260,7 @@ Features
 
 https://cloudblogs.microsoft.com/sqlserver/2017/12/12/try-mssql-cli-a-new-interactive-command-line-tool-for-sql-server/
 
-** Setup
+*** Setup
 
 #+begin_src shell :tangle no
 sudo apt install python-pip python-dev
@@ -429,6 +489,8 @@ SELECT
 
 **** [ssf] Select Star From
 
+~SELECT~ with condition.
+
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/ssf.yasnippet
 # name: SELECT * FROM frag...
 # --
@@ -475,7 +537,9 @@ FROM $0
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/scgb.yasnippet
 # name: Count with group by
 # --
-SELECT ${1:col}, COUNT(*) FROM $0 GROUP BY $1
+SELECT ${1:col}, COUNT(*)
+FROM $0
+GROUP BY $1
 #+end_src
 
 **** [num] Format Number
@@ -1020,6 +1084,7 @@ CROSS APPLY
 )                                       D(column_names)
 WHERE t.is_ms_shipped = 0
     AND index_id > 0
+    AND t.name LIKE '%%'                -- Table name.
     AND i.name LIKE '%%'                -- Index name.
 ORDER BY
     t.name,
@@ -1041,7 +1106,8 @@ INNER JOIN sys.all_ind_columns          ind_col
         AND ind.index_name = ind_col.index_name
 -- Exclude (some) Oracle default schemas.
 WHERE
-    ind.owner NOT IN ('CTXSYS', 'MDSYS', 'SYS', 'SYSTEM', 'XDB')
+    ind.owner NOT IN ('APEX_040200', 'CTXSYS', 'LBACSYS', 'MDSYS', 'OLAPSYS',
+                      'ORDDATA', 'ORDSYS', 'SYS', 'SYSTEM', 'WMSYS', 'XDB')
     AND ind.index_name LIKE UPPER('%%')
 ORDER BY
     ind.table_owner,
@@ -1063,7 +1129,9 @@ SELECT
 FROM all_ind_columns                    aic
 -- Exclude (some) Oracle default schemas.
 WHERE
-    aic.index_owner NOT IN ('CTXSYS', 'MDSYS', 'SYS', 'SYSTEM', 'XDB')
+    aic.index_owner NOT IN ('APEX_040200', 'CTXSYS', 'LBACSYS', 'MDSYS', 'OLAPSYS',
+                            'ORDDATA', 'ORDSYS', 'SYS', 'SYSTEM', 'WMSYS', 'XDB')
+    AND aic.table_name LIKE UPPER('%%')
     AND aic.index_name LIKE UPPER('%%')
 GROUP BY
     aic.index_owner,
@@ -1407,11 +1475,21 @@ SELECT
     TABLE_NAME AS view_name
 FROM INFORMATION_SCHEMA.VIEWS
 WHERE TABLE_NAME LIKE '%%';
+#+end_src
 
--- SELECT owner, view_name
--- FROM sys.all_views
--- WHERE owner = 'AFM'
---     AND view_name LIKE '%%';
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/lvora.yasnippet
+-- For Oracle.
+SELECT
+    owner,
+    view_name
+FROM sys.all_views
+WHERE
+    owner NOT IN ('APEX_040200', 'CTXSYS', 'LBACSYS', 'MDSYS', 'OLAPSYS',
+                  'ORDDATA', 'ORDSYS', 'SYS', 'SYSTEM', 'WMSYS', 'XDB')
+    AND view_name LIKE '%%'
+ORDER BY
+    owner,
+    view_name;
 #+end_src
 
 **** [sf] Show Function
