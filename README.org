@@ -1014,6 +1014,20 @@ Collation ~SQL_Latin1_General_CP1_CI_AI~:
 
 List functions.
 
+#+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/lf.yasnippet
+# name: List Functions
+# --
+SELECT
+    name,
+    definition,
+    type_desc,
+    type
+FROM sys.sql_modules m
+INNER JOIN sys.objects o
+    ON m.object_id = o.object_id
+WHERE type IN ('FN', 'IF', 'TF');
+#+end_src
+
 **** [li] List Indexes
 
 List indexes.
@@ -1104,8 +1118,8 @@ FROM sys.all_indexes                    ind
 INNER JOIN sys.all_ind_columns          ind_col
     ON ind.owner = ind_col.index_owner
         AND ind.index_name = ind_col.index_name
--- Exclude (some) Oracle default schemas.
 WHERE
+    -- Exclude (some) Oracle default schemas.
     ind.owner NOT IN ('APEX_040200', 'CTXSYS', 'LBACSYS', 'MDSYS', 'OLAPSYS',
                       'ORDDATA', 'ORDSYS', 'SYS', 'SYSTEM', 'WMSYS', 'XDB')
     AND ind.index_name LIKE UPPER('%%')
@@ -1127,8 +1141,8 @@ SELECT
     LISTAGG(aic.column_name, ', ')
         WITHIN GROUP (ORDER BY aic.column_position) AS COLS
 FROM all_ind_columns                    aic
--- Exclude (some) Oracle default schemas.
 WHERE
+    -- Exclude (some) Oracle default schemas.
     aic.index_owner NOT IN ('APEX_040200', 'CTXSYS', 'LBACSYS', 'MDSYS', 'OLAPSYS',
                             'ORDDATA', 'ORDSYS', 'SYS', 'SYSTEM', 'WMSYS', 'XDB')
     AND aic.table_name LIKE UPPER('%%')
@@ -1484,6 +1498,7 @@ SELECT
     view_name
 FROM sys.all_views
 WHERE
+    -- Exclude (some) Oracle default schemas.
     owner NOT IN ('APEX_040200', 'CTXSYS', 'LBACSYS', 'MDSYS', 'OLAPSYS',
                   'ORDDATA', 'ORDSYS', 'SYS', 'SYSTEM', 'WMSYS', 'XDB')
     AND view_name LIKE '%%'
@@ -3369,6 +3384,32 @@ WHERE EXISTS
     WHERE OBJECT_NAME(c.object_id) + '_' + c.name + '_t' = t.name
 )
 ORDER BY 1, 2;
+#+end_src
+
+*** For Oracle
+
+#+begin_src sql
+-- List triggers (for Oracle).
+SELECT
+    owner                               AS trigger_schema_name,
+    trigger_name,
+    trigger_type,
+    triggering_event,
+    table_owner                         AS schema_name,
+    table_name                          AS object_name,
+    base_object_type                    AS object_type,
+    status,
+    trigger_body                        AS script
+FROM sys.all_triggers
+WHERE
+    -- Exclude (some) Oracle default schemas.
+    owner NOT IN ('APEX_040200', 'CTXSYS', 'LBACSYS', 'MDSYS', 'OLAPSYS',
+                  'ORDDATA', 'ORDSYS', 'SYS', 'SYSTEM', 'WMSYS', 'XDB')
+ORDER BY
+    trigger_name,
+    table_owner,
+    table_name,
+    base_object_type;
 #+end_src
 
 ** Using a DML trigger with a reminder e-mail message
