@@ -2658,6 +2658,8 @@ deprecated (not to mention easily confused with string literals).
 But the only portable notation is using double quotes...
 #+end_note
 
+XXX Add referenced table but avoid duplicates (multi-columns FK)
+
 #+begin_src sql
 SELECT
     OBJECT_NAME(c.object_id)            AS TABLE_NAME,
@@ -3391,24 +3393,26 @@ ORDER BY 1, 2;
 #+begin_src sql
 -- List triggers (for Oracle).
 SELECT
-    owner                               AS trigger_schema_name,
+    table_owner                         AS SCHEMA_NAME,
+    table_name                          AS OBJECT_NAME,
+    -- owner                               AS TRIGGER_SCHEMA_NAME,
     trigger_name,
     trigger_type,
     triggering_event,
-    table_owner                         AS schema_name,
-    table_name                          AS object_name,
-    base_object_type                    AS object_type,
+    base_object_type                    AS OBJECT_TYPE,
     status,
-    trigger_body                        AS script
+    trigger_body                        AS DEFINITION
 FROM sys.all_triggers
 WHERE
     -- Exclude (some) Oracle default schemas.
     owner NOT IN ('APEX_040200', 'CTXSYS', 'LBACSYS', 'MDSYS', 'OLAPSYS',
                   'ORDDATA', 'ORDSYS', 'SYS', 'SYSTEM', 'WMSYS', 'XDB')
+    AND table_name LIKE UPPER('%%')
+    AND trigger_name LIKE UPPER('%%')
 ORDER BY
-    trigger_name,
     table_owner,
     table_name,
+    trigger_name,
     base_object_type;
 #+end_src
 
