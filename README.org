@@ -12,6 +12,10 @@
 
 #+SETUPFILE: ~/.dotfiles/org/theme-readtheorg.setup
 
+* Textual Search over All Fields In All Tables For A Specific Value!!! (for checking results of anonymization)
+
+https://stackoverflow.com/questions/208493/search-all-fields-in-all-tables-for-a-specific-value-oracle
+
 * Tasks                                                               :noexport:
 
 ** TODO Watch video of SQL Prompt
@@ -2451,6 +2455,25 @@ XXX Check out https://dataedo.com/kb/query/sql-server!!! (+ version for Oracle !
 - http://blogs.lessthandot.com/index.php/datamgmt/dbprogramming/tips-and-tricks-to-make/
   Shortcuts, defaults, etc.
 
+** Table spaces in Oracle
+
+#+begin_src shell
+SELECT tablespace_name, file_name
+FROM dba_temp_files;
+
+CREATE TEMPORARY TABLESPACE temp2
+    TEMPFILE 'D:\temp2.dbf'
+    SIZE 100m AUTOEXTEND ON NEXT 100m MAXSIZE 200m;
+
+ALTER DATABASE DEFAULT TEMPORARY TABLESPACE temp2;
+
+SELECT property_name, property_value
+FROM database_properties
+WHERE property_name='DEFAULT_TEMP_TABLESPACE';
+
+DROP TABLESPACE temp3 INCLUDING CONTENTS AND DATAFILES;
+#+end_src
+
 ** SQL Server - Trace SQL
 
 #+begin_src sql
@@ -2676,7 +2699,7 @@ SELECT
     CASE
         WHEN t.name IN ('char', 'varchar', 'nvarchar', 'decimal') THEN c.max_length
         ELSE NULL
-    END                                 AS SIZE,
+    END                                 AS "SIZE",
     CASE
         WHEN c.default_object_id = 0 OR OBJECT_DEFINITION(c.default_object_id) = '(NULL)' THEN ''
         ELSE OBJECT_DEFINITION(c.default_object_id)
@@ -2723,6 +2746,25 @@ Join to *user* ~_type_id~ in the ~sys.types~ table.  ~user_type_id~ is identical
 ~system_type_id~ for system types -- See
 https://msdn.microsoft.com/en-gb/library/ms188021.aspx
 #+end_note
+
+#+begin_src sql
+-- For Oracle.
+SELECT
+    table_name,
+    column_name,
+    nullable,
+    data_type,
+    char_length,
+    data_default,
+    identity_column
+FROM user_tab_cols
+WHERE
+    table_name LIKE UPPER('%%')
+    AND column_name LIKE UPPER('%%')
+ORDER BY
+    table_name,
+    column_name;
+#+end_src
 
 ** 6 Useful SQL Server Data Dictionary Queries Every DBA Should Have
 
@@ -3409,6 +3451,7 @@ WHERE
                   'ORDDATA', 'ORDSYS', 'SYS', 'SYSTEM', 'WMSYS', 'XDB')
     AND table_name LIKE UPPER('%%')
     AND trigger_name LIKE UPPER('%%')
+    -- AND status = 'ENABLED'
 ORDER BY
     table_owner,
     table_name,
