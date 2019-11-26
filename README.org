@@ -2474,6 +2474,13 @@ WHERE property_name='DEFAULT_TEMP_TABLESPACE';
 DROP TABLESPACE temp3 INCLUDING CONTENTS AND DATAFILES;
 #+end_src
 
+** Debug - See line giving error in Oracle
+
+#+begin_src shell
+EXEC dbms_output.ENABLE(99999999);
+SET serveroutput on format wrapped;
+#+end_src
+
 ** SQL Server - Trace SQL
 
 #+begin_src sql
@@ -2949,6 +2956,20 @@ ORDER BY
 
 #+begin_src sql
 -- For Oracle.
+SELECT
+    owner,
+    table_name,
+    constraint_name,
+    r_constraint_name
+FROM all_constraints
+WHERE
+    table_name LIKE '%%'
+    AND UPPER(constraint_type) = 'R'
+    AND UPPER(status) = 'ENABLED';
+#+end_src
+
+#+begin_src sql
+-- For Oracle.
 SELECT DISTINCT
     table_name,
     column_name,
@@ -2979,6 +3000,8 @@ FROM
         ON uc.constraint_name = cols.constraint_name
     WHERE constraint_type <> 'C'
 )
+WHERE TABLE_name LIKE '%%'
+  AND r_table_name LIKE '%%'
 CONNECT BY
 NOCYCLE
     PRIOR table_name = r_table_name
