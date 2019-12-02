@@ -2455,6 +2455,22 @@ XXX Check out https://dataedo.com/kb/query/sql-server!!! (+ version for Oracle !
 - http://blogs.lessthandot.com/index.php/datamgmt/dbprogramming/tips-and-tricks-to-make/
   Shortcuts, defaults, etc.
 
+** Oracle ROWNUM vs. SQL Server TOP -- Query across both databases
+
+#+begin_src sql
+-- TOP 10 for both SQL Server and Oracle.
+SELECT *
+FROM
+(
+    SELECT
+        pct_id,
+        RANK() OVER(ORDER BY pct_id DESC) rmpct_rank
+    FROM rmpct
+) t
+WHERE rmpct_rank <= 10
+ORDER BY pct_id;
+#+end_src
+
 ** Table spaces in Oracle
 
 #+begin_src shell
