@@ -2450,6 +2450,58 @@ XXX Check out https://dataedo.com/kb/query/sql-server!!! (+ version for Oracle !
 
 - [[https://blogs.sentryone.com/aaronbertrand/backtobasics-ctes][Common Table Expressions (CTEs)]]
 
+** NULL-Aware comparison
+
+"Boolean" logic in SQL is a bit complicated, because it is a *three-valued logic*
+with ~true~, ~false~, and ~NULL~.  ~NULL~ fails basically all comparisons, so it fails
+~a = b~ and ~a <> b~.
+
+#+begin_warning
+In SQL, ~NULL~ is *not equal* (~=~) to anything -- not even to another ~NULL~.
+According to the three-valued logic of SQL, the result of ~NULL = NULL~ is not the
+boolean value /true/ but /unknown/ -- it is a *non-value*.
+
+Unfortunately, not only is ~NULL~ not equal to anything, it's also *not unequal* to
+anything.  This is where the language is confusing.
+
+Here are two common queries that just don't work:
+
+: SELECT * FROM table WHERE column = NULL;
+: SELECT * FROM table WHERE column <> NULL;
+
+They both return *no* rows!
+
+The right way to think about ~NULL~ -- The correct way to understand NULL is that
+it is not a value.  Not "this is a ~NULL~ value" but "this ~NULL~ is not a value."
+Everything either is a value, or it isn’t.  When something is a value, it is
+"1," or "hello," or "green," or "$5.00" etc -- but when something isn’t a value,
+*it just isn’t anything at all*.  SQL represents "this has no value" by the
+special non-value ~NULL~.  When someone says "the ~NULL~ value," one should mentally
+disagree, because there’s *no such thing*.  ~NULL~ is the complete, total absence of
+any value whatsoever.
+#+end_warning
+
+The correct way to write the queries -- SQL has the special ~IS [NOT] NULL~
+comparison predicate to test if a particular value is ~NULL~.
+
+: SELECT * FROM table WHERE column IS NULL;
+: SELECT * FROM table WHERE column IS NOT NULL;
+
+And the "functional opposite" of:
+
+#+begin_src sql
+   (a = b)
+OR (a IS NULL AND b IS NULL)
+#+end_src
+
+in a ~WHERE~ clause would then be:
+
+#+begin_src sql
+   (a <> b)
+OR (a IS NOT NULL AND b IS NULL)
+OR (a IS NULL AND b IS NOT NULL)
+#+end_src
+
 ** TODO Tips and Tricks to Make SQL Server Management Studio Awesome
 
 - http://blogs.lessthandot.com/index.php/datamgmt/dbprogramming/tips-and-tricks-to-make/
