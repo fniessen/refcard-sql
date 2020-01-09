@@ -2502,6 +2502,45 @@ OR (a IS NOT NULL AND b IS NULL)
 OR (a IS NULL AND b IS NOT NULL)
 #+end_src
 
+** Export table to CSV (Oracle)
+
+By design, SQL Developer only shows 5,000 records from any query, and 10,010
+rows of output in total for a single script execution.
+
+Increase those preferences in ~Database~ > ~Worksheet~ > ~Max Rows to print in
+a script~ and ~Max lines in Script output~.
+
+#+begin_src sql
+-- SET ECHO OFF
+-- SET HEADING ON
+-- SET FEEDBACK OFF
+SET COLSEP ';'
+
+-- N should be the length you want for numbers (avoid scientific notation on IDs).
+SET NUMWIDTH 10
+
+-- N should be the sum of the column widths.
+SET LINESIZE 9999
+
+-- One header row every 50,000 rows.
+SET PAGESIZE 50000
+
+SPOOL table_rmpct.csv
+
+-- Query.
+SELECT * FROM rmpct ORDER BY pct_id;
+
+SPOOL OFF
+#+end_src
+
+Could be used in a script with ~sqlplus -s~ and the SQL commands in a /heredoc/
+section, followed by:
+
+#+begin_src shell
+# Remove leading and trailing spaces in cells.
+grep -v -- ----- table_rmpct.csv | sed 's/; */;/g' | sed 's/ *;/;/g' | sponge table_rmpct.csv
+#+end_src
+
 ** TODO Tips and Tricks to Make SQL Server Management Studio Awesome
 
 - http://blogs.lessthandot.com/index.php/datamgmt/dbprogramming/tips-and-tricks-to-make/
