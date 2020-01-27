@@ -595,6 +595,11 @@ WHERE $0
 LIKE '%$0%'
 #+end_src
 
+#+begin_warning
+By default, in Oracle, the ~LIKE~ comparisons are treated in a *case-sensitive*
+manner!!!
+#+end_warning
+
 **** [today] Today
 
 #+begin_src sql :tangle ~/.emacs.d/snippets/sql-mode/today.yasnippet
@@ -1161,15 +1166,26 @@ ORDER BY
     aic.index_name;
 #+end_src
 
-**** List missing indexes
+**** List missing indexes (improve the performance of databases via indexes)
 
-SQL script to *help identifying* ways to increase performance based on the most
-commonly-run queries.
+In high-usage environments, one of the main performance bottlenecks that can
+start to appear is the speed at which the database is able to run the many SQL
+queries.
+
+The below SQL script is designed to help identifying ways to *increase
+performance in MSSQL-database environments* based on the most commonly-run
+queries in that environment.
 
 It analyzes the recent queries that have been run, and suggests database indexes
-that could be added in order to speed them up. Aside from just straight
-*re-building primary key indexes*, this is the best tool we've seen for *speeding
-up performance* in SQL Server queries, *from minutes down to seconds*.
+that could be added in order to speed them up.  The number of recent queries it
+checks can be increased or decreased by modifying the initial ~SELECT~ statement
+at the start of the script.  Aside from just straight *re-building primary key
+indexes*, this is the best tool we've seen for *speeding up performance* in SQL
+Server queries, *from minutes down to seconds*.
+
+For maximum effectiveness, this SQL script should be run on an actual production
+environment's database, so that it can best detect what the most common SQL
+queries are for that database.
 
 #+begin_warning
 Each database has different volumes of data on each table in their environment,
@@ -1180,24 +1196,24 @@ the database.
 #+end_warning
 
 #+begin_src sql :tangle no
--- For SQL Server.
+-- performance_script. For SQL Server.
 SELECT TOP 25
-    -- An estimate of the overall value of this index
+    -- An estimate of the overall value of this index.
     CAST(user_seeks * avg_total_user_cost * (avg_user_impact * 0.01) AS INT) AS [index_advantage],
     -- The last time another seek was added to this row.
     migs.last_user_seek,
     mid.[statement]                     AS [Database.Schema.Table],
-    -- Columns that were part of an exact comparison
+    -- Columns that were part of an exact comparison.
     mid.equality_columns,
-    -- Columns that were part on any other comparison including <, >, <>, or BETWEEN
+    -- Columns that were part on any other comparison including <, >, <>, or BETWEEN.
     mid.inequality_columns,
-    -- Columns return, but not part of a comparison
+    -- Columns return, but not part of a comparison.
     mid.included_columns,
-    -- Number of times this index would have been used if it had existed
+    -- Number of times this index would have been used if it had existed.
     migs.user_seeks,
-    -- Cost of query without the index
+    -- Cost of query without the index.
     migs.avg_total_user_cost,
-    -- Estimated improvment of previous column cost if this index is created
+    -- Estimated improvment of previous column cost if this index is created.
     migs.avg_user_impact,
     'CREATE INDEX IX_' + LEFT(RIGHT(mid.STATEMENT, CHARINDEX('[', REVERSE(mid.[statement]))-1), LEN(RIGHT(mid.STATEMENT, CHARINDEX('[', REVERSE(mid.[statement]))-1))-1) + '_'
     + CASE
@@ -2798,6 +2814,7 @@ But the only portable notation is using double quotes...
 XXX Add referenced table but avoid duplicates (multi-columns FK)
 
 #+begin_src sql
+-- For SQL Server.
 SELECT
     OBJECT_NAME(c.object_id)            AS TABLE_NAME,
     c.name                              AS COLUMN_NAME,
