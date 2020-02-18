@@ -97,7 +97,7 @@ See https://alessandroalpi.blog/2013/07/24/ssms-boost-another-cool-addin-for-sql
 (format-time-string "%Y")
 #+end_src
 
-#+begin_src conf :tangle ~/.dotfiles/home/.sqshrc
+#+begin_src conf :tangle .sqshrc
 # Hey Emacs, this is a -*- conf -*- file
 ## .sqshrc - My sqsh initialization file
 
@@ -151,7 +151,7 @@ See https://alessandroalpi.blog/2013/07/24/ssms-boost-another-cool-addin-for-sql
 #** Aliases for T-SQL commands
 #+end_src
 
-#+begin_src conf :tangle ~/.dotfiles/home/.sqshrc
+#+begin_src conf :tangle .sqshrc
 \alias statson='\loop -e "SET STATISTICS IO ON; SET STATISTICS TIME ON;"'
 \alias statsoff='\loop -e "SET STATISTICS IO OFF; SET STATISTICS TIME OFF;"'
 #+end_src
@@ -185,7 +185,7 @@ Want to *format your output* online in a web browser?  The [[http://statisticspa
 help with that. Just paste in the output of Statistics IO and/or Statistics Time
 and press Parse. Your output will be formatted and totaled. Enjoy.
 
-#+begin_src conf :tangle ~/.dotfiles/home/.sqshrc
+#+begin_src conf :tangle .sqshrc
 \alias planon='\loop -e "SET SHOWPLAN ON"'
 \alias planoff='\loop -e "SET SHOWPLAN OFF"'
 
