@@ -1,0 +1,6 @@
+# name: Drop column
+# --
+-- Drop a column from the table.
+ALTER TABLE ${1:[schema].[table_name]}
+    DROP COLUMN $0;
+go

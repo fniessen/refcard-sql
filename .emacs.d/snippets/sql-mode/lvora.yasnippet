@@ -1,0 +1,13 @@
+-- For Oracle.
+SELECT
+    owner,
+    view_name
+FROM sys.all_views
+WHERE
+    -- Exclude (some) Oracle default schemas.
+    owner NOT IN ('APEX_040200', 'CTXSYS', 'LBACSYS', 'MDSYS', 'OLAPSYS',
+                  'ORDDATA', 'ORDSYS', 'SYS', 'SYSTEM', 'WMSYS', 'XDB')
+    AND view_name LIKE '%%'
+ORDER BY
+    owner,
+    view_name;

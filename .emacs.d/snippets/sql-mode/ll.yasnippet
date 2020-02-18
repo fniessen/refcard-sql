@@ -1,0 +1,12 @@
+# name: List Logins
+# --
+SELECT
+    name,
+    type_desc,
+    default_database_name,
+    type,
+    create_date
+FROM sys.server_principals
+WHERE type_desc = 'SQL_LOGIN'
+    AND name LIKE '%%'
+ORDER BY name;

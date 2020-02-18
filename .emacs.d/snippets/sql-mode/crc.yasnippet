@@ -1,0 +1,5 @@
+# name: Add constraint
+# --
+ALTER TABLE ${1:[schema].[table_name]}
+    ADD CONSTRAINT ${2:constraint_name};
+go

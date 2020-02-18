@@ -193,12 +193,6 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/readtheorg/css/htmlize.css"/>
-<link rel="stylesheet" type="text/css" href="http://www.pirilampo.org/styles/readtheorg/css/readtheorg.css"/>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="http://www.pirilampo.org/styles/lib/js/jquery.stickytableheaders.js"></script>
-<script type="text/javascript" src="http://www.pirilampo.org/styles/readtheorg/js/readtheorg.js"></script>
 </head>
 <body>
 <div id="content">
@@ -207,146 +201,146 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org401be08">Textual Search over All Fields In All Tables For A Specific Value!!! (for checking results of anonymization)</a></li>
-<li><a href="#orgc977b0a">SQL Clients</a>
+<li><a href="#org98a5bc1">Textual Search over All Fields In All Tables For A Specific Value!!! (for checking results of anonymization)</a></li>
+<li><a href="#org135f1a1">SQL Clients</a>
 <ul>
-<li><a href="#org8d99c86">SQL Server Management Studio</a>
+<li><a href="#orga77d439">SQL Server Management Studio</a>
 <ul>
-<li><a href="#org8d9c519">SSMSBoost</a></li>
-<li><a href="#org3d58342">SSMS Tools Pack (by Mladen Pradjc)</a></li>
-<li><a href="#orgac54fa7">SQL Prompt (by Red-Gate)</a></li>
+<li><a href="#org5694b23">SSMSBoost</a></li>
+<li><a href="#orgbb79864">SSMS Tools Pack (by Mladen Pradjc)</a></li>
+<li><a href="#orgdde1bbe">SQL Prompt (by Red-Gate)</a></li>
 </ul>
 </li>
-<li><a href="#org453c6d8">DBeaver</a></li>
-<li><a href="#org464f775">Sqsh</a></li>
-<li><a href="#org1222f76">Mssql-cli</a>
+<li><a href="#org4e333e5">DBeaver</a></li>
+<li><a href="#org42dad35">Sqsh</a></li>
+<li><a href="#org2eb4332">Mssql-cli</a>
 <ul>
-<li><a href="#org58e20c7">Features</a></li>
-<li><a href="#org101147f">Setup</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="#orge1def92">Emacs YASnippets</a>
-<ul>
-<li><a href="#org83a91c9">Insert Snippet&#x2026;</a>
-<ul>
-<li><a href="#org3b2141f">Cursor</a></li>
-<li><a href="#orgd01e0bc">Database</a></li>
-<li><a href="#org4fd8ee2">Fragment</a></li>
-<li><a href="#orgb459874">Function</a></li>
-<li><a href="#org603dd3b">Help</a></li>
-<li><a href="#orgb5051a7">Index</a></li>
-<li><a href="#org76c664e">Join fragment</a></li>
-<li><a href="#orge78d7f6">Login</a></li>
-<li><a href="#orgcbed4de">Role</a></li>
-<li><a href="#org640b48c">Schema</a></li>
-<li><a href="#orged1f7af">Set options</a></li>
-<li><a href="#orgde5f972">Stored Procedure</a></li>
-<li><a href="#orgbbc1e7c">Synonym</a></li>
-<li><a href="#org85cb597">Table</a></li>
-<li><a href="#org3438765">Transaction</a></li>
-<li><a href="#org8d87fe7">Trigger</a></li>
-<li><a href="#orga88d13e">User</a></li>
-<li><a href="#orgf7bb181">User Defined Data Type</a></li>
-<li><a href="#orge66bb20">User Defined Table Type</a></li>
-<li><a href="#orga2c8bfc">User Defined Type</a></li>
-<li><a href="#orgd3de3f7">View</a></li>
-<li><a href="#org60f8d65">&#x2014; Miscellaneous ---</a></li>
-</ul>
-</li>
-<li><a href="#org01bfac1">Surround With&#x2026;</a>
-<ul>
-<li><a href="#org6769578">[begin] Code Snippet for BEGIN&#x2026;END block</a></li>
-<li><a href="#org9b2cca6">[if] Code Snippet for IF construct</a></li>
-<li><a href="#orge17ea02">[while] Code Snippet for WHILE loop</a></li>
+<li><a href="#org294dc46">Features</a></li>
+<li><a href="#org33ece30">Setup</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a href="#orgb26f8b8">General SQL</a>
+<li><a href="#org356816c">Emacs YASnippets</a>
 <ul>
-<li><a href="#orge8cb1d1">NULL-Aware comparison</a></li>
-<li><a href="#orgbfcdc1d">Export table to CSV (Oracle)</a></li>
-<li><a href="#orgc40bbcb"><span class="todo TODO">TODO</span> Tips and Tricks to Make SQL Server Management Studio Awesome</a></li>
-<li><a href="#orgb6b5aec">Oracle ROWNUM vs. SQL Server TOP &#x2013; Query across both databases</a></li>
-<li><a href="#orgd203488">Table spaces in Oracle</a></li>
-<li><a href="#org5dabf8a">Debug - See line giving error in Oracle</a></li>
-<li><a href="#orgef7c991">SQL Server - Trace SQL</a></li>
-<li><a href="#org5ddbcbf">SQL Dates</a></li>
-<li><a href="#orgf01e45b">Code formatting</a></li>
-<li><a href="#org0a9caf0">Table name as variable</a></li>
-<li><a href="#org36ac6e6">SQL Loop</a>
+<li><a href="#org7cf08f2">Insert Snippet&#x2026;</a>
 <ul>
-<li><a href="#org146d43c">While loop with temporary table</a></li>
-<li><a href="#org33b85ff">Cursor-like FETCH-NEXT logic</a></li>
-<li><a href="#orgfb30612">Cursor</a></li>
+<li><a href="#orgea00269">Cursor</a></li>
+<li><a href="#org6b4063d">Database</a></li>
+<li><a href="#org30ea59e">Fragment</a></li>
+<li><a href="#org7fbd9f4">Function</a></li>
+<li><a href="#orgf41b423">Help</a></li>
+<li><a href="#org11c1f95">Index</a></li>
+<li><a href="#orgb0843c2">Join fragment</a></li>
+<li><a href="#org92eb442">Login</a></li>
+<li><a href="#org9c6b846">Role</a></li>
+<li><a href="#org61430b7">Schema</a></li>
+<li><a href="#orgaa56924">Set options</a></li>
+<li><a href="#org24c545f">Stored Procedure</a></li>
+<li><a href="#org7cf11e5">Synonym</a></li>
+<li><a href="#org6f7f0b3">Table</a></li>
+<li><a href="#org75c16e4">Transaction</a></li>
+<li><a href="#org4b0d2dc">Trigger</a></li>
+<li><a href="#org6049637">User</a></li>
+<li><a href="#orgc0d4dca">User Defined Data Type</a></li>
+<li><a href="#org436fc61">User Defined Table Type</a></li>
+<li><a href="#org1799931">User Defined Type</a></li>
+<li><a href="#orgbba01f1">View</a></li>
+<li><a href="#org976063e">&#x2014; Miscellaneous ---</a></li>
 </ul>
 </li>
-<li><a href="#org00de9ff">SQL error on update: The UPDATE statement conflicted with the FOREIGN KEY constraint</a></li>
-<li><a href="#orgfa094f4">Debugging triggers</a></li>
-<li><a href="#orgbc271fe">Conversion failed when converting date and/or time from character string while inserting datetime</a></li>
-<li><a href="#org1c0c675">Retrieve DB version information</a>
+<li><a href="#orgb3a9ab0">Surround With&#x2026;</a>
 <ul>
-<li><a href="#org9dc329d">SQL Server</a></li>
-<li><a href="#orgf9ba47c">Oracle</a></li>
+<li><a href="#org068b6a0">[begin] Code Snippet for BEGIN&#x2026;END block</a></li>
+<li><a href="#org6a54f85">[if] Code Snippet for IF construct</a></li>
+<li><a href="#org48fd8c6">[while] Code Snippet for WHILE loop</a></li>
 </ul>
 </li>
-<li><a href="#org07bf78c">List all columns (sfss, afm-fields, for all the fields in the SQL Database Schema)</a></li>
-<li><a href="#org91d7284">6 Useful SQL Server Data Dictionary Queries Every DBA Should Have</a></li>
-<li><a href="#org639e6ac">Over 40 queries to find SQL Server tables with or without a certain property</a></li>
-<li><a href="#org1dbd68d">List all constraints</a></li>
-<li><a href="#org8a6d36a">List all PRIMARY KEY constraints</a></li>
-<li><a href="#org402e398">List all FOREIGN KEY constraints</a>
-<ul>
-<li><a href="#org3fda8e4">The DELETE statement conflicted with the REFERENCE constraint</a></li>
 </ul>
 </li>
-<li><a href="#orgfcddfb0">Disable/enable all constraints in the database</a></li>
-<li><a href="#org0e20e17">Disable/enable all constraints on a table</a></li>
-<li><a href="#orgb633e49">List all non-NULLABLE columns</a></li>
-<li><a href="#orgaecf0c5">List all DEFAULT constraints (with default value)</a></li>
-<li><a href="#org6af0a43">List all IDENTITY columns</a>
+<li><a href="#org1ad93bd">General SQL</a>
 <ul>
-<li><a href="#org91bf717">How to remove Identity from a column in a table?</a></li>
+<li><a href="#orge217c11">NULL-Aware comparison</a></li>
+<li><a href="#orgc01c9c4">Export table to CSV (Oracle)</a></li>
+<li><a href="#org5f5d27b"><span class="todo TODO">TODO</span> Tips and Tricks to Make SQL Server Management Studio Awesome</a></li>
+<li><a href="#orgc12914d">Oracle ROWNUM vs. SQL Server TOP &#x2013; Query across both databases</a></li>
+<li><a href="#orgfaefe75">Table spaces in Oracle</a></li>
+<li><a href="#org369f883">Debug - See line giving error in Oracle</a></li>
+<li><a href="#org31667e4">SQL Server - Trace SQL</a></li>
+<li><a href="#org6b486f0">SQL Dates</a></li>
+<li><a href="#org1db657a">Code formatting</a></li>
+<li><a href="#org3754cc1">Table name as variable</a></li>
+<li><a href="#org806dbff">SQL Loop</a>
+<ul>
+<li><a href="#org5fc6817">While loop with temporary table</a></li>
+<li><a href="#org879ed39">Cursor-like FETCH-NEXT logic</a></li>
+<li><a href="#orgf17ee5f">Cursor</a></li>
 </ul>
 </li>
-<li><a href="#org1312c71">List triggers</a>
+<li><a href="#orgc40ea10">SQL error on update: The UPDATE statement conflicted with the FOREIGN KEY constraint</a></li>
+<li><a href="#orgebb79f7">Debugging triggers</a></li>
+<li><a href="#org39d82ad">Conversion failed when converting date and/or time from character string while inserting datetime</a></li>
+<li><a href="#org37effbc">Retrieve DB version information</a>
 <ul>
-<li><a href="#orgf7bbe49">Nested triggers (server option)</a></li>
-<li><a href="#orgbfb0bfd">Recursive triggers (database option)</a></li>
-<li><a href="#org3ea1fc1">For EPO cascading_update/delete triggers</a></li>
-<li><a href="#org37278c0">For Oracle</a></li>
+<li><a href="#orgbcfc08d">SQL Server</a></li>
+<li><a href="#orgca29336">Oracle</a></li>
 </ul>
 </li>
-<li><a href="#org681cfae">Using a DML trigger with a reminder e-mail message</a></li>
-<li><a href="#org27364c7">List all stored procedures and functions</a></li>
-<li><a href="#org76dfa2a">List all views, stored procedures, functions and triggers REFERENCING a particular table</a></li>
-<li><a href="#orgc3f49db">List all indexes and index columns</a></li>
-<li><a href="#org70df40f">SQL Collation</a></li>
-<li><a href="#orgf5b9f40">Finding and Eliminating Duplicate or Overlapping Indexes</a></li>
+<li><a href="#org831fc75">List all columns (sfss, afm-fields, for all the fields in the SQL Database Schema)</a></li>
+<li><a href="#orgc230590">6 Useful SQL Server Data Dictionary Queries Every DBA Should Have</a></li>
+<li><a href="#orgdd1773d">Over 40 queries to find SQL Server tables with or without a certain property</a></li>
+<li><a href="#orgb3e15b3">List all constraints</a></li>
+<li><a href="#org0160342">List all PRIMARY KEY constraints</a></li>
+<li><a href="#org9a8e53a">List all FOREIGN KEY constraints</a>
+<ul>
+<li><a href="#org9a41493">The DELETE statement conflicted with the REFERENCE constraint</a></li>
+</ul>
+</li>
+<li><a href="#orgd4eace7">Disable/enable all constraints in the database</a></li>
+<li><a href="#org2b03058">Disable/enable all constraints on a table</a></li>
+<li><a href="#orgc994b97">List all non-NULLABLE columns</a></li>
+<li><a href="#orgfd28f23">List all DEFAULT constraints (with default value)</a></li>
+<li><a href="#org810882e">List all IDENTITY columns</a>
+<ul>
+<li><a href="#orgcdfc11d">How to remove Identity from a column in a table?</a></li>
+</ul>
+</li>
+<li><a href="#org21f620e">List triggers</a>
+<ul>
+<li><a href="#orgb9e8a60">Nested triggers (server option)</a></li>
+<li><a href="#org926493c">Recursive triggers (database option)</a></li>
+<li><a href="#org7a36991">For EPO cascading_update/delete triggers</a></li>
+<li><a href="#org695e465">For Oracle</a></li>
+</ul>
+</li>
+<li><a href="#orgf285424">Using a DML trigger with a reminder e-mail message</a></li>
+<li><a href="#org128bf63">List all stored procedures and functions</a></li>
+<li><a href="#org54cd503">List all views, stored procedures, functions and triggers REFERENCING a particular table</a></li>
+<li><a href="#org4001a75">List all indexes and index columns</a></li>
+<li><a href="#orga00988d">SQL Collation</a></li>
+<li><a href="#orgffe18b2">Finding and Eliminating Duplicate or Overlapping Indexes</a></li>
 </ul>
 </li>
 </ul>
 </div>
 </div>
 
-<div id="outline-container-org401be08" class="outline-2">
-<h2 id="org401be08">Textual Search over All Fields In All Tables For A Specific Value!!! (for checking results of anonymization)</h2>
-<div class="outline-text-2" id="text-org401be08">
+<div id="outline-container-org98a5bc1" class="outline-2">
+<h2 id="org98a5bc1">Textual Search over All Fields In All Tables For A Specific Value!!! (for checking results of anonymization)</h2>
+<div class="outline-text-2" id="text-org98a5bc1">
 <p>
 <a href="https://stackoverflow.com/questions/208493/search-all-fields-in-all-tables-for-a-specific-value-oracle">https://stackoverflow.com/questions/208493/search-all-fields-in-all-tables-for-a-specific-value-oracle</a>
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgc977b0a" class="outline-2">
-<h2 id="orgc977b0a">SQL Clients</h2>
-<div class="outline-text-2" id="text-orgc977b0a">
+<div id="outline-container-org135f1a1" class="outline-2">
+<h2 id="org135f1a1">SQL Clients</h2>
+<div class="outline-text-2" id="text-org135f1a1">
 </div>
-<div id="outline-container-org8d99c86" class="outline-3">
-<h3 id="org8d99c86">SQL Server Management Studio</h3>
-<div class="outline-text-3" id="text-org8d99c86">
+<div id="outline-container-orga77d439" class="outline-3">
+<h3 id="orga77d439">SQL Server Management Studio</h3>
+<div class="outline-text-3" id="text-orga77d439">
 <p>
 Free add-ins for SQL Server Management Studio.
 </p>
@@ -356,9 +350,9 @@ See <a href="https://alessandroalpi.blog/2013/07/24/ssms-boost-another-cool-addi
 </p>
 </div>
 
-<div id="outline-container-org8d9c519" class="outline-4">
-<h4 id="org8d9c519">SSMSBoost</h4>
-<div class="outline-text-4" id="text-org8d9c519">
+<div id="outline-container-org5694b23" class="outline-4">
+<h4 id="org5694b23">SSMSBoost</h4>
+<div class="outline-text-4" id="text-org5694b23">
 <ul class="org-ul">
 <li>Format SQL Code</li>
 <li>Auto replacements (or &ldquo;snippets&rdquo;) allow you to write frequently used SQL
@@ -376,9 +370,9 @@ commands more quickly</li>
 </div>
 </div>
 
-<div id="outline-container-org3d58342" class="outline-4">
-<h4 id="org3d58342">SSMS Tools Pack (by Mladen Pradjc)</h4>
-<div class="outline-text-4" id="text-org3d58342">
+<div id="outline-container-orgbb79864" class="outline-4">
+<h4 id="orgbb79864">SSMS Tools Pack (by Mladen Pradjc)</h4>
+<div class="outline-text-4" id="text-orgbb79864">
 <ul class="org-ul">
 <li>Regions - you can create region of code (-#region -#endregion) which can be
 collapsed/expanded</li>
@@ -392,9 +386,9 @@ perspective (with alerting and more statistics)</li>
 </div>
 </div>
 
-<div id="outline-container-orgac54fa7" class="outline-4">
-<h4 id="orgac54fa7">SQL Prompt (by Red-Gate)</h4>
-<div class="outline-text-4" id="text-orgac54fa7">
+<div id="outline-container-orgdde1bbe" class="outline-4">
+<h4 id="orgdde1bbe">SQL Prompt (by Red-Gate)</h4>
+<div class="outline-text-4" id="text-orgdde1bbe">
 <ul class="org-ul">
 <li>Format SQL and coding style - you can choose how to format your T-SQL with
 a huge set of options (uppercase/lowercase, joins, aliases, indentation and so
@@ -413,9 +407,9 @@ a lot. You can also go to a definition/summary of an object in a popup
 </div>
 </div>
 
-<div id="outline-container-org453c6d8" class="outline-3">
-<h3 id="org453c6d8">DBeaver</h3>
-<div class="outline-text-3" id="text-org453c6d8">
+<div id="outline-container-org4e333e5" class="outline-3">
+<h3 id="org4e333e5">DBeaver</h3>
+<div class="outline-text-3" id="text-org4e333e5">
 <ul class="org-ul">
 <li>Supports any database that has a JDBC or ODBC driver: <b>SQL Server</b>, <b>Oracle</b>,
 PostgreSQL, MySQL, DB2 and many others.</li>
@@ -429,9 +423,9 @@ word trying to find any identifiers matching you input in all open editors.</li>
 </div>
 </div>
 
-<div id="outline-container-org464f775" class="outline-3">
-<h3 id="org464f775">Sqsh</h3>
-<div class="outline-text-3" id="text-org464f775">
+<div id="outline-container-org42dad35" class="outline-3">
+<h3 id="org42dad35">Sqsh</h3>
+<div class="outline-text-3" id="text-org42dad35">
 <div class="org-src-container">
 <pre class="src src-conf"><span class="org-comment-delimiter"># </span><span class="org-comment">Hey Emacs, this is a -*- conf -*- file</span>
 <span class="org-comment-delimiter">## </span><span class="org-comment">.sqshrc - My sqsh initialization file</span>
@@ -607,13 +601,13 @@ and press Parse. Your output will be formatted and totaled. Enjoy.
 </div>
 </div>
 
-<div id="outline-container-org1222f76" class="outline-3">
-<h3 id="org1222f76">Mssql-cli</h3>
-<div class="outline-text-3" id="text-org1222f76">
+<div id="outline-container-org2eb4332" class="outline-3">
+<h3 id="org2eb4332">Mssql-cli</h3>
+<div class="outline-text-3" id="text-org2eb4332">
 </div>
-<div id="outline-container-org58e20c7" class="outline-4">
-<h4 id="org58e20c7">Features</h4>
-<div class="outline-text-4" id="text-org58e20c7">
+<div id="outline-container-org294dc46" class="outline-4">
+<h4 id="org294dc46">Features</h4>
+<div class="outline-text-4" id="text-org294dc46">
 <p>
 New and interactive command line query tool for SQL Server. This open source
 tool works cross-platform and is a proud member of the dbcli community.
@@ -637,9 +631,9 @@ Features
 </div>
 </div>
 
-<div id="outline-container-org101147f" class="outline-4">
-<h4 id="org101147f">Setup</h4>
-<div class="outline-text-4" id="text-org101147f">
+<div id="outline-container-org33ece30" class="outline-4">
+<h4 id="org33ece30">Setup</h4>
+<div class="outline-text-4" id="text-org33ece30">
 <div class="org-src-container">
 <pre class="src src-shell">sudo apt install python-pip python-dev
 sudo pip install --upgrade pip
@@ -657,9 +651,9 @@ kinit.exe user@domain.com
 </div>
 </div>
 
-<div id="outline-container-orge1def92" class="outline-2">
-<h2 id="orge1def92">Emacs YASnippets</h2>
-<div class="outline-text-2" id="text-orge1def92">
+<div id="outline-container-org356816c" class="outline-2">
+<h2 id="org356816c">Emacs YASnippets</h2>
+<div class="outline-text-2" id="text-org356816c">
 <p>
 A <b>SQL &ldquo;snippet&rdquo;</b> (or <b>auto-replacement</b>) is a frequently used <b>code template</b> which
 can be inserted into a code you are typing by pressing the TAB key.  It allows
@@ -693,17 +687,17 @@ Prompt snippets.
 </p>
 </div>
 
-<div id="outline-container-org83a91c9" class="outline-3">
-<h3 id="org83a91c9">Insert Snippet&#x2026;</h3>
-<div class="outline-text-3" id="text-org83a91c9">
+<div id="outline-container-org7cf08f2" class="outline-3">
+<h3 id="org7cf08f2">Insert Snippet&#x2026;</h3>
+<div class="outline-text-3" id="text-org7cf08f2">
 </div>
-<div id="outline-container-org3b2141f" class="outline-4">
-<h4 id="org3b2141f">Cursor</h4>
-<div class="outline-text-4" id="text-org3b2141f">
+<div id="outline-container-orgea00269" class="outline-4">
+<h4 id="orgea00269">Cursor</h4>
+<div class="outline-text-4" id="text-orgea00269">
 </div>
-<div id="outline-container-orgd7a9eb9" class="outline-5">
-<h5 id="orgd7a9eb9">[curff] Cursor Fast-Forward</h5>
-<div class="outline-text-5" id="text-orgd7a9eb9">
+<div id="outline-container-org2eb62dd" class="outline-5">
+<h5 id="org2eb62dd">[curff] Cursor Fast-Forward</h5>
+<div class="outline-text-5" id="text-org2eb62dd">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: Fast-forward <span class="org-keyword">read</span>-<span class="org-keyword">on</span>...
 # <span class="org-comment">--</span>
@@ -736,13 +730,13 @@ FAST_FORWARD READ_ONLY
 </div>
 </div>
 
-<div id="outline-container-orgd01e0bc" class="outline-4">
-<h4 id="orgd01e0bc">Database</h4>
-<div class="outline-text-4" id="text-orgd01e0bc">
+<div id="outline-container-org6b4063d" class="outline-4">
+<h4 id="org6b4063d">Database</h4>
+<div class="outline-text-4" id="text-org6b4063d">
 </div>
-<div id="outline-container-org2e723a9" class="outline-5">
-<h5 id="org2e723a9">[cdb] Create DataBase</h5>
-<div class="outline-text-5" id="text-org2e723a9">
+<div id="outline-container-org8c32ce6" class="outline-5">
+<h5 id="org8c32ce6">[cdb] Create DataBase</h5>
+<div class="outline-text-5" id="text-org8c32ce6">
 <p>
 Create database.
 </p>
@@ -788,9 +782,9 @@ Create database.
 </div>
 </div>
 
-<div id="outline-container-org629ea39" class="outline-5">
-<h5 id="org629ea39">[cdbsnap] Create DataBase Snapshot</h5>
-<div class="outline-text-5" id="text-org629ea39">
+<div id="outline-container-org5889711" class="outline-5">
+<h5 id="org5889711">[cdbsnap] Create DataBase Snapshot</h5>
+<div class="outline-text-5" id="text-org5889711">
 <p>
 Create snapshot.
 </p>
@@ -819,9 +813,9 @@ Create snapshot.
 </div>
 </div>
 
-<div id="outline-container-orgdcd4a8f" class="outline-5">
-<h5 id="orgdcd4a8f">[dd] Drop Database</h5>
-<div class="outline-text-5" id="text-orgdcd4a8f">
+<div id="outline-container-org874d004" class="outline-5">
+<h5 id="org874d004">[dd] Drop Database</h5>
+<div class="outline-text-5" id="text-org874d004">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Drop</span> <span class="org-keyword">database</span>
 # <span class="org-comment">--</span>
@@ -839,9 +833,9 @@ Create snapshot.
 </div>
 </div>
 
-<div id="outline-container-org661b8c5" class="outline-5">
-<h5 id="org661b8c5">Database Backup</h5>
-<div class="outline-text-5" id="text-org661b8c5">
+<div id="outline-container-org1d5c601" class="outline-5">
+<h5 id="org1d5c601">Database Backup</h5>
+<div class="outline-text-5" id="text-org1d5c601">
 <p>
 Backup database.
 </p>
@@ -863,9 +857,9 @@ Backup database.
 </div>
 </div>
 
-<div id="outline-container-orgf8aceec" class="outline-5">
-<h5 id="orgf8aceec">Database Restore</h5>
-<div class="outline-text-5" id="text-orgf8aceec">
+<div id="outline-container-org885c7c3" class="outline-5">
+<h5 id="org885c7c3">Database Restore</h5>
+<div class="outline-text-5" id="text-org885c7c3">
 <p>
 Restore database.
 </p>
@@ -890,13 +884,13 @@ Restore database.
 </div>
 </div>
 
-<div id="outline-container-org4fd8ee2" class="outline-4">
-<h4 id="org4fd8ee2">Fragment</h4>
-<div class="outline-text-4" id="text-org4fd8ee2">
+<div id="outline-container-org30ea59e" class="outline-4">
+<h4 id="org30ea59e">Fragment</h4>
+<div class="outline-text-4" id="text-org30ea59e">
 </div>
-<div id="outline-container-orgd569126" class="outline-5">
-<h5 id="orgd569126">[cr] Create</h5>
-<div class="outline-text-5" id="text-orgd569126">
+<div id="outline-container-org2086657" class="outline-5">
+<h5 id="org2086657">[cr] Create</h5>
+<div class="outline-text-5" id="text-org2086657">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Create</span> fragment
 # <span class="org-comment">--</span>
@@ -906,9 +900,9 @@ Restore database.
 </div>
 </div>
 
-<div id="outline-container-org3b11aab" class="outline-5">
-<h5 id="org3b11aab">[i] Insert</h5>
-<div class="outline-text-5" id="text-org3b11aab">
+<div id="outline-container-org218f738" class="outline-5">
+<h5 id="org218f738">[i] Insert</h5>
+<div class="outline-text-5" id="text-org218f738">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">INSERT</span> fragment
 # <span class="org-comment">--</span>
@@ -918,9 +912,9 @@ Restore database.
 </div>
 </div>
 
-<div id="outline-container-orgab7504e" class="outline-5">
-<h5 id="orgab7504e">[ii] Insert Into</h5>
-<div class="outline-text-5" id="text-orgab7504e">
+<div id="outline-container-orgabdd179" class="outline-5">
+<h5 id="orgabdd179">[ii] Insert Into</h5>
+<div class="outline-text-5" id="text-orgabdd179">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">INSERT</span> <span class="org-keyword">INTO</span> fragment
 # <span class="org-comment">--</span>
@@ -931,9 +925,9 @@ Restore database.
 </div>
 </div>
 
-<div id="outline-container-orgf057124" class="outline-5">
-<h5 id="orgf057124">[s] Select</h5>
-<div class="outline-text-5" id="text-orgf057124">
+<div id="outline-container-org44e6da0" class="outline-5">
+<h5 id="org44e6da0">[s] Select</h5>
+<div class="outline-text-5" id="text-org44e6da0">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">SELECT</span> fragment
 # <span class="org-comment">--</span>
@@ -943,9 +937,9 @@ Restore database.
 </div>
 </div>
 
-<div id="outline-container-org87ac847" class="outline-5">
-<h5 id="org87ac847">[ssf] Select Star From</h5>
-<div class="outline-text-5" id="text-org87ac847">
+<div id="outline-container-org553f31c" class="outline-5">
+<h5 id="org553f31c">[ssf] Select Star From</h5>
+<div class="outline-text-5" id="text-org553f31c">
 <p>
 <code>SELECT</code> with condition.
 </p>
@@ -961,9 +955,9 @@ Restore database.
 </div>
 </div>
 
-<div id="outline-container-org9b19ff7" class="outline-5">
-<h5 id="org9b19ff7">[sst] Select Top 10</h5>
-<div class="outline-text-5" id="text-org9b19ff7">
+<div id="outline-container-orgdfb4d3b" class="outline-5">
+<h5 id="orgdfb4d3b">[sst] Select Top 10</h5>
+<div class="outline-text-5" id="text-orgdfb4d3b">
 <p>
 Select top 10 rows.
 </p>
@@ -978,9 +972,9 @@ Select top 10 rows.
 </div>
 </div>
 
-<div id="outline-container-org08d42b1" class="outline-5">
-<h5 id="org08d42b1">[st100] Select Top 100</h5>
-<div class="outline-text-5" id="text-org08d42b1">
+<div id="outline-container-org8765088" class="outline-5">
+<h5 id="org8765088">[st100] Select Top 100</h5>
+<div class="outline-text-5" id="text-org8765088">
 <p>
 Select top 100 rows.
 </p>
@@ -995,9 +989,9 @@ Select top 100 rows.
 </div>
 </div>
 
-<div id="outline-container-org543c431" class="outline-5">
-<h5 id="org543c431">[scf] Select Count From</h5>
-<div class="outline-text-5" id="text-org543c431">
+<div id="outline-container-orgb0f01bd" class="outline-5">
+<h5 id="orgb0f01bd">[scf] Select Count From</h5>
+<div class="outline-text-5" id="text-orgb0f01bd">
 <p>
 Count number of records returned by query.
 </p>
@@ -1012,9 +1006,9 @@ Count number of records returned by query.
 </div>
 </div>
 
-<div id="outline-container-org0166daf" class="outline-5">
-<h5 id="org0166daf">[scgb] Select Count with Group By</h5>
-<div class="outline-text-5" id="text-org0166daf">
+<div id="outline-container-org6ec7e12" class="outline-5">
+<h5 id="org6ec7e12">[scgb] Select Count with Group By</h5>
+<div class="outline-text-5" id="text-org6ec7e12">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Count</span> <span class="org-keyword">with</span> <span class="org-keyword">group</span> <span class="org-keyword">by</span>
 # <span class="org-comment">--</span>
@@ -1026,9 +1020,9 @@ Count number of records returned by query.
 </div>
 </div>
 
-<div id="outline-container-orgba908b6" class="outline-5">
-<h5 id="orgba908b6">[num] Format Number</h5>
-<div class="outline-text-5" id="text-orgba908b6">
+<div id="outline-container-org6290d6c" class="outline-5">
+<h5 id="org6290d6c">[num] Format Number</h5>
+<div class="outline-text-5" id="text-org6290d6c">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: Format <span class="org-keyword">number</span>
 # <span class="org-comment">--</span>
@@ -1038,9 +1032,9 @@ FORMAT($0,<span class="org-string">'#,##0'</span>)
 </div>
 </div>
 
-<div id="outline-container-org27869b9" class="outline-5">
-<h5 id="org27869b9">[smf] Select Sum From</h5>
-<div class="outline-text-5" id="text-org27869b9">
+<div id="outline-container-orgb8aad31" class="outline-5">
+<h5 id="orgb8aad31">[smf] Select Sum From</h5>
+<div class="outline-text-5" id="text-orgb8aad31">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">SELECT</span> <span class="org-keyword">SUM</span>(*) <span class="org-keyword">FROM</span>...
 # <span class="org-comment">--</span>
@@ -1051,9 +1045,9 @@ FORMAT($0,<span class="org-string">'#,##0'</span>)
 </div>
 </div>
 
-<div id="outline-container-org1d99bae" class="outline-5">
-<h5 id="org1d99bae">[f] From</h5>
-<div class="outline-text-5" id="text-org1d99bae">
+<div id="outline-container-orgee4b59e" class="outline-5">
+<h5 id="orgee4b59e">[f] From</h5>
+<div class="outline-text-5" id="text-orgee4b59e">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">FROM</span> fragment
 # <span class="org-comment">--</span>
@@ -1063,9 +1057,9 @@ FORMAT($0,<span class="org-string">'#,##0'</span>)
 </div>
 </div>
 
-<div id="outline-container-org6dcd720" class="outline-5">
-<h5 id="org6dcd720">[is] INFORMATION_SCHEMA</h5>
-<div class="outline-text-5" id="text-org6dcd720">
+<div id="outline-container-orgd34f185" class="outline-5">
+<h5 id="orgd34f185">[is] INFORMATION_SCHEMA</h5>
+<div class="outline-text-5" id="text-orgd34f185">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: INFORMATION_SCH...
 # <span class="org-comment">--</span>
@@ -1075,9 +1069,9 @@ INFORMATION_SCHEMA$0
 </div>
 </div>
 
-<div id="outline-container-org2fb3ead" class="outline-5">
-<h5 id="org2fb3ead">[w] Where</h5>
-<div class="outline-text-5" id="text-org2fb3ead">
+<div id="outline-container-org4efc449" class="outline-5">
+<h5 id="org4efc449">[w] Where</h5>
+<div class="outline-text-5" id="text-org4efc449">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">WHERE</span> fragment
 # <span class="org-comment">--</span>
@@ -1087,9 +1081,9 @@ INFORMATION_SCHEMA$0
 </div>
 </div>
 
-<div id="outline-container-orgf43cf3e" class="outline-5">
-<h5 id="orgf43cf3e">[lk] Like</h5>
-<div class="outline-text-5" id="text-orgf43cf3e">
+<div id="outline-container-org6948f13" class="outline-5">
+<h5 id="org6948f13">[lk] Like</h5>
+<div class="outline-text-5" id="text-org6948f13">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">LIKE</span> fragment
 # <span class="org-comment">--</span>
@@ -1107,9 +1101,9 @@ manner!!!
 </div>
 </div>
 
-<div id="outline-container-org03c062a" class="outline-5">
-<h5 id="org03c062a">[today] Today</h5>
-<div class="outline-text-5" id="text-org03c062a">
+<div id="outline-container-org25f36ad" class="outline-5">
+<h5 id="org25f36ad">[today] Today</h5>
+<div class="outline-text-5" id="text-org25f36ad">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: Today fragment
 # <span class="org-comment">--</span>
@@ -1119,9 +1113,9 @@ manner!!!
 </div>
 </div>
 
-<div id="outline-container-orgd5c170f" class="outline-5">
-<h5 id="orgd5c170f">[now] Now</h5>
-<div class="outline-text-5" id="text-orgd5c170f">
+<div id="outline-container-orgd772bc3" class="outline-5">
+<h5 id="orgd772bc3">[now] Now</h5>
+<div class="outline-text-5" id="text-orgd772bc3">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: Now fragment
 # <span class="org-comment">--</span>
@@ -1131,9 +1125,9 @@ manner!!!
 </div>
 </div>
 
-<div id="outline-container-org552ea19" class="outline-5">
-<h5 id="org552ea19">[gb] Group By</h5>
-<div class="outline-text-5" id="text-org552ea19">
+<div id="outline-container-orgb81afca" class="outline-5">
+<h5 id="orgb81afca">[gb] Group By</h5>
+<div class="outline-text-5" id="text-orgb81afca">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">GROUP</span> <span class="org-keyword">BY</span> fragment
 # <span class="org-comment">--</span>
@@ -1143,9 +1137,9 @@ manner!!!
 </div>
 </div>
 
-<div id="outline-container-org274513a" class="outline-5">
-<h5 id="org274513a">[ha] Having</h5>
-<div class="outline-text-5" id="text-org274513a">
+<div id="outline-container-org083d8f7" class="outline-5">
+<h5 id="org083d8f7">[ha] Having</h5>
+<div class="outline-text-5" id="text-org083d8f7">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">HAVING</span> fragment
 # <span class="org-comment">--</span>
@@ -1155,9 +1149,9 @@ manner!!!
 </div>
 </div>
 
-<div id="outline-container-org093af2e" class="outline-5">
-<h5 id="org093af2e">[ob] Order By</h5>
-<div class="outline-text-5" id="text-org093af2e">
+<div id="outline-container-orgf35f1cc" class="outline-5">
+<h5 id="orgf35f1cc">[ob] Order By</h5>
+<div class="outline-text-5" id="text-orgf35f1cc">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">ORDER</span> <span class="org-keyword">BY</span> fragment
 # <span class="org-comment">--</span>
@@ -1167,9 +1161,9 @@ manner!!!
 </div>
 </div>
 
-<div id="outline-container-orgddfad58" class="outline-5">
-<h5 id="orgddfad58">[rwn] Row Number</h5>
-<div class="outline-text-5" id="text-orgddfad58">
+<div id="outline-container-orgc4a9609" class="outline-5">
+<h5 id="orgc4a9609">[rwn] Row Number</h5>
+<div class="outline-text-5" id="text-orgc4a9609">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: ROW_NUMBER fragment
 # <span class="org-comment">--</span>
@@ -1179,9 +1173,9 @@ ROW_NUMBER() <span class="org-keyword">OVER</span>(PARTITION <span class="org-ke
 </div>
 </div>
 
-<div id="outline-container-org1d3bab3" class="outline-5">
-<h5 id="org1d3bab3">[up] Update</h5>
-<div class="outline-text-5" id="text-org1d3bab3">
+<div id="outline-container-org871fc03" class="outline-5">
+<h5 id="org871fc03">[up] Update</h5>
+<div class="outline-text-5" id="text-org871fc03">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">UPDATE</span> fragment
 # <span class="org-comment">--</span>
@@ -1191,9 +1185,9 @@ ROW_NUMBER() <span class="org-keyword">OVER</span>(PARTITION <span class="org-ke
 </div>
 </div>
 
-<div id="outline-container-org4d85f21" class="outline-5">
-<h5 id="org4d85f21">[upd] Update</h5>
-<div class="outline-text-5" id="text-org4d85f21">
+<div id="outline-container-orgfe786ea" class="outline-5">
+<h5 id="orgfe786ea">[upd] Update</h5>
+<div class="outline-text-5" id="text-orgfe786ea">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">UPDATE</span> fragment
 # <span class="org-comment">--</span>
@@ -1205,9 +1199,9 @@ ROW_NUMBER() <span class="org-keyword">OVER</span>(PARTITION <span class="org-ke
 </div>
 </div>
 
-<div id="outline-container-orgeffae4f" class="outline-5">
-<h5 id="orgeffae4f">[d] Delete</h5>
-<div class="outline-text-5" id="text-orgeffae4f">
+<div id="outline-container-orga1414d7" class="outline-5">
+<h5 id="orga1414d7">[d] Delete</h5>
+<div class="outline-text-5" id="text-orga1414d7">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">DELETE</span> frag...
 # <span class="org-comment">--</span>
@@ -1217,9 +1211,9 @@ ROW_NUMBER() <span class="org-keyword">OVER</span>(PARTITION <span class="org-ke
 </div>
 </div>
 
-<div id="outline-container-orgee0169f" class="outline-5">
-<h5 id="orgee0169f">[df] Delete From</h5>
-<div class="outline-text-5" id="text-orgee0169f">
+<div id="outline-container-org97aab1e" class="outline-5">
+<h5 id="org97aab1e">[df] Delete From</h5>
+<div class="outline-text-5" id="text-org97aab1e">
 <p>
 Delete statement.
 </p>
@@ -1234,9 +1228,9 @@ Delete statement.
 </div>
 </div>
 
-<div id="outline-container-org6ac4843" class="outline-5">
-<h5 id="org6ac4843">[tt] Truncate Table</h5>
-<div class="outline-text-5" id="text-org6ac4843">
+<div id="outline-container-org0dc56e7" class="outline-5">
+<h5 id="org0dc56e7">[tt] Truncate Table</h5>
+<div class="outline-text-5" id="text-org0dc56e7">
 <p>
 Truncate statement.
 </p>
@@ -1250,36 +1244,36 @@ Truncate statement.
 </div>
 </div>
 
-<div id="outline-container-org1679f19" class="outline-5">
-<h5 id="org1679f19">[lin]</h5>
-<div class="outline-text-5" id="text-org1679f19">
+<div id="outline-container-org57694f3" class="outline-5">
+<h5 id="org57694f3">[lin]</h5>
+<div class="outline-text-5" id="text-org57694f3">
 <p>
 to split up code
 </p>
 </div>
 </div>
 
-<div id="outline-container-org58c6e1d" class="outline-5">
-<h5 id="org58c6e1d">[linn]</h5>
-<div class="outline-text-5" id="text-org58c6e1d">
+<div id="outline-container-org2e99775" class="outline-5">
+<h5 id="org2e99775">[linn]</h5>
+<div class="outline-text-5" id="text-org2e99775">
 <p>
 as above, with space for commentary
 </p>
 </div>
 </div>
 
-<div id="outline-container-org3a46346" class="outline-5">
-<h5 id="org3a46346">[header]</h5>
-<div class="outline-text-5" id="text-org3a46346">
+<div id="outline-container-orgaf21b7b" class="outline-5">
+<h5 id="orgaf21b7b">[header]</h5>
+<div class="outline-text-5" id="text-orgaf21b7b">
 <p>
 as above, with even  more space
 </p>
 </div>
 </div>
 
-<div id="outline-container-org9273e85" class="outline-5">
-<h5 id="org9273e85">[deci] Declare Int</h5>
-<div class="outline-text-5" id="text-org9273e85">
+<div id="outline-container-org0d9683c" class="outline-5">
+<h5 id="org0d9683c">[deci] Declare Int</h5>
+<div class="outline-text-5" id="text-org0d9683c">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">DECLARE</span> <span class="org-type">int</span> fragment
 # <span class="org-comment">--</span>
@@ -1289,9 +1283,9 @@ as above, with even  more space
 </div>
 </div>
 
-<div id="outline-container-orgebbeba6" class="outline-5">
-<h5 id="orgebbeba6">[decv] Declare Varchar</h5>
-<div class="outline-text-5" id="text-orgebbeba6">
+<div id="outline-container-orgbf02c9a" class="outline-5">
+<h5 id="orgbf02c9a">[decv] Declare Varchar</h5>
+<div class="outline-text-5" id="text-orgbf02c9a">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">DECLARE</span> <span class="org-type">varchar</span> fragment
 # <span class="org-comment">--</span>
@@ -1301,9 +1295,9 @@ as above, with even  more space
 </div>
 </div>
 
-<div id="outline-container-org666225d" class="outline-5">
-<h5 id="org666225d">[be] Begin&#x2026;End</h5>
-<div class="outline-text-5" id="text-org666225d">
+<div id="outline-container-orgf716362" class="outline-5">
+<h5 id="orgf716362">[be] Begin&#x2026;End</h5>
+<div class="outline-text-5" id="text-orgf716362">
 <p>
 Insert <code>BEGIN...END</code> block.
 </p>
@@ -1319,9 +1313,9 @@ Insert <code>BEGIN...END</code> block.
 </div>
 </div>
 
-<div id="outline-container-orgfea6023" class="outline-5">
-<h5 id="orgfea6023">[tc] Try &#x2026; Catch</h5>
-<div class="outline-text-5" id="text-orgfea6023">
+<div id="outline-container-org30cc216" class="outline-5">
+<h5 id="org30cc216">[tc] Try &#x2026; Catch</h5>
+<div class="outline-text-5" id="text-org30cc216">
 <p>
 Insert <code>TRY...CATCH</code> block.
 </p>
@@ -1348,9 +1342,9 @@ Insert <code>TRY...CATCH</code> block.
 </div>
 </div>
 
-<div id="outline-container-org68aeb46" class="outline-5">
-<h5 id="org68aeb46">[ifs] If</h5>
-<div class="outline-text-5" id="text-org68aeb46">
+<div id="outline-container-orgdcaf9d9" class="outline-5">
+<h5 id="orgdcaf9d9">[ifs] If</h5>
+<div class="outline-text-5" id="text-orgdcaf9d9">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">IF</span> fragment
 # <span class="org-comment">--</span>
@@ -1363,9 +1357,9 @@ Insert <code>TRY...CATCH</code> block.
 </div>
 </div>
 
-<div id="outline-container-org2c34b65" class="outline-5">
-<h5 id="org2c34b65">[ex] Exists</h5>
-<div class="outline-text-5" id="text-org2c34b65">
+<div id="outline-container-orgd86a6d4" class="outline-5">
+<h5 id="orgd86a6d4">[ex] Exists</h5>
+<div class="outline-text-5" id="text-orgd86a6d4">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">EXISTS</span> fragment
 # <span class="org-comment">--</span>
@@ -1375,9 +1369,9 @@ Insert <code>TRY...CATCH</code> block.
 </div>
 </div>
 
-<div id="outline-container-org3a88e4e" class="outline-5">
-<h5 id="org3a88e4e">[nex] Not Exists</h5>
-<div class="outline-text-5" id="text-org3a88e4e">
+<div id="outline-container-org532dc27" class="outline-5">
+<h5 id="org532dc27">[nex] Not Exists</h5>
+<div class="outline-text-5" id="text-org532dc27">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">NOT</span> <span class="org-keyword">EXISTS</span> fragment
 # <span class="org-comment">--</span>
@@ -1387,9 +1381,9 @@ Insert <code>TRY...CATCH</code> block.
 </div>
 </div>
 
-<div id="outline-container-org5348020" class="outline-5">
-<h5 id="org5348020">If Exists</h5>
-<div class="outline-text-5" id="text-org5348020">
+<div id="outline-container-orge5a43f4" class="outline-5">
+<h5 id="orge5a43f4">If Exists</h5>
+<div class="outline-text-5" id="text-orge5a43f4">
 <p>
 Perform an operation if a selected object exists.
 </p>
@@ -1408,9 +1402,9 @@ Perform an operation if a selected object exists.
 </div>
 </div>
 
-<div id="outline-container-orgead5ecb" class="outline-5">
-<h5 id="orgead5ecb">Case</h5>
-<div class="outline-text-5" id="text-orgead5ecb">
+<div id="outline-container-orgb057159" class="outline-5">
+<h5 id="orgb057159">Case</h5>
+<div class="outline-text-5" id="text-orgb057159">
 <div class="org-src-container">
 <pre class="src src-sql"><span class="org-keyword">CASE</span> <span class="org-comment-delimiter">/*</span><span class="org-comment">expression*/</span>
     <span class="org-keyword">WHEN</span> <span class="org-comment-delimiter">/*</span><span class="org-comment">expression*/</span> <span class="org-keyword">THEN</span> <span class="org-comment-delimiter">/*</span><span class="org-comment">result_expression*/</span>
@@ -1422,9 +1416,9 @@ Perform an operation if a selected object exists.
 </div>
 </div>
 
-<div id="outline-container-org547de81" class="outline-5">
-<h5 id="org547de81">[cte] Common Table Expression</h5>
-<div class="outline-text-5" id="text-org547de81">
+<div id="outline-container-org48e8568" class="outline-5">
+<h5 id="org48e8568">[cte] Common Table Expression</h5>
+<div class="outline-text-5" id="text-org48e8568">
 <p>
 Temporary inline view.
 </p>
@@ -1447,9 +1441,9 @@ Temporary inline view.
 </div>
 </div>
 
-<div id="outline-container-orgc92f14a" class="outline-5">
-<h5 id="orgc92f14a">[wtf] What The Fuck</h5>
-<div class="outline-text-5" id="text-orgc92f14a">
+<div id="outline-container-org524fd88" class="outline-5">
+<h5 id="org524fd88">[wtf] What The Fuck</h5>
+<div class="outline-text-5" id="text-org524fd88">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: WTF fragment
 # <span class="org-comment">--</span>
@@ -1460,17 +1454,17 @@ WTF???!??!  AAAAAARRRRRRRRRRGGGGGGGGHHHHHHHHHHHHHHHHHHH!!!!!!!!!!!!!!!!!!
 </div>
 </div>
 
-<div id="outline-container-orgb459874" class="outline-4">
-<h4 id="orgb459874">Function</h4>
-<div class="outline-text-4" id="text-orgb459874">
+<div id="outline-container-org7fbd9f4" class="outline-4">
+<h4 id="org7fbd9f4">Function</h4>
+<div class="outline-text-4" id="text-org7fbd9f4">
 <p>
 Naming convention: functions are prefixed with <code>ufn</code>.
 </p>
 </div>
 
-<div id="outline-container-orgb75e9ff" class="outline-5">
-<h5 id="orgb75e9ff">[ctif] Create Inline Table Function</h5>
-<div class="outline-text-5" id="text-orgb75e9ff">
+<div id="outline-container-org97b92fc" class="outline-5">
+<h5 id="org97b92fc">[ctif] Create Inline Table Function</h5>
+<div class="outline-text-5" id="text-org97b92fc">
 <p>
 Creates an inline table function.
 </p>
@@ -1516,9 +1510,9 @@ Creates an inline table function.
 </div>
 </div>
 
-<div id="outline-container-orgcce6a70" class="outline-5">
-<h5 id="orgcce6a70">[ctf] Create Multi-Statement Table Function</h5>
-<div class="outline-text-5" id="text-orgcce6a70">
+<div id="outline-container-org0f46c6e" class="outline-5">
+<h5 id="org0f46c6e">[ctf] Create Multi-Statement Table Function</h5>
+<div class="outline-text-5" id="text-org0f46c6e">
 <p>
 Creates a multi-statement table function.
 </p>
@@ -1557,9 +1551,9 @@ Creates a multi-statement table function.
 </div>
 </div>
 
-<div id="outline-container-org5de7768" class="outline-5">
-<h5 id="org5de7768">[csf] Create Scalar Function</h5>
-<div class="outline-text-5" id="text-org5de7768">
+<div id="outline-container-org6367212" class="outline-5">
+<h5 id="org6367212">[csf] Create Scalar Function</h5>
+<div class="outline-text-5" id="text-org6367212">
 <p>
 Creates a scalar function.
 </p>
@@ -1606,9 +1600,9 @@ Creates a scalar function.
 </div>
 </div>
 
-<div id="outline-container-org5e527ce" class="outline-5">
-<h5 id="org5e527ce">[af] Alter Function</h5>
-<div class="outline-text-5" id="text-org5e527ce">
+<div id="outline-container-org61f5319" class="outline-5">
+<h5 id="org61f5319">[af] Alter Function</h5>
+<div class="outline-text-5" id="text-org61f5319">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">ALTER</span> <span class="org-keyword">FUNCTION</span> fr...
 # <span class="org-comment">--</span>
@@ -1618,9 +1612,9 @@ Creates a scalar function.
 </div>
 </div>
 
-<div id="outline-container-org31c9570" class="outline-5">
-<h5 id="org31c9570">[dfn] Drop Function</h5>
-<div class="outline-text-5" id="text-org31c9570">
+<div id="outline-container-org067799e" class="outline-5">
+<h5 id="org067799e">[dfn] Drop Function</h5>
+<div class="outline-text-5" id="text-org067799e">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Drop</span> <span class="org-keyword">function</span>
 # <span class="org-comment">--</span>
@@ -1631,13 +1625,13 @@ Creates a scalar function.
 </div>
 </div>
 
-<div id="outline-container-org603dd3b" class="outline-4">
-<h4 id="org603dd3b">Help</h4>
-<div class="outline-text-4" id="text-org603dd3b">
+<div id="outline-container-orgf41b423" class="outline-4">
+<h4 id="orgf41b423">Help</h4>
+<div class="outline-text-4" id="text-orgf41b423">
 </div>
-<div id="outline-container-org5f837f4" class="outline-5">
-<h5 id="org5f837f4">[d] Describe object</h5>
-<div class="outline-text-5" id="text-org5f837f4">
+<div id="outline-container-org8a3b6e5" class="outline-5">
+<h5 id="org8a3b6e5">[d] Describe object</h5>
+<div class="outline-text-5" id="text-org8a3b6e5">
 <p>
 List or describe database objects. Calls <code>sp_help</code>.
 </p>
@@ -1651,9 +1645,9 @@ List or describe database objects. Calls <code>sp_help</code>.
 </div>
 </div>
 
-<div id="outline-container-orgc7a056b" class="outline-5">
-<h5 id="orgc7a056b">[ld] List Databases</h5>
-<div class="outline-text-5" id="text-orgc7a056b">
+<div id="outline-container-orgd68841f" class="outline-5">
+<h5 id="orgd68841f">[ld] List Databases</h5>
+<div class="outline-text-5" id="text-orgd68841f">
 <p>
 List databases.
 </p>
@@ -1695,9 +1689,9 @@ Collation <code>SQL_Latin1_General_CP1_CI_AI</code>:
 </div>
 </div>
 
-<div id="outline-container-org7cc868d" class="outline-5">
-<h5 id="org7cc868d">[lf] List Functions</h5>
-<div class="outline-text-5" id="text-org7cc868d">
+<div id="outline-container-org7646515" class="outline-5">
+<h5 id="org7646515">[lf] List Functions</h5>
+<div class="outline-text-5" id="text-org7646515">
 <p>
 List functions.
 </p>
@@ -1719,9 +1713,9 @@ List functions.
 </div>
 </div>
 
-<div id="outline-container-org82cce57" class="outline-5">
-<h5 id="org82cce57">[li] List Indexes</h5>
-<div class="outline-text-5" id="text-org82cce57">
+<div id="outline-container-orgf6b3d35" class="outline-5">
+<h5 id="orgf6b3d35">[li] List Indexes</h5>
+<div class="outline-text-5" id="text-orgf6b3d35">
 <p>
 List indexes.
 </p>
@@ -1861,9 +1855,9 @@ Comma-separated list of index columns:
 </div>
 </div>
 
-<div id="outline-container-orgb136efb" class="outline-5">
-<h5 id="orgb136efb">List missing indexes (improve the performance of databases via indexes)</h5>
-<div class="outline-text-5" id="text-orgb136efb">
+<div id="outline-container-orgd9f2483" class="outline-5">
+<h5 id="orgd9f2483">List missing indexes (improve the performance of databases via indexes)</h5>
+<div class="outline-text-5" id="text-orgd9f2483">
 <p>
 In high-usage environments, one of the main performance bottlenecks that can
 start to appear is the speed at which the database is able to run the many SQL
@@ -2022,9 +2016,9 @@ reason, not all FK need to be indexed!)
 </div>
 </div>
 
-<div id="outline-container-orge980b91" class="outline-5">
-<h5 id="orge980b91">List redundant indexes</h5>
-<div class="outline-text-5" id="text-orge980b91">
+<div id="outline-container-org57008d5" class="outline-5">
+<h5 id="org57008d5">List redundant indexes</h5>
+<div class="outline-text-5" id="text-org57008d5">
 <p>
 <a href="https://dzone.com/articles/how-to-find-redundant-indexes-in-sql">https://dzone.com/articles/how-to-find-redundant-indexes-in-sql</a>
 </p>
@@ -2115,9 +2109,9 @@ indexes
 </div>
 </div>
 
-<div id="outline-container-org24313ba" class="outline-5">
-<h5 id="org24313ba">List unused indexes</h5>
-<div class="outline-text-5" id="text-org24313ba">
+<div id="outline-container-org32e1c35" class="outline-5">
+<h5 id="org32e1c35">List unused indexes</h5>
+<div class="outline-text-5" id="text-org32e1c35">
 <div class="org-src-container">
 <pre class="src src-sql"><span class="org-doc">USE MASTER;</span>
 <span class="org-doc">GO</span>
@@ -2181,9 +2175,9 @@ which indexes may be good candidates to be dropped.
 </div>
 </div>
 
-<div id="outline-container-orge74fd5b" class="outline-5">
-<h5 id="orge74fd5b">[ll] List Logins</h5>
-<div class="outline-text-5" id="text-orge74fd5b">
+<div id="outline-container-org0aabacf" class="outline-5">
+<h5 id="org0aabacf">[ll] List Logins</h5>
+<div class="outline-text-5" id="text-org0aabacf">
 <p>
 List logins and associated roles.
 </p>
@@ -2206,9 +2200,9 @@ List logins and associated roles.
 </div>
 </div>
 
-<div id="outline-container-org2d2893d" class="outline-5">
-<h5 id="org2d2893d">[ls] List Schemas</h5>
-<div class="outline-text-5" id="text-org2d2893d">
+<div id="outline-container-orgd17a48d" class="outline-5">
+<h5 id="orgd17a48d">[ls] List Schemas</h5>
+<div class="outline-text-5" id="text-orgd17a48d">
 <p>
 List schemas.
 </p>
@@ -2227,9 +2221,9 @@ List schemas.
 </div>
 </div>
 
-<div id="outline-container-org2cd1e6c" class="outline-5">
-<h5 id="org2cd1e6c">[lt] List Tables</h5>
-<div class="outline-text-5" id="text-org2cd1e6c">
+<div id="outline-container-org824f7a2" class="outline-5">
+<h5 id="org824f7a2">[lt] List Tables</h5>
+<div class="outline-text-5" id="text-org824f7a2">
 <p>
 List tables.
 </p>
@@ -2250,9 +2244,9 @@ List tables.
 </div>
 </div>
 
-<div id="outline-container-org2957a9e" class="outline-5">
-<h5 id="org2957a9e">[lv] List Views</h5>
-<div class="outline-text-5" id="text-org2957a9e">
+<div id="outline-container-org333cc45" class="outline-5">
+<h5 id="org333cc45">[lv] List Views</h5>
+<div class="outline-text-5" id="text-org333cc45">
 <p>
 List views.
 </p>
@@ -2288,9 +2282,9 @@ List views.
 </div>
 </div>
 
-<div id="outline-container-org072ff51" class="outline-5">
-<h5 id="org072ff51">[sf] Show Function</h5>
-<div class="outline-text-5" id="text-org072ff51">
+<div id="outline-container-org5fea0c9" class="outline-5">
+<h5 id="org5fea0c9">[sf] Show Function</h5>
+<div class="outline-text-5" id="text-org5fea0c9">
 <p>
 Show a function&rsquo;s definition.
 </p>
@@ -2304,9 +2298,9 @@ Show a function&rsquo;s definition.
 </div>
 </div>
 
-<div id="outline-container-org9c78834" class="outline-5">
-<h5 id="org9c78834">[sis] Search In Sources</h5>
-<div class="outline-text-5" id="text-org9c78834">
+<div id="outline-container-org44365bb" class="outline-5">
+<h5 id="org44365bb">[sis] Search In Sources</h5>
+<div class="outline-text-5" id="text-org44365bb">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Search</span> <span class="org-keyword">In</span> Sources
 # <span class="org-comment">--</span>
@@ -2366,13 +2360,13 @@ Show a function&rsquo;s definition.
 </div>
 </div>
 
-<div id="outline-container-orgb5051a7" class="outline-4">
-<h4 id="orgb5051a7">Index</h4>
-<div class="outline-text-4" id="text-orgb5051a7">
+<div id="outline-container-org11c1f95" class="outline-4">
+<h4 id="org11c1f95">Index</h4>
+<div class="outline-text-4" id="text-org11c1f95">
 </div>
-<div id="outline-container-orge01226e" class="outline-5">
-<h5 id="orge01226e">[crunq] Create Unique Index</h5>
-<div class="outline-text-5" id="text-orge01226e">
+<div id="outline-container-orgf6af926" class="outline-5">
+<h5 id="orgf6af926">[crunq] Create Unique Index</h5>
+<div class="outline-text-5" id="text-orgf6af926">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Create</span> <span class="org-keyword">unique</span> <span class="org-keyword">index</span>
 # <span class="org-comment">--</span>
@@ -2383,9 +2377,9 @@ Show a function&rsquo;s definition.
 </div>
 </div>
 
-<div id="outline-container-orgd9aeaf5" class="outline-5">
-<h5 id="orgd9aeaf5">[cni] Create Non-Clustered Index (crnci)</h5>
-<div class="outline-text-5" id="text-orgd9aeaf5">
+<div id="outline-container-org7fcaae9" class="outline-5">
+<h5 id="org7fcaae9">[cni] Create Non-Clustered Index (crnci)</h5>
+<div class="outline-text-5" id="text-org7fcaae9">
 <p>
 Creates a basic, non-clustered index.
 </p>
@@ -2413,9 +2407,9 @@ $0
 </div>
 </div>
 
-<div id="outline-container-org25441fc" class="outline-5">
-<h5 id="org25441fc">[cuni] Create Unique Non-Clustered Index</h5>
-<div class="outline-text-5" id="text-org25441fc">
+<div id="outline-container-orge038ffd" class="outline-5">
+<h5 id="orge038ffd">[cuni] Create Unique Non-Clustered Index</h5>
+<div class="outline-text-5" id="text-orge038ffd">
 <p>
 Creates a unique, non-clustered index.
 </p>
@@ -2444,9 +2438,9 @@ $0
 </div>
 </div>
 
-<div id="outline-container-orgcb75c31" class="outline-5">
-<h5 id="orgcb75c31">[cci] Create Clustered Index (crci)</h5>
-<div class="outline-text-5" id="text-orgcb75c31">
+<div id="outline-container-orga5c6c1f" class="outline-5">
+<h5 id="orga5c6c1f">[cci] Create Clustered Index (crci)</h5>
+<div class="outline-text-5" id="text-orga5c6c1f">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Create</span> non-<span class="org-keyword">unique</span> cl...
 # <span class="org-comment">--</span>
@@ -2470,9 +2464,9 @@ $0
 </div>
 </div>
 
-<div id="outline-container-org1ebab46" class="outline-5">
-<h5 id="org1ebab46">[cuci] Create Unique Clustered Index</h5>
-<div class="outline-text-5" id="text-org1ebab46">
+<div id="outline-container-orgeb0f452" class="outline-5">
+<h5 id="orgeb0f452">[cuci] Create Unique Clustered Index</h5>
+<div class="outline-text-5" id="text-orgeb0f452">
 <p>
 Create index full syntax.
 </p>
@@ -2501,9 +2495,9 @@ $0
 </div>
 </div>
 
-<div id="outline-container-org4fb446d" class="outline-5">
-<h5 id="org4fb446d">[di] Drop Index</h5>
-<div class="outline-text-5" id="text-org4fb446d">
+<div id="outline-container-org399bef1" class="outline-5">
+<h5 id="org399bef1">[di] Drop Index</h5>
+<div class="outline-text-5" id="text-org399bef1">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Drop</span> <span class="org-keyword">index</span>
 # <span class="org-comment">--</span>
@@ -2514,13 +2508,13 @@ $0
 </div>
 </div>
 
-<div id="outline-container-org76c664e" class="outline-4">
-<h4 id="org76c664e">Join fragment</h4>
-<div class="outline-text-4" id="text-org76c664e">
+<div id="outline-container-orgb0843c2" class="outline-4">
+<h4 id="orgb0843c2">Join fragment</h4>
+<div class="outline-text-4" id="text-orgb0843c2">
 </div>
-<div id="outline-container-org12d2d6a" class="outline-5">
-<h5 id="org12d2d6a">[j] Join</h5>
-<div class="outline-text-5" id="text-org12d2d6a">
+<div id="outline-container-orgfe3e3f4" class="outline-5">
+<h5 id="orgfe3e3f4">[j] Join</h5>
+<div class="outline-text-5" id="text-orgfe3e3f4">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">JOIN</span> fragment
 # <span class="org-comment">--</span>
@@ -2530,9 +2524,9 @@ $0
 </div>
 </div>
 
-<div id="outline-container-orgee0953a" class="outline-5">
-<h5 id="orgee0953a">[cj] Cross Join</h5>
-<div class="outline-text-5" id="text-orgee0953a">
+<div id="outline-container-org9a528d7" class="outline-5">
+<h5 id="org9a528d7">[cj] Cross Join</h5>
+<div class="outline-text-5" id="text-org9a528d7">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">CROSS</span> <span class="org-keyword">JOIN</span> fragment
 # <span class="org-comment">--</span>
@@ -2542,9 +2536,9 @@ $0
 </div>
 </div>
 
-<div id="outline-container-org9dc47b2" class="outline-5">
-<h5 id="org9dc47b2">[fj] Full Join</h5>
-<div class="outline-text-5" id="text-org9dc47b2">
+<div id="outline-container-org43da5f3" class="outline-5">
+<h5 id="org43da5f3">[fj] Full Join</h5>
+<div class="outline-text-5" id="text-org43da5f3">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">FULL</span> <span class="org-keyword">JOIN</span> fragment
 # <span class="org-comment">--</span>
@@ -2554,9 +2548,9 @@ $0
 </div>
 </div>
 
-<div id="outline-container-org939549b" class="outline-5">
-<h5 id="org939549b">[foj] Full Outer Join</h5>
-<div class="outline-text-5" id="text-org939549b">
+<div id="outline-container-org85ab7a1" class="outline-5">
+<h5 id="org85ab7a1">[foj] Full Outer Join</h5>
+<div class="outline-text-5" id="text-org85ab7a1">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">FULL</span> <span class="org-keyword">OUTER</span> <span class="org-keyword">JOIN</span> fr...
 # <span class="org-comment">--</span>
@@ -2566,9 +2560,9 @@ $0
 </div>
 </div>
 
-<div id="outline-container-orgf411f09" class="outline-5">
-<h5 id="orgf411f09">[ij] Inner Join</h5>
-<div class="outline-text-5" id="text-orgf411f09">
+<div id="outline-container-org329fba4" class="outline-5">
+<h5 id="org329fba4">[ij] Inner Join</h5>
+<div class="outline-text-5" id="text-org329fba4">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">INNER</span> <span class="org-keyword">JOIN</span> fragment
 # <span class="org-comment">--</span>
@@ -2578,9 +2572,9 @@ $0
 </div>
 </div>
 
-<div id="outline-container-orgf889546" class="outline-5">
-<h5 id="orgf889546">[j] Join</h5>
-<div class="outline-text-5" id="text-orgf889546">
+<div id="outline-container-orgb3c079b" class="outline-5">
+<h5 id="orgb3c079b">[j] Join</h5>
+<div class="outline-text-5" id="text-orgb3c079b">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">JOIN</span> fragment
 # <span class="org-comment">--</span>
@@ -2590,9 +2584,9 @@ $0
 </div>
 </div>
 
-<div id="outline-container-org7441e81" class="outline-5">
-<h5 id="org7441e81">[lj] Left Join</h5>
-<div class="outline-text-5" id="text-org7441e81">
+<div id="outline-container-orgbcc4918" class="outline-5">
+<h5 id="orgbcc4918">[lj] Left Join</h5>
+<div class="outline-text-5" id="text-orgbcc4918">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">LEFT</span> <span class="org-keyword">JOIN</span> fragment
 # <span class="org-comment">--</span>
@@ -2602,9 +2596,9 @@ $0
 </div>
 </div>
 
-<div id="outline-container-org68e1430" class="outline-5">
-<h5 id="org68e1430">[loj] Left Outer Join</h5>
-<div class="outline-text-5" id="text-org68e1430">
+<div id="outline-container-orge17cd24" class="outline-5">
+<h5 id="orge17cd24">[loj] Left Outer Join</h5>
+<div class="outline-text-5" id="text-orge17cd24">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">LEFT</span> <span class="org-keyword">OUTER</span> <span class="org-keyword">JOIN</span> fr...
 # <span class="org-comment">--</span>
@@ -2614,9 +2608,9 @@ $0
 </div>
 </div>
 
-<div id="outline-container-orga339dd7" class="outline-5">
-<h5 id="orga339dd7">[rj] Right Join</h5>
-<div class="outline-text-5" id="text-orga339dd7">
+<div id="outline-container-org76387f6" class="outline-5">
+<h5 id="org76387f6">[rj] Right Join</h5>
+<div class="outline-text-5" id="text-org76387f6">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">RIGHT</span> <span class="org-keyword">JOIN</span> fragment
 # <span class="org-comment">--</span>
@@ -2626,9 +2620,9 @@ $0
 </div>
 </div>
 
-<div id="outline-container-orged2ef9d" class="outline-5">
-<h5 id="orged2ef9d">[roj] Right Outer Join</h5>
-<div class="outline-text-5" id="text-orged2ef9d">
+<div id="outline-container-org01f78cd" class="outline-5">
+<h5 id="org01f78cd">[roj] Right Outer Join</h5>
+<div class="outline-text-5" id="text-org01f78cd">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">RIGHT</span> <span class="org-keyword">OUTER</span> <span class="org-keyword">JOIN</span> f...
 # <span class="org-comment">--</span>
@@ -2639,13 +2633,13 @@ $0
 </div>
 </div>
 
-<div id="outline-container-orge78d7f6" class="outline-4">
-<h4 id="orge78d7f6">Login</h4>
-<div class="outline-text-4" id="text-orge78d7f6">
+<div id="outline-container-org92eb442" class="outline-4">
+<h4 id="org92eb442">Login</h4>
+<div class="outline-text-4" id="text-org92eb442">
 </div>
-<div id="outline-container-org77bcd8e" class="outline-5">
-<h5 id="org77bcd8e">[cl] Create SQL Authentication Login</h5>
-<div class="outline-text-5" id="text-org77bcd8e">
+<div id="outline-container-org1c451ea" class="outline-5">
+<h5 id="org1c451ea">[cl] Create SQL Authentication Login</h5>
+<div class="outline-text-5" id="text-org1c451ea">
 <p>
 Creates a SQL Server Authentication login.
 </p>
@@ -2667,9 +2661,9 @@ Creates a SQL Server Authentication login.
 </div>
 </div>
 
-<div id="outline-container-org4526d6b" class="outline-5">
-<h5 id="org4526d6b">Create Windows Authentication Login</h5>
-<div class="outline-text-5" id="text-org4526d6b">
+<div id="outline-container-org3ae075d" class="outline-5">
+<h5 id="org3ae075d">Create Windows Authentication Login</h5>
+<div class="outline-text-5" id="text-org3ae075d">
 <p>
 Creates a Windows Authentication login.
 </p>
@@ -2690,9 +2684,9 @@ DEFAULT_DATABASE = ${2:default_database}
 </div>
 </div>
 
-<div id="outline-container-orgdae0421" class="outline-5">
-<h5 id="orgdae0421">[dl] Drop Login</h5>
-<div class="outline-text-5" id="text-orgdae0421">
+<div id="outline-container-orgbb89338" class="outline-5">
+<h5 id="orgbb89338">[dl] Drop Login</h5>
+<div class="outline-text-5" id="text-orgbb89338">
 <p>
 Drop login.
 </p>
@@ -2708,13 +2702,13 @@ Drop login.
 </div>
 </div>
 
-<div id="outline-container-orgcbed4de" class="outline-4">
-<h4 id="orgcbed4de">Role</h4>
-<div class="outline-text-4" id="text-orgcbed4de">
+<div id="outline-container-org9c6b846" class="outline-4">
+<h4 id="org9c6b846">Role</h4>
+<div class="outline-text-4" id="text-org9c6b846">
 </div>
-<div id="outline-container-org650d5b4" class="outline-5">
-<h5 id="org650d5b4">Create Role</h5>
-<div class="outline-text-5" id="text-org650d5b4">
+<div id="outline-container-org4f96faa" class="outline-5">
+<h5 id="org4f96faa">Create Role</h5>
+<div class="outline-text-5" id="text-org4f96faa">
 <p>
 Create Database Role.
 </p>
@@ -2731,13 +2725,13 @@ Create Database Role.
 </div>
 </div>
 
-<div id="outline-container-org640b48c" class="outline-4">
-<h4 id="org640b48c">Schema</h4>
-<div class="outline-text-4" id="text-org640b48c">
+<div id="outline-container-org61430b7" class="outline-4">
+<h4 id="org61430b7">Schema</h4>
+<div class="outline-text-4" id="text-org61430b7">
 </div>
-<div id="outline-container-orga69b06d" class="outline-5">
-<h5 id="orga69b06d">Create Schema</h5>
-<div class="outline-text-5" id="text-orga69b06d">
+<div id="outline-container-orga5ea8d2" class="outline-5">
+<h5 id="orga5ea8d2">Create Schema</h5>
+<div class="outline-text-5" id="text-orga5ea8d2">
 <p>
 Create a database schema.
 </p>
@@ -2750,13 +2744,13 @@ Create a database schema.
 </div>
 </div>
 
-<div id="outline-container-orged1f7af" class="outline-4">
-<h4 id="orged1f7af">Set options</h4>
-<div class="outline-text-4" id="text-orged1f7af">
+<div id="outline-container-orgaa56924" class="outline-4">
+<h4 id="orgaa56924">Set options</h4>
+<div class="outline-text-4" id="text-orgaa56924">
 </div>
-<div id="outline-container-org3a3f031" class="outline-5">
-<h5 id="org3a3f031">[san] Set ANSI_NULLS</h5>
-<div class="outline-text-5" id="text-org3a3f031">
+<div id="outline-container-org876f48b" class="outline-5">
+<h5 id="org876f48b">[san] Set ANSI_NULLS</h5>
+<div class="outline-text-5" id="text-org876f48b">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: Change the <span class="org-keyword">current</span> A...
 # <span class="org-comment">--</span>
@@ -2766,9 +2760,9 @@ Create a database schema.
 </div>
 </div>
 
-<div id="outline-container-orgbfd05c5" class="outline-5">
-<h5 id="orgbfd05c5">[sqi] Set QUOTED_IDENTIFIER</h5>
-<div class="outline-text-5" id="text-orgbfd05c5">
+<div id="outline-container-org6a50a34" class="outline-5">
+<h5 id="org6a50a34">[sqi] Set QUOTED_IDENTIFIER</h5>
+<div class="outline-text-5" id="text-org6a50a34">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: Change the <span class="org-keyword">current</span> ...
 # <span class="org-comment">--</span>
@@ -2778,9 +2772,9 @@ Create a database schema.
 </div>
 </div>
 
-<div id="outline-container-org53f75d6" class="outline-5">
-<h5 id="org53f75d6">[sxa] Set XACT_ABORT</h5>
-<div class="outline-text-5" id="text-org53f75d6">
+<div id="outline-container-org8e3c737" class="outline-5">
+<h5 id="org8e3c737">[sxa] Set XACT_ABORT</h5>
+<div class="outline-text-5" id="text-org8e3c737">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: Change the <span class="org-keyword">current</span> X...
 # <span class="org-comment">--</span>
@@ -2791,17 +2785,17 @@ Create a database schema.
 </div>
 </div>
 
-<div id="outline-container-orgde5f972" class="outline-4">
-<h4 id="orgde5f972">Stored Procedure</h4>
-<div class="outline-text-4" id="text-orgde5f972">
+<div id="outline-container-org24c545f" class="outline-4">
+<h4 id="org24c545f">Stored Procedure</h4>
+<div class="outline-text-4" id="text-org24c545f">
 <p>
 Naming convention: stored procedures are prefixed with <code>usp</code>.
 </p>
 </div>
 
-<div id="outline-container-orgee27fd2" class="outline-5">
-<h5 id="orgee27fd2">[cp] Create Procedure Basic Template</h5>
-<div class="outline-text-5" id="text-orgee27fd2">
+<div id="outline-container-org62cb071" class="outline-5">
+<h5 id="org62cb071">[cp] Create Procedure Basic Template</h5>
+<div class="outline-text-5" id="text-org62cb071">
 <p>
 Create a simple stored procedure with output parameter.
 </p>
@@ -2858,9 +2852,9 @@ Create a simple stored procedure with output parameter.
 </div>
 </div>
 
-<div id="outline-container-org9ba35ab" class="outline-5">
-<h5 id="org9ba35ab">[crlp] Create CLR Procedure</h5>
-<div class="outline-text-5" id="text-org9ba35ab">
+<div id="outline-container-orge0a44f9" class="outline-5">
+<h5 id="orge0a44f9">[crlp] Create CLR Procedure</h5>
+<div class="outline-text-5" id="text-orge0a44f9">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Create</span> CLR stored pr...
 # <span class="org-comment">--</span>
@@ -2884,9 +2878,9 @@ Create a simple stored procedure with output parameter.
 </div>
 </div>
 
-<div id="outline-container-org1dd1f24" class="outline-5">
-<h5 id="org1dd1f24">[ap] Alter Procedure</h5>
-<div class="outline-text-5" id="text-org1dd1f24">
+<div id="outline-container-org4a88138" class="outline-5">
+<h5 id="org4a88138">[ap] Alter Procedure</h5>
+<div class="outline-text-5" id="text-org4a88138">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">ALTER</span> <span class="org-keyword">PROCEDURE</span>
 # <span class="org-comment">--</span>
@@ -2896,9 +2890,9 @@ Create a simple stored procedure with output parameter.
 </div>
 </div>
 
-<div id="outline-container-org82dee39" class="outline-5">
-<h5 id="org82dee39">[dp] Drop Procedure</h5>
-<div class="outline-text-5" id="text-org82dee39">
+<div id="outline-container-orga49d153" class="outline-5">
+<h5 id="orga49d153">[dp] Drop Procedure</h5>
+<div class="outline-text-5" id="text-orga49d153">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Drop</span> stored <span class="org-keyword">procedure</span>
 # <span class="org-comment">--</span>
@@ -2909,13 +2903,13 @@ Create a simple stored procedure with output parameter.
 </div>
 </div>
 
-<div id="outline-container-orgbbc1e7c" class="outline-4">
-<h4 id="orgbbc1e7c">Synonym</h4>
-<div class="outline-text-4" id="text-orgbbc1e7c">
+<div id="outline-container-org7cf11e5" class="outline-4">
+<h4 id="org7cf11e5">Synonym</h4>
+<div class="outline-text-4" id="text-org7cf11e5">
 </div>
-<div id="outline-container-org08f6dd8" class="outline-5">
-<h5 id="org08f6dd8">Create Synonym</h5>
-<div class="outline-text-5" id="text-org08f6dd8">
+<div id="outline-container-org023d0d4" class="outline-5">
+<h5 id="org023d0d4">Create Synonym</h5>
+<div class="outline-text-5" id="text-org023d0d4">
 <p>
 Creates a synonym.
 </p>
@@ -2930,13 +2924,13 @@ Creates a synonym.
 </div>
 </div>
 
-<div id="outline-container-org85cb597" class="outline-4">
-<h4 id="org85cb597">Table</h4>
-<div class="outline-text-4" id="text-org85cb597">
+<div id="outline-container-org6f7f0b3" class="outline-4">
+<h4 id="org6f7f0b3">Table</h4>
+<div class="outline-text-4" id="text-org6f7f0b3">
 </div>
-<div id="outline-container-org83701f5" class="outline-5">
-<h5 id="org83701f5">[ct] Create Table (crt)</h5>
-<div class="outline-text-5" id="text-org83701f5">
+<div id="outline-container-orgba5adb1" class="outline-5">
+<h5 id="orgba5adb1">[ct] Create Table (crt)</h5>
+<div class="outline-text-5" id="text-orgba5adb1">
 <p>
 Creates a table (and drop previous one with the same name).
 </p>
@@ -2960,9 +2954,9 @@ Creates a table (and drop previous one with the same name).
 </div>
 </div>
 
-<div id="outline-container-orgd0b6f8b" class="outline-5">
-<h5 id="orgd0b6f8b">[ctt] Create Temporary Table (crtt)</h5>
-<div class="outline-text-5" id="text-orgd0b6f8b">
+<div id="outline-container-org8b54d55" class="outline-5">
+<h5 id="org8b54d55">[ctt] Create Temporary Table (crtt)</h5>
+<div class="outline-text-5" id="text-org8b54d55">
 <p>
 Creates a temporary table.
 </p>
@@ -2980,9 +2974,9 @@ Creates a temporary table.
 </div>
 </div>
 
-<div id="outline-container-org3ff1e06" class="outline-5">
-<h5 id="org3ff1e06">[ctv] Create Table Variable (crtv)</h5>
-<div class="outline-text-5" id="text-org3ff1e06">
+<div id="outline-container-org732b7ed" class="outline-5">
+<h5 id="org732b7ed">[ctv] Create Table Variable (crtv)</h5>
+<div class="outline-text-5" id="text-org732b7ed">
 <p>
 Creates a table variable.
 </p>
@@ -2999,9 +2993,9 @@ Creates a table variable.
 </div>
 </div>
 
-<div id="outline-container-org9d6ef4f" class="outline-5">
-<h5 id="org9d6ef4f">[at] Alter Table fragment</h5>
-<div class="outline-text-5" id="text-org9d6ef4f">
+<div id="outline-container-org66578a8" class="outline-5">
+<h5 id="org66578a8">[at] Alter Table fragment</h5>
+<div class="outline-text-5" id="text-org66578a8">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">ALTER</span> <span class="org-keyword">TABLE</span> fragm...
 # <span class="org-comment">--</span>
@@ -3011,9 +3005,9 @@ Creates a table variable.
 </div>
 </div>
 
-<div id="outline-container-org620d7e4" class="outline-5">
-<h5 id="org620d7e4">[ata] Add Column</h5>
-<div class="outline-text-5" id="text-org620d7e4">
+<div id="outline-container-org30cc74e" class="outline-5">
+<h5 id="org30cc74e">[ata] Add Column</h5>
+<div class="outline-text-5" id="text-org30cc74e">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Add</span> <span class="org-keyword">column</span>
 # <span class="org-comment">--</span>
@@ -3026,9 +3020,9 @@ Creates a table variable.
 </div>
 </div>
 
-<div id="outline-container-orgf3ece34" class="outline-5">
-<h5 id="orgf3ece34">[atac] Modify Column</h5>
-<div class="outline-text-5" id="text-orgf3ece34">
+<div id="outline-container-orga462aa3" class="outline-5">
+<h5 id="orga462aa3">[atac] Modify Column</h5>
+<div class="outline-text-5" id="text-orga462aa3">
 <div class="warning">
 <p>
 Running <code>ALTER COLUMN</code> without mentioning attribute <code>NOT NULL</code> will result in the
@@ -3049,9 +3043,9 @@ column being changed to <b>nullable</b>, if it is already not.
 </div>
 </div>
 
-<div id="outline-container-org6992e6a" class="outline-5">
-<h5 id="org6992e6a">[atd] Drop column</h5>
-<div class="outline-text-5" id="text-org6992e6a">
+<div id="outline-container-org8b78de4" class="outline-5">
+<h5 id="org8b78de4">[atd] Drop column</h5>
+<div class="outline-text-5" id="text-org8b78de4">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Drop</span> <span class="org-keyword">column</span>
 # <span class="org-comment">--</span>
@@ -3064,9 +3058,9 @@ column being changed to <b>nullable</b>, if it is already not.
 </div>
 </div>
 
-<div id="outline-container-org83dbcfa" class="outline-5">
-<h5 id="org83dbcfa">[crc] Add Constraint</h5>
-<div class="outline-text-5" id="text-org83dbcfa">
+<div id="outline-container-orge0a807d" class="outline-5">
+<h5 id="orge0a807d">[crc] Add Constraint</h5>
+<div class="outline-text-5" id="text-orge0a807d">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Add</span> <span class="org-keyword">constraint</span>
 # <span class="org-comment">--</span>
@@ -3078,9 +3072,9 @@ column being changed to <b>nullable</b>, if it is already not.
 </div>
 </div>
 
-<div id="outline-container-orgdaf31a1" class="outline-5">
-<h5 id="orgdaf31a1">[atdc] Drop Constraint</h5>
-<div class="outline-text-5" id="text-orgdaf31a1">
+<div id="outline-container-org294e918" class="outline-5">
+<h5 id="org294e918">[atdc] Drop Constraint</h5>
+<div class="outline-text-5" id="text-org294e918">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Drop</span> <span class="org-keyword">constraint</span>
 # <span class="org-comment">--</span>
@@ -3092,9 +3086,9 @@ column being changed to <b>nullable</b>, if it is already not.
 </div>
 </div>
 
-<div id="outline-container-org169fcb5" class="outline-5">
-<h5 id="org169fcb5">[dt] Drop Table</h5>
-<div class="outline-text-5" id="text-org169fcb5">
+<div id="outline-container-orgf086659" class="outline-5">
+<h5 id="orgf086659">[dt] Drop Table</h5>
+<div class="outline-text-5" id="text-orgf086659">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Drop</span> <span class="org-keyword">table</span>
 # <span class="org-comment">--</span>
@@ -3112,13 +3106,13 @@ column being changed to <b>nullable</b>, if it is already not.
 </div>
 </div>
 
-<div id="outline-container-org3438765" class="outline-4">
-<h4 id="org3438765">Transaction</h4>
-<div class="outline-text-4" id="text-org3438765">
+<div id="outline-container-org75c16e4" class="outline-4">
+<h4 id="org75c16e4">Transaction</h4>
+<div class="outline-text-4" id="text-org75c16e4">
 </div>
-<div id="outline-container-org2012533" class="outline-5">
-<h5 id="org2012533">[bt] Begin Transaction</h5>
-<div class="outline-text-5" id="text-org2012533">
+<div id="outline-container-org3c44a0a" class="outline-5">
+<h5 id="org3c44a0a">[bt] Begin Transaction</h5>
+<div class="outline-text-5" id="text-org3c44a0a">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Begin</span> <span class="org-keyword">transaction</span>
 # <span class="org-comment">--</span>
@@ -3128,9 +3122,9 @@ column being changed to <b>nullable</b>, if it is already not.
 </div>
 </div>
 
-<div id="outline-container-org55a5f1e" class="outline-5">
-<h5 id="org55a5f1e">[ctr] Commit Transaction</h5>
-<div class="outline-text-5" id="text-org55a5f1e">
+<div id="outline-container-org96871a0" class="outline-5">
+<h5 id="org96871a0">[ctr] Commit Transaction</h5>
+<div class="outline-text-5" id="text-org96871a0">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Commit</span> <span class="org-keyword">transaction</span>
 # <span class="org-comment">--</span>
@@ -3140,9 +3134,9 @@ column being changed to <b>nullable</b>, if it is already not.
 </div>
 </div>
 
-<div id="outline-container-org929f689" class="outline-5">
-<h5 id="org929f689">[rt] Rollback Transaction</h5>
-<div class="outline-text-5" id="text-org929f689">
+<div id="outline-container-org3fe3085" class="outline-5">
+<h5 id="org3fe3085">[rt] Rollback Transaction</h5>
+<div class="outline-text-5" id="text-org3fe3085">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Rollback</span> <span class="org-keyword">transaction</span>
 # <span class="org-comment">--</span>
@@ -3153,13 +3147,13 @@ column being changed to <b>nullable</b>, if it is already not.
 </div>
 </div>
 
-<div id="outline-container-org8d87fe7" class="outline-4">
-<h4 id="org8d87fe7">Trigger</h4>
-<div class="outline-text-4" id="text-org8d87fe7">
+<div id="outline-container-org4b0d2dc" class="outline-4">
+<h4 id="org4b0d2dc">Trigger</h4>
+<div class="outline-text-4" id="text-org4b0d2dc">
 </div>
-<div id="outline-container-org23c5c21" class="outline-5">
-<h5 id="org23c5c21">Create Trigger</h5>
-<div class="outline-text-5" id="text-org23c5c21">
+<div id="outline-container-org283e256" class="outline-5">
+<h5 id="org283e256">Create Trigger</h5>
+<div class="outline-text-5" id="text-org283e256">
 <p>
 Creates a trigger.
 </p>
@@ -3200,9 +3194,9 @@ Creates a trigger.
 </div>
 </div>
 
-<div id="outline-container-org0005a64" class="outline-5">
-<h5 id="org0005a64">Enable Trigger</h5>
-<div class="outline-text-5" id="text-org0005a64">
+<div id="outline-container-orga25b3ae" class="outline-5">
+<h5 id="orga25b3ae">Enable Trigger</h5>
+<div class="outline-text-5" id="text-orga25b3ae">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: Enable <span class="org-keyword">trigger</span>
 # <span class="org-comment">--</span>
@@ -3212,9 +3206,9 @@ Creates a trigger.
 </div>
 </div>
 
-<div id="outline-container-org8dc51b2" class="outline-5">
-<h5 id="org8dc51b2">Enable All Triggers</h5>
-<div class="outline-text-5" id="text-org8dc51b2">
+<div id="outline-container-org848b300" class="outline-5">
+<h5 id="org848b300">Enable All Triggers</h5>
+<div class="outline-text-5" id="text-org848b300">
 <p>
 Enable all triggers on table.
 </p>
@@ -3229,9 +3223,9 @@ Enable all triggers on table.
 </div>
 </div>
 
-<div id="outline-container-org243539c" class="outline-5">
-<h5 id="org243539c">Disable Trigger</h5>
-<div class="outline-text-5" id="text-org243539c">
+<div id="outline-container-org9afec75" class="outline-5">
+<h5 id="org9afec75">Disable Trigger</h5>
+<div class="outline-text-5" id="text-org9afec75">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: Disable <span class="org-keyword">trigger</span>
 # <span class="org-comment">--</span>
@@ -3241,9 +3235,9 @@ Enable all triggers on table.
 </div>
 </div>
 
-<div id="outline-container-orgbbf93bd" class="outline-5">
-<h5 id="orgbbf93bd">Disable All Triggers</h5>
-<div class="outline-text-5" id="text-orgbbf93bd">
+<div id="outline-container-org21446b6" class="outline-5">
+<h5 id="org21446b6">Disable All Triggers</h5>
+<div class="outline-text-5" id="text-org21446b6">
 <p>
 Disable all triggers on table.
 </p>
@@ -3259,13 +3253,13 @@ Disable all triggers on table.
 </div>
 </div>
 
-<div id="outline-container-orga88d13e" class="outline-4">
-<h4 id="orga88d13e">User</h4>
-<div class="outline-text-4" id="text-orga88d13e">
+<div id="outline-container-org6049637" class="outline-4">
+<h4 id="org6049637">User</h4>
+<div class="outline-text-4" id="text-org6049637">
 </div>
-<div id="outline-container-org161558d" class="outline-5">
-<h5 id="org161558d">[cu] Create User</h5>
-<div class="outline-text-5" id="text-org161558d">
+<div id="outline-container-org9ce605d" class="outline-5">
+<h5 id="org9ce605d">[cu] Create User</h5>
+<div class="outline-text-5" id="text-org9ce605d">
 <p>
 Creates a database user.
 </p>
@@ -3285,9 +3279,9 @@ Creates a database user.
 </div>
 </div>
 
-<div id="outline-container-org1f9162d" class="outline-5">
-<h5 id="org1f9162d">[du] Drop User</h5>
-<div class="outline-text-5" id="text-org1f9162d">
+<div id="outline-container-orgfe95ac7" class="outline-5">
+<h5 id="orgfe95ac7">[du] Drop User</h5>
+<div class="outline-text-5" id="text-orgfe95ac7">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Drop</span> <span class="org-keyword">user</span>
 # <span class="org-comment">--</span>
@@ -3299,13 +3293,13 @@ Creates a database user.
 </div>
 </div>
 
-<div id="outline-container-orgf7bb181" class="outline-4">
-<h4 id="orgf7bb181">User Defined Data Type</h4>
-<div class="outline-text-4" id="text-orgf7bb181">
+<div id="outline-container-orgc0d4dca" class="outline-4">
+<h4 id="orgc0d4dca">User Defined Data Type</h4>
+<div class="outline-text-4" id="text-orgc0d4dca">
 </div>
-<div id="outline-container-org4082dbf" class="outline-5">
-<h5 id="org4082dbf">Create User-Defined Data Type</h5>
-<div class="outline-text-5" id="text-org4082dbf">
+<div id="outline-container-org38375c5" class="outline-5">
+<h5 id="org38375c5">Create User-Defined Data Type</h5>
+<div class="outline-text-5" id="text-org38375c5">
 <p>
 Creates a user-defined data type.
 </p>
@@ -3319,13 +3313,13 @@ Creates a user-defined data type.
 </div>
 </div>
 
-<div id="outline-container-orge66bb20" class="outline-4">
-<h4 id="orge66bb20">User Defined Table Type</h4>
-<div class="outline-text-4" id="text-orge66bb20">
+<div id="outline-container-org436fc61" class="outline-4">
+<h4 id="org436fc61">User Defined Table Type</h4>
+<div class="outline-text-4" id="text-org436fc61">
 </div>
-<div id="outline-container-org3d71ea8" class="outline-5">
-<h5 id="org3d71ea8">Create User-Defined Table Type</h5>
-<div class="outline-text-5" id="text-org3d71ea8">
+<div id="outline-container-org27e1eca" class="outline-5">
+<h5 id="org27e1eca">Create User-Defined Table Type</h5>
+<div class="outline-text-5" id="text-org27e1eca">
 <p>
 Creates a user-defined table type.
 </p>
@@ -3343,13 +3337,13 @@ Creates a user-defined table type.
 </div>
 </div>
 
-<div id="outline-container-orga2c8bfc" class="outline-4">
-<h4 id="orga2c8bfc">User Defined Type</h4>
-<div class="outline-text-4" id="text-orga2c8bfc">
+<div id="outline-container-org1799931" class="outline-4">
+<h4 id="org1799931">User Defined Type</h4>
+<div class="outline-text-4" id="text-org1799931">
 </div>
-<div id="outline-container-orgb0422b4" class="outline-5">
-<h5 id="orgb0422b4">Create User-Defined Type</h5>
-<div class="outline-text-5" id="text-orgb0422b4">
+<div id="outline-container-orgfc7be1d" class="outline-5">
+<h5 id="orgfc7be1d">Create User-Defined Type</h5>
+<div class="outline-text-5" id="text-orgfc7be1d">
 <p>
 Creates a CLR integration user-defined type.
 </p>
@@ -3364,13 +3358,13 @@ Creates a CLR integration user-defined type.
 </div>
 </div>
 
-<div id="outline-container-orgd3de3f7" class="outline-4">
-<h4 id="orgd3de3f7">View</h4>
-<div class="outline-text-4" id="text-orgd3de3f7">
+<div id="outline-container-orgbba01f1" class="outline-4">
+<h4 id="orgbba01f1">View</h4>
+<div class="outline-text-4" id="text-orgbba01f1">
 </div>
-<div id="outline-container-org176a612" class="outline-5">
-<h5 id="org176a612">[cv] Create View</h5>
-<div class="outline-text-5" id="text-org176a612">
+<div id="outline-container-org6b3cad9" class="outline-5">
+<h5 id="org6b3cad9">[cv] Create View</h5>
+<div class="outline-text-5" id="text-org6b3cad9">
 <p>
 Creates a view.
 </p>
@@ -3395,9 +3389,9 @@ Creates a view.
 </div>
 </div>
 
-<div id="outline-container-org7941b62" class="outline-5">
-<h5 id="org7941b62">[dv] Drop View</h5>
-<div class="outline-text-5" id="text-org7941b62">
+<div id="outline-container-orga001c9c" class="outline-5">
+<h5 id="orga001c9c">[dv] Drop View</h5>
+<div class="outline-text-5" id="text-orga001c9c">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Drop</span> <span class="org-keyword">view</span>
 # <span class="org-comment">--</span>
@@ -3408,13 +3402,13 @@ Creates a view.
 </div>
 </div>
 
-<div id="outline-container-org60f8d65" class="outline-4">
-<h4 id="org60f8d65">&#x2014; Miscellaneous ---</h4>
-<div class="outline-text-4" id="text-org60f8d65">
+<div id="outline-container-org976063e" class="outline-4">
+<h4 id="org976063e">&#x2014; Miscellaneous ---</h4>
+<div class="outline-text-4" id="text-org976063e">
 </div>
-<div id="outline-container-org02e7c6d" class="outline-5">
-<h5 id="org02e7c6d">[e] Execute</h5>
-<div class="outline-text-5" id="text-org02e7c6d">
+<div id="outline-container-org4adb9b0" class="outline-5">
+<h5 id="org4adb9b0">[e] Execute</h5>
+<div class="outline-text-5" id="text-org4adb9b0">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">EXECUTE</span> fragment
 # <span class="org-comment">--</span>
@@ -3424,9 +3418,9 @@ Creates a view.
 </div>
 </div>
 
-<div id="outline-container-org77fa04e" class="outline-5">
-<h5 id="org77fa04e">[sph] sp_help</h5>
-<div class="outline-text-5" id="text-org77fa04e">
+<div id="outline-container-org874492c" class="outline-5">
+<h5 id="org874492c">[sph] sp_help</h5>
+<div class="outline-text-5" id="text-org874492c">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Execute</span> sp_help
 # <span class="org-comment">--</span>
@@ -3436,9 +3430,9 @@ Creates a view.
 </div>
 </div>
 
-<div id="outline-container-org2435a47" class="outline-5">
-<h5 id="org2435a47">[spt] sp_helptext</h5>
-<div class="outline-text-5" id="text-org2435a47">
+<div id="outline-container-orgbc2038e" class="outline-5">
+<h5 id="orgbc2038e">[spt] sp_helptext</h5>
+<div class="outline-text-5" id="text-orgbc2038e">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Execute</span> sp_helptext
 # <span class="org-comment">--</span>
@@ -3448,9 +3442,9 @@ Creates a view.
 </div>
 </div>
 
-<div id="outline-container-org7eed139" class="outline-5">
-<h5 id="org7eed139">[xpfd] xp_fixeddrives</h5>
-<div class="outline-text-5" id="text-org7eed139">
+<div id="outline-container-org9dd2d1b" class="outline-5">
+<h5 id="org9dd2d1b">[xpfd] xp_fixeddrives</h5>
+<div class="outline-text-5" id="text-org9dd2d1b">
 <p>
 Retrieve free space on all fixed drives.
 </p>
@@ -3464,9 +3458,9 @@ Retrieve free space on all fixed drives.
 </div>
 </div>
 
-<div id="outline-container-orgc012cf4" class="outline-5">
-<h5 id="orgc012cf4">[w2] Who2</h5>
-<div class="outline-text-5" id="text-orgc012cf4">
+<div id="outline-container-orgba1bdf2" class="outline-5">
+<h5 id="orgba1bdf2">[w2] Who2</h5>
+<div class="outline-text-5" id="text-orgba1bdf2">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-keyword">Execute</span> sp_who2$0
 # <span class="org-comment">--</span>
@@ -3476,9 +3470,9 @@ Retrieve free space on all fixed drives.
 </div>
 </div>
 
-<div id="outline-container-org4befa49" class="outline-5">
-<h5 id="org4befa49">[err] @@ERROR</h5>
-<div class="outline-text-5" id="text-org4befa49">
+<div id="outline-container-org973ce49" class="outline-5">
+<h5 id="org973ce49">[err] @@ERROR</h5>
+<div class="outline-text-5" id="text-org973ce49">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: <span class="org-builtin">@@ERROR</span> <span class="org-keyword">function</span> ...
 # <span class="org-comment">--</span>
@@ -3488,9 +3482,9 @@ Retrieve free space on all fixed drives.
 </div>
 </div>
 
-<div id="outline-container-orge3e1cd1" class="outline-5">
-<h5 id="orge3e1cd1">[mro] Most Recent Objects</h5>
-<div class="outline-text-5" id="text-orge3e1cd1">
+<div id="outline-container-org2816a8d" class="outline-5">
+<h5 id="org2816a8d">[mro] Most Recent Objects</h5>
+<div class="outline-text-5" id="text-org2816a8d">
 <p>
 Retrieve 20 most recently created objects.
 </p>
@@ -3506,9 +3500,9 @@ Retrieve 20 most recently created objects.
 </div>
 </div>
 
-<div id="outline-container-orga5a72bf" class="outline-5">
-<h5 id="orga5a72bf">Comment</h5>
-<div class="outline-text-5" id="text-orga5a72bf">
+<div id="outline-container-org0737685" class="outline-5">
+<h5 id="org0737685">Comment</h5>
+<div class="outline-text-5" id="text-org0737685">
 <p>
 A comment block.
 </p>
@@ -3522,9 +3516,9 @@ A comment block.
 </div>
 </div>
 
-<div id="outline-container-orgc661511" class="outline-5">
-<h5 id="orgc661511">Comment</h5>
-<div class="outline-text-5" id="text-orgc661511">
+<div id="outline-container-orgf2afd21" class="outline-5">
+<h5 id="orgf2afd21">Comment</h5>
+<div class="outline-text-5" id="text-orgf2afd21">
 <p>
 A multiline comment block.
 </p>
@@ -3540,13 +3534,13 @@ A multiline comment block.
 </div>
 </div>
 
-<div id="outline-container-org01bfac1" class="outline-3">
-<h3 id="org01bfac1">Surround With&#x2026;</h3>
-<div class="outline-text-3" id="text-org01bfac1">
+<div id="outline-container-orgb3a9ab0" class="outline-3">
+<h3 id="orgb3a9ab0">Surround With&#x2026;</h3>
+<div class="outline-text-3" id="text-orgb3a9ab0">
 </div>
-<div id="outline-container-org6769578" class="outline-4">
-<h4 id="org6769578">[begin] Code Snippet for BEGIN&#x2026;END block</h4>
-<div class="outline-text-4" id="text-org6769578">
+<div id="outline-container-org068b6a0" class="outline-4">
+<h4 id="org068b6a0">[begin] Code Snippet for BEGIN&#x2026;END block</h4>
+<div class="outline-text-4" id="text-org068b6a0">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: Surround <span class="org-keyword">with</span> <span class="org-keyword">BEGIN</span>...
 # <span class="org-comment">--</span>
@@ -3558,9 +3552,9 @@ A multiline comment block.
 </div>
 </div>
 
-<div id="outline-container-org9b2cca6" class="outline-4">
-<h4 id="org9b2cca6">[if] Code Snippet for IF construct</h4>
-<div class="outline-text-4" id="text-org9b2cca6">
+<div id="outline-container-org6a54f85" class="outline-4">
+<h4 id="org6a54f85">[if] Code Snippet for IF construct</h4>
+<div class="outline-text-4" id="text-org6a54f85">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: Surround <span class="org-keyword">with</span> <span class="org-keyword">IF</span>...
 # <span class="org-comment">--</span>
@@ -3573,9 +3567,9 @@ A multiline comment block.
 </div>
 </div>
 
-<div id="outline-container-orge17ea02" class="outline-4">
-<h4 id="orge17ea02">[while] Code Snippet for WHILE loop</h4>
-<div class="outline-text-4" id="text-orge17ea02">
+<div id="outline-container-org48fd8c6" class="outline-4">
+<h4 id="org48fd8c6">[while] Code Snippet for WHILE loop</h4>
+<div class="outline-text-4" id="text-org48fd8c6">
 <div class="org-src-container">
 <pre class="src src-sql"># <span class="org-keyword">name</span>: Surround <span class="org-keyword">with</span> <span class="org-keyword">WHILE</span>...
 # <span class="org-comment">--</span>
@@ -3590,9 +3584,9 @@ A multiline comment block.
 </div>
 </div>
 
-<div id="outline-container-orgb26f8b8" class="outline-2">
-<h2 id="orgb26f8b8">General SQL</h2>
-<div class="outline-text-2" id="text-orgb26f8b8">
+<div id="outline-container-org1ad93bd" class="outline-2">
+<h2 id="org1ad93bd">General SQL</h2>
+<div class="outline-text-2" id="text-org1ad93bd">
 <p>
 <a href="https://www.red-gate.com/simple-talk/sql/t-sql-programming/ten-common-sql-programming-mistakes/">https://www.red-gate.com/simple-talk/sql/t-sql-programming/ten-common-sql-programming-mistakes/</a>
 </p>
@@ -3622,9 +3616,9 @@ XXX Check out <a href="https://dataedo.com/kb/query/sql-server">https://dataedo.
 </ul>
 </div>
 
-<div id="outline-container-orge8cb1d1" class="outline-3">
-<h3 id="orge8cb1d1">NULL-Aware comparison</h3>
-<div class="outline-text-3" id="text-orge8cb1d1">
+<div id="outline-container-orge217c11" class="outline-3">
+<h3 id="orge217c11">NULL-Aware comparison</h3>
+<div class="outline-text-3" id="text-orge217c11">
 <p>
 &ldquo;Boolean&rdquo; logic in SQL is a bit complicated, because it is a <b>three-valued logic</b>
 with <code>true</code>, <code>false</code>, and <code>NULL</code>.  <code>NULL</code> fails basically all comparisons, so it fails
@@ -3704,9 +3698,9 @@ in a <code>WHERE</code> clause would then be:
 </div>
 </div>
 
-<div id="outline-container-orgbfcdc1d" class="outline-3">
-<h3 id="orgbfcdc1d">Export table to CSV (Oracle)</h3>
-<div class="outline-text-3" id="text-orgbfcdc1d">
+<div id="outline-container-orgc01c9c4" class="outline-3">
+<h3 id="orgc01c9c4">Export table to CSV (Oracle)</h3>
+<div class="outline-text-3" id="text-orgc01c9c4">
 <p>
 By design, SQL Developer only shows 5,000 records from any query, and 10,010
 rows of output in total for a single script execution.
@@ -3754,9 +3748,9 @@ grep -v -- ----- table_rmpct.csv | sed <span class="org-string">'s/; */;/g'</spa
 </div>
 </div>
 
-<div id="outline-container-orgc40bbcb" class="outline-3">
-<h3 id="orgc40bbcb"><span class="todo TODO">TODO</span> Tips and Tricks to Make SQL Server Management Studio Awesome</h3>
-<div class="outline-text-3" id="text-orgc40bbcb">
+<div id="outline-container-org5f5d27b" class="outline-3">
+<h3 id="org5f5d27b"><span class="todo TODO">TODO</span> Tips and Tricks to Make SQL Server Management Studio Awesome</h3>
+<div class="outline-text-3" id="text-org5f5d27b">
 <ul class="org-ul">
 <li><a href="http://blogs.lessthandot.com/index.php/datamgmt/dbprogramming/tips-and-tricks-to-make/">http://blogs.lessthandot.com/index.php/datamgmt/dbprogramming/tips-and-tricks-to-make/</a>
 Shortcuts, defaults, etc.</li>
@@ -3764,9 +3758,9 @@ Shortcuts, defaults, etc.</li>
 </div>
 </div>
 
-<div id="outline-container-orgb6b5aec" class="outline-3">
-<h3 id="orgb6b5aec">Oracle ROWNUM vs. SQL Server TOP &#x2013; Query across both databases</h3>
-<div class="outline-text-3" id="text-orgb6b5aec">
+<div id="outline-container-orgc12914d" class="outline-3">
+<h3 id="orgc12914d">Oracle ROWNUM vs. SQL Server TOP &#x2013; Query across both databases</h3>
+<div class="outline-text-3" id="text-orgc12914d">
 <div class="org-src-container">
 <pre class="src src-sql"><span class="org-comment">-- TOP 10 for both SQL Server and Oracle.</span>
 <span class="org-keyword">SELECT</span> *
@@ -3784,9 +3778,9 @@ Shortcuts, defaults, etc.</li>
 </div>
 </div>
 
-<div id="outline-container-orgd203488" class="outline-3">
-<h3 id="orgd203488">Table spaces in Oracle</h3>
-<div class="outline-text-3" id="text-orgd203488">
+<div id="outline-container-orgfaefe75" class="outline-3">
+<h3 id="orgfaefe75">Table spaces in Oracle</h3>
+<div class="outline-text-3" id="text-orgfaefe75">
 <div class="org-src-container">
 <pre class="src src-shell">SELECT tablespace_name, file_name
 FROM dba_temp_files;
@@ -3807,9 +3801,9 @@ DROP TABLESPACE temp3 INCLUDING CONTENTS AND DATAFILES;
 </div>
 </div>
 
-<div id="outline-container-org5dabf8a" class="outline-3">
-<h3 id="org5dabf8a">Debug - See line giving error in Oracle</h3>
-<div class="outline-text-3" id="text-org5dabf8a">
+<div id="outline-container-org369f883" class="outline-3">
+<h3 id="org369f883">Debug - See line giving error in Oracle</h3>
+<div class="outline-text-3" id="text-org369f883">
 <div class="org-src-container">
 <pre class="src src-shell">EXEC dbms_output.ENABLE(99999999);
 SET serveroutput on format wrapped;
@@ -3818,9 +3812,9 @@ SET serveroutput on format wrapped;
 </div>
 </div>
 
-<div id="outline-container-orgef7c991" class="outline-3">
-<h3 id="orgef7c991">SQL Server - Trace SQL</h3>
-<div class="outline-text-3" id="text-orgef7c991">
+<div id="outline-container-org31667e4" class="outline-3">
+<h3 id="org31667e4">SQL Server - Trace SQL</h3>
+<div class="outline-text-3" id="text-org31667e4">
 <div class="org-src-container">
 <pre class="src src-sql"><span class="org-keyword">DROP</span> EVENT <span class="org-keyword">SESSION</span> [afm-<span class="org-keyword">session</span>-<span class="org-keyword">sql</span>] <span class="org-keyword">ON</span> SERVER;
 
@@ -3849,18 +3843,18 @@ SET serveroutput on format wrapped;
 </div>
 </div>
 
-<div id="outline-container-org5ddbcbf" class="outline-3">
-<h3 id="org5ddbcbf">SQL Dates</h3>
-<div class="outline-text-3" id="text-org5ddbcbf">
+<div id="outline-container-org6b486f0" class="outline-3">
+<h3 id="org6b486f0">SQL Dates</h3>
+<div class="outline-text-3" id="text-org6b486f0">
 <p>
 <a href="https://www.sqldates.com/">https://www.sqldates.com/</a>
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgf01e45b" class="outline-3">
-<h3 id="orgf01e45b">Code formatting</h3>
-<div class="outline-text-3" id="text-orgf01e45b">
+<div id="outline-container-org1db657a" class="outline-3">
+<h3 id="org1db657a">Code formatting</h3>
+<div class="outline-text-3" id="text-org1db657a">
 <ul class="org-ul">
 <li><p>
 <a href="http://programmers.stackexchange.com/questions/160522/should-i-put-newlines-before-or-after-binary-operators">http://programmers.stackexchange.com/questions/160522/should-i-put-newlines-before-or-after-binary-operators</a>
@@ -3906,9 +3900,9 @@ data.</li>
 </div>
 </div>
 
-<div id="outline-container-org0a9caf0" class="outline-3">
-<h3 id="org0a9caf0">Table name as variable</h3>
-<div class="outline-text-3" id="text-org0a9caf0">
+<div id="outline-container-org3754cc1" class="outline-3">
+<h3 id="org3754cc1">Table name as variable</h3>
+<div class="outline-text-3" id="text-org3754cc1">
 <p>
 Table names and column names need to be static, if the query is static.  For
 dynamic table or column names, you should generate the full SQL dynamically, and
@@ -3921,13 +3915,13 @@ More details here: <a href="http://www.sommarskog.se/dynamic_sql.html">The curse
 </div>
 </div>
 
-<div id="outline-container-org36ac6e6" class="outline-3">
-<h3 id="org36ac6e6">SQL Loop</h3>
-<div class="outline-text-3" id="text-org36ac6e6">
+<div id="outline-container-org806dbff" class="outline-3">
+<h3 id="org806dbff">SQL Loop</h3>
+<div class="outline-text-3" id="text-org806dbff">
 </div>
-<div id="outline-container-org146d43c" class="outline-4">
-<h4 id="org146d43c">While loop with temporary table</h4>
-<div class="outline-text-4" id="text-org146d43c">
+<div id="outline-container-org5fc6817" class="outline-4">
+<h4 id="org5fc6817">While loop with temporary table</h4>
+<div class="outline-text-4" id="text-org5fc6817">
 <div class="org-src-container">
 <pre class="src src-sql"><span class="org-comment">-- Create a new table using the schema of another.</span>
 <span class="org-keyword">SELECT</span> <span class="org-keyword">TABLE_NAME</span>
@@ -3972,18 +3966,18 @@ Other info at
 </div>
 </div>
 
-<div id="outline-container-org33b85ff" class="outline-4">
-<h4 id="org33b85ff">Cursor-like FETCH-NEXT logic</h4>
-<div class="outline-text-4" id="text-org33b85ff">
+<div id="outline-container-org879ed39" class="outline-4">
+<h4 id="org879ed39">Cursor-like FETCH-NEXT logic</h4>
+<div class="outline-text-4" id="text-org879ed39">
 <p>
 <a href="https://stackoverflow.com/questions/11852782/t-sql-loop-over-query-results">https://stackoverflow.com/questions/11852782/t-sql-loop-over-query-results</a>
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgfb30612" class="outline-4">
-<h4 id="orgfb30612">Cursor</h4>
-<div class="outline-text-4" id="text-orgfb30612">
+<div id="outline-container-orgf17ee5f" class="outline-4">
+<h4 id="orgf17ee5f">Cursor</h4>
+<div class="outline-text-4" id="text-orgf17ee5f">
 <p>
 Cursors are slower than while loops?
 </p>
@@ -3991,18 +3985,18 @@ Cursors are slower than while loops?
 </div>
 </div>
 
-<div id="outline-container-org00de9ff" class="outline-3">
-<h3 id="org00de9ff">SQL error on update: The UPDATE statement conflicted with the FOREIGN KEY constraint</h3>
-<div class="outline-text-3" id="text-org00de9ff">
+<div id="outline-container-orgc40ea10" class="outline-3">
+<h3 id="orgc40ea10">SQL error on update: The UPDATE statement conflicted with the FOREIGN KEY constraint</h3>
+<div class="outline-text-3" id="text-orgc40ea10">
 <p>
 <a href="https://stackoverflow.com/questions/23856420/sql-error-on-update-the-update-statement-conflicted-with-the-foreign-key-const">https://stackoverflow.com/questions/23856420/sql-error-on-update-the-update-statement-conflicted-with-the-foreign-key-const</a>
 </p>
 </div>
 </div>
 
-<div id="outline-container-orgfa094f4" class="outline-3">
-<h3 id="orgfa094f4">Debugging triggers</h3>
-<div class="outline-text-3" id="text-orgfa094f4">
+<div id="outline-container-orgebb79f7" class="outline-3">
+<h3 id="orgebb79f7">Debugging triggers</h3>
+<div class="outline-text-3" id="text-orgebb79f7">
 <p>
 The login for the developer must be a <b>member of the sysadmin server role</b>.
 </p>
@@ -4022,9 +4016,9 @@ being debugged.
 </div>
 </div>
 
-<div id="outline-container-orgbc271fe" class="outline-3">
-<h3 id="orgbc271fe">Conversion failed when converting date and/or time from character string while inserting datetime</h3>
-<div class="outline-text-3" id="text-orgbc271fe">
+<div id="outline-container-org39d82ad" class="outline-3">
+<h3 id="org39d82ad">Conversion failed when converting date and/or time from character string while inserting datetime</h3>
+<div class="outline-text-3" id="text-org39d82ad">
 <p>
 Whenever possible one should avoid culture specific date/time literals. There
 are some secure formats:
@@ -4069,13 +4063,13 @@ related question.
 </div>
 </div>
 
-<div id="outline-container-org1c0c675" class="outline-3">
-<h3 id="org1c0c675">Retrieve DB version information</h3>
-<div class="outline-text-3" id="text-org1c0c675">
+<div id="outline-container-org37effbc" class="outline-3">
+<h3 id="org37effbc">Retrieve DB version information</h3>
+<div class="outline-text-3" id="text-org37effbc">
 </div>
-<div id="outline-container-org9dc329d" class="outline-4">
-<h4 id="org9dc329d">SQL Server</h4>
-<div class="outline-text-4" id="text-org9dc329d">
+<div id="outline-container-orgbcfc08d" class="outline-4">
+<h4 id="orgbcfc08d">SQL Server</h4>
+<div class="outline-text-4" id="text-orgbcfc08d">
 <div class="org-src-container">
 <pre class="src src-sql"><span class="org-keyword">SELECT</span> <span class="org-builtin">@@version</span>;
 </pre>
@@ -4089,9 +4083,9 @@ related question.
 </div>
 </div>
 
-<div id="outline-container-orgf9ba47c" class="outline-4">
-<h4 id="orgf9ba47c">Oracle</h4>
-<div class="outline-text-4" id="text-orgf9ba47c">
+<div id="outline-container-orgca29336" class="outline-4">
+<h4 id="orgca29336">Oracle</h4>
+<div class="outline-text-4" id="text-orgca29336">
 <div class="org-src-container">
 <pre class="src src-sql"><span class="org-keyword">SELECT</span> *
 <span class="org-keyword">FROM</span> v$version
@@ -4106,9 +4100,9 @@ related question.
 </div>
 </div>
 
-<div id="outline-container-org07bf78c" class="outline-3">
-<h3 id="org07bf78c">List all columns (sfss, afm-fields, for all the fields in the SQL Database Schema)</h3>
-<div class="outline-text-3" id="text-org07bf78c">
+<div id="outline-container-org831fc75" class="outline-3">
+<h3 id="org831fc75">List all columns (sfss, afm-fields, for all the fields in the SQL Database Schema)</h3>
+<div class="outline-text-3" id="text-org831fc75">
 <div class="org-src-container">
 <pre class="src src-sql"><span class="org-keyword">SELECT</span>
     sys.objects.<span class="org-keyword">name</span>                    <span class="org-keyword">AS</span> <span class="org-keyword">TABLE_NAME</span>,
@@ -4229,9 +4223,9 @@ Join to <b>user</b> <code>_type_id</code> in the <code>sys.types</code> table.  
 </div>
 </div>
 
-<div id="outline-container-org91d7284" class="outline-3">
-<h3 id="org91d7284">6 Useful SQL Server Data Dictionary Queries Every DBA Should Have</h3>
-<div class="outline-text-3" id="text-org91d7284">
+<div id="outline-container-orgc230590" class="outline-3">
+<h3 id="orgc230590">6 Useful SQL Server Data Dictionary Queries Every DBA Should Have</h3>
+<div class="outline-text-3" id="text-orgc230590">
 <p>
 <a href="https://dataedo.com/blog/useful-sql-server-data-dictionary-queries-every-dba-should-have">https://dataedo.com/blog/useful-sql-server-data-dictionary-queries-every-dba-should-have</a>
 </p>
@@ -4247,18 +4241,18 @@ Join to <b>user</b> <code>_type_id</code> in the <code>sys.types</code> table.  
 </div>
 </div>
 
-<div id="outline-container-org639e6ac" class="outline-3">
-<h3 id="org639e6ac">Over 40 queries to find SQL Server tables with or without a certain property</h3>
-<div class="outline-text-3" id="text-org639e6ac">
+<div id="outline-container-orgdd1773d" class="outline-3">
+<h3 id="orgdd1773d">Over 40 queries to find SQL Server tables with or without a certain property</h3>
+<div class="outline-text-3" id="text-orgdd1773d">
 <p>
 <a href="https://www.mssqltips.com/sqlservertip/3402/over-40-queries-to-find-sql-server-tables-with-or-without-a-certain-property/">https://www.mssqltips.com/sqlservertip/3402/over-40-queries-to-find-sql-server-tables-with-or-without-a-certain-property/</a>
 </p>
 </div>
 </div>
 
-<div id="outline-container-org1dbd68d" class="outline-3">
-<h3 id="org1dbd68d">List all constraints</h3>
-<div class="outline-text-3" id="text-org1dbd68d">
+<div id="outline-container-orgb3e15b3" class="outline-3">
+<h3 id="orgb3e15b3">List all constraints</h3>
+<div class="outline-text-3" id="text-orgb3e15b3">
 <div class="org-src-container">
 <pre class="src src-sql"><span class="org-keyword">EXEC</span> sp_help <span class="org-string">'rm'</span>;
 </pre>
@@ -4291,9 +4285,9 @@ code using SQL Server Management Studio, get into the &ldquo;Object Explorer&rdq
 </div>
 </div>
 
-<div id="outline-container-org8a6d36a" class="outline-3">
-<h3 id="org8a6d36a">List all PRIMARY KEY constraints</h3>
-<div class="outline-text-3" id="text-org8a6d36a">
+<div id="outline-container-org0160342" class="outline-3">
+<h3 id="org0160342">List all PRIMARY KEY constraints</h3>
+<div class="outline-text-3" id="text-org0160342">
 <div class="tip">
 <p>
 <code>EXEC sp_pkeys</code> will return a row for each column that participates in the primary
@@ -4372,9 +4366,9 @@ systems.
 </div>
 </div>
 
-<div id="outline-container-org402e398" class="outline-3">
-<h3 id="org402e398">List all FOREIGN KEY constraints</h3>
-<div class="outline-text-3" id="text-org402e398">
+<div id="outline-container-org9a8e53a" class="outline-3">
+<h3 id="org9a8e53a">List all FOREIGN KEY constraints</h3>
+<div class="outline-text-3" id="text-org9a8e53a">
 <div class="tip">
 <p>
 <code>EXEC sp_helpconstraint 'rm'</code> will list:
@@ -4543,9 +4537,9 @@ NOCYCLE
 </div>
 </div>
 
-<div id="outline-container-org3fda8e4" class="outline-4">
-<h4 id="org3fda8e4">The DELETE statement conflicted with the REFERENCE constraint</h4>
-<div class="outline-text-4" id="text-org3fda8e4">
+<div id="outline-container-org9a41493" class="outline-4">
+<h4 id="org9a41493">The DELETE statement conflicted with the REFERENCE constraint</h4>
+<div class="outline-text-4" id="text-org9a41493">
 <div class="org-src-container">
 <pre class="src src-sql"><span class="org-keyword">DELETE</span> <span class="org-keyword">FROM</span> reserve_request <span class="org-keyword">WHERE</span> <span class="org-builtin">datediff</span>(DD, meeting_date, <span class="org-string">'2018-09-06'</span>) &gt;= 380
 <span class="org-comment">-- Query executed successfully.</span>
@@ -4580,9 +4574,9 @@ Find the record from <code>FK_TABLE_NAME</code> which has a reference in <code>P
 </div>
 </div>
 
-<div id="outline-container-orgfcddfb0" class="outline-3">
-<h3 id="orgfcddfb0">Disable/enable all constraints in the database</h3>
-<div class="outline-text-3" id="text-orgfcddfb0">
+<div id="outline-container-orgd4eace7" class="outline-3">
+<h3 id="orgd4eace7">Disable/enable all constraints in the database</h3>
+<div class="outline-text-3" id="text-orgd4eace7">
 <div class="org-src-container">
 <pre class="src src-sql"><span class="org-comment">-- Disable all constraints for database.</span>
 <span class="org-keyword">EXEC</span> sp_MSforeachtable "<span class="org-keyword">ALTER</span> <span class="org-keyword">TABLE</span> ? <span class="org-keyword">NOCHECK</span> <span class="org-keyword">CONSTRAINT</span> <span class="org-keyword">all</span>"
@@ -4608,9 +4602,9 @@ data in the database and repopulating it (say, in test environment).
 </div>
 </div>
 
-<div id="outline-container-org0e20e17" class="outline-3">
-<h3 id="org0e20e17">Disable/enable all constraints on a table</h3>
-<div class="outline-text-3" id="text-org0e20e17">
+<div id="outline-container-org2b03058" class="outline-3">
+<h3 id="org2b03058">Disable/enable all constraints on a table</h3>
+<div class="outline-text-3" id="text-org2b03058">
 <div class="org-src-container">
 <pre class="src src-sql"><span class="org-comment">-- Disable all table constraints.</span>
 <span class="org-keyword">ALTER</span> <span class="org-keyword">TABLE</span> <span class="org-function-name">MyTable</span> <span class="org-keyword">NOCHECK</span> <span class="org-keyword">CONSTRAINT</span> <span class="org-keyword">ALL</span>
@@ -4628,9 +4622,9 @@ data in the database and repopulating it (say, in test environment).
 </div>
 </div>
 
-<div id="outline-container-orgb633e49" class="outline-3">
-<h3 id="orgb633e49">List all non-NULLABLE columns</h3>
-<div class="outline-text-3" id="text-orgb633e49">
+<div id="outline-container-orgc994b97" class="outline-3">
+<h3 id="orgc994b97">List all non-NULLABLE columns</h3>
+<div class="outline-text-3" id="text-orgc994b97">
 <div class="tip">
 <p>
 SQL will use the <b>default value</b> if you do <b>not declare</b> the <b>non-nullable column</b> in
@@ -4661,9 +4655,9 @@ the <code>INSERT</code> statement.
 </div>
 </div>
 
-<div id="outline-container-orgaecf0c5" class="outline-3">
-<h3 id="orgaecf0c5">List all DEFAULT constraints (with default value)</h3>
-<div class="outline-text-3" id="text-orgaecf0c5">
+<div id="outline-container-orgfd28f23" class="outline-3">
+<h3 id="orgfd28f23">List all DEFAULT constraints (with default value)</h3>
+<div class="outline-text-3" id="text-orgfd28f23">
 <div class="org-src-container">
 <pre class="src src-sql"><span class="org-keyword">SELECT</span>
     t.<span class="org-keyword">name</span>                              <span class="org-keyword">AS</span> <span class="org-keyword">TABLE_NAME</span>,
@@ -4686,9 +4680,9 @@ the <code>INSERT</code> statement.
 </div>
 </div>
 
-<div id="outline-container-org6af0a43" class="outline-3">
-<h3 id="org6af0a43">List all IDENTITY columns</h3>
-<div class="outline-text-3" id="text-org6af0a43">
+<div id="outline-container-org810882e" class="outline-3">
+<h3 id="org810882e">List all IDENTITY columns</h3>
+<div class="outline-text-3" id="text-org810882e">
 <div class="org-src-container">
 <pre class="src src-sql"><span class="org-keyword">SELECT</span>
     o.<span class="org-keyword">name</span>                              <span class="org-keyword">AS</span> <span class="org-keyword">TABLE_NAME</span>,
@@ -4737,9 +4731,9 @@ set to <code>ON</code>.
 </div>
 </div>
 
-<div id="outline-container-org91bf717" class="outline-4">
-<h4 id="org91bf717">How to remove Identity from a column in a table?</h4>
-<div class="outline-text-4" id="text-org91bf717">
+<div id="outline-container-orgcdfc11d" class="outline-4">
+<h4 id="orgcdfc11d">How to remove Identity from a column in a table?</h4>
+<div class="outline-text-4" id="text-orgcdfc11d">
 <p>
 <a href="https://stackoverflow.com/questions/8230257/remove-identity-from-a-column-in-a-table">https://stackoverflow.com/questions/8230257/remove-identity-from-a-column-in-a-table</a>
 </p>
@@ -4856,9 +4850,9 @@ partitions are used you don&rsquo;t need Enterprise edition):
 </div>
 </div>
 
-<div id="outline-container-org1312c71" class="outline-3">
-<h3 id="org1312c71">List triggers</h3>
-<div class="outline-text-3" id="text-org1312c71">
+<div id="outline-container-org21f620e" class="outline-3">
+<h3 id="org21f620e">List triggers</h3>
+<div class="outline-text-3" id="text-org21f620e">
 <p>
 <a href="https://stackoverflow.com/questions/4305691/need-to-list-all-triggers-in-sql-server-database-with-table-name-and-tables-sch">https://stackoverflow.com/questions/4305691/need-to-list-all-triggers-in-sql-server-database-with-table-name-and-tables-sch</a>
 to <b>list database triggers</b> as well!
@@ -4976,9 +4970,9 @@ trigger will <b>fire once for the whole statement</b>.
 </p>
 </div>
 
-<div id="outline-container-orgf7bbe49" class="outline-4">
-<h4 id="orgf7bbe49">Nested triggers (server option)</h4>
-<div class="outline-text-4" id="text-orgf7bbe49">
+<div id="outline-container-orgb9e8a60" class="outline-4">
+<h4 id="orgb9e8a60">Nested triggers (server option)</h4>
+<div class="outline-text-4" id="text-orgb9e8a60">
 <p>
 Check whether nested triggers are turned on or off.
 </p>
@@ -5008,9 +5002,9 @@ fired them) can be nested regardless of the setting of this option.
 </div>
 </div>
 
-<div id="outline-container-orgbfb0bfd" class="outline-4">
-<h4 id="orgbfb0bfd">Recursive triggers (database option)</h4>
-<div class="outline-text-4" id="text-orgbfb0bfd">
+<div id="outline-container-org926493c" class="outline-4">
+<h4 id="org926493c">Recursive triggers (database option)</h4>
+<div class="outline-text-4" id="text-org926493c">
 <p>
 <b>Direct recursion</b> only.
 </p>
@@ -5023,9 +5017,9 @@ fired them) can be nested regardless of the setting of this option.
 </div>
 </div>
 
-<div id="outline-container-org3ea1fc1" class="outline-4">
-<h4 id="org3ea1fc1">For EPO cascading_update/delete triggers</h4>
-<div class="outline-text-4" id="text-org3ea1fc1">
+<div id="outline-container-org7a36991" class="outline-4">
+<h4 id="org7a36991">For EPO cascading_update/delete triggers</h4>
+<div class="outline-text-4" id="text-org7a36991">
 <div class="org-src-container">
 <pre class="src src-sql"><span class="org-keyword">SELECT</span>
     <span class="org-string">'referenced_trigger'</span>                <span class="org-keyword">AS</span> trigger_type,
@@ -5051,9 +5045,9 @@ fired them) can be nested regardless of the setting of this option.
 </div>
 </div>
 
-<div id="outline-container-org37278c0" class="outline-4">
-<h4 id="org37278c0">For Oracle</h4>
-<div class="outline-text-4" id="text-org37278c0">
+<div id="outline-container-org695e465" class="outline-4">
+<h4 id="org695e465">For Oracle</h4>
+<div class="outline-text-4" id="text-org695e465">
 <div class="org-src-container">
 <pre class="src src-sql"><span class="org-comment">-- List triggers (for Oracle).</span>
 <span class="org-keyword">SELECT</span>
@@ -5085,9 +5079,9 @@ fired them) can be nested regardless of the setting of this option.
 </div>
 </div>
 
-<div id="outline-container-org681cfae" class="outline-3">
-<h3 id="org681cfae">Using a DML trigger with a reminder e-mail message</h3>
-<div class="outline-text-3" id="text-org681cfae">
+<div id="outline-container-orgf285424" class="outline-3">
+<h3 id="orgf285424">Using a DML trigger with a reminder e-mail message</h3>
+<div class="outline-text-3" id="text-orgf285424">
 <p>
 The following example sends an e-mail message to a specified person (MaryM) when
 the Customer table changes.
@@ -5109,9 +5103,9 @@ the Customer table changes.
 </div>
 </div>
 
-<div id="outline-container-org27364c7" class="outline-3">
-<h3 id="org27364c7">List all stored procedures and functions</h3>
-<div class="outline-text-3" id="text-org27364c7">
+<div id="outline-container-org128bf63" class="outline-3">
+<h3 id="org128bf63">List all stored procedures and functions</h3>
+<div class="outline-text-3" id="text-org128bf63">
 <div class="org-src-container">
 <pre class="src src-sql"><span class="org-keyword">SELECT</span>
     <span class="org-keyword">name</span>,
@@ -5132,9 +5126,9 @@ the Customer table changes.
 </div>
 </div>
 
-<div id="outline-container-org76dfa2a" class="outline-3">
-<h3 id="org76dfa2a">List all views, stored procedures, functions and triggers REFERENCING a particular table</h3>
-<div class="outline-text-3" id="text-org76dfa2a">
+<div id="outline-container-org54cd503" class="outline-3">
+<h3 id="org54cd503">List all views, stored procedures, functions and triggers REFERENCING a particular table</h3>
+<div class="outline-text-3" id="text-org54cd503">
 <div class="tip">
 <p>
 <code>EXEC sp_depends</code> lists the database objects that depend on a table.  Though, this
@@ -5226,9 +5220,9 @@ etc.:
 </div>
 </div>
 
-<div id="outline-container-orgc3f49db" class="outline-3">
-<h3 id="orgc3f49db">List all indexes and index columns</h3>
-<div class="outline-text-3" id="text-orgc3f49db">
+<div id="outline-container-org4001a75" class="outline-3">
+<h3 id="org4001a75">List all indexes and index columns</h3>
+<div class="outline-text-3" id="text-org4001a75">
 <p>
 You can also use <code>EXEC sp_helpindex</code> to view all the indexes (and index columns)
 of one table:
@@ -5245,9 +5239,9 @@ of one table:
 </div>
 </div>
 
-<div id="outline-container-org70df40f" class="outline-3">
-<h3 id="org70df40f">SQL Collation</h3>
-<div class="outline-text-3" id="text-org70df40f">
+<div id="outline-container-orga00988d" class="outline-3">
+<h3 id="orga00988d">SQL Collation</h3>
+<div class="outline-text-3" id="text-orga00988d">
 <div class="org-src-container">
 <pre class="src src-sql"><span class="org-keyword">SELECT</span>
     <span class="org-builtin">OBJECT_NAME</span>(<span class="org-builtin">object_id</span>)              <span class="org-keyword">AS</span> <span class="org-keyword">table</span>,
@@ -5272,9 +5266,9 @@ of one table:
 </div>
 </div>
 
-<div id="outline-container-orgf5b9f40" class="outline-3">
-<h3 id="orgf5b9f40">Finding and Eliminating Duplicate or Overlapping Indexes</h3>
-<div class="outline-text-3" id="text-orgf5b9f40">
+<div id="outline-container-orgffe18b2" class="outline-3">
+<h3 id="orgffe18b2">Finding and Eliminating Duplicate or Overlapping Indexes</h3>
+<div class="outline-text-3" id="text-orgffe18b2">
 <p>
 Effective indexing is the key to keeping your queries running quickly while
 consuming as few resources as possible in the process.  Each index that is added

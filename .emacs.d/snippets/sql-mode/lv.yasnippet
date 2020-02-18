@@ -1,0 +1,8 @@
+# name: List Views
+# --
+SELECT
+    table_catalog AS catalog,
+    TABLE_SCHEMA AS schema_name,
+    TABLE_NAME AS view_name
+FROM INFORMATION_SCHEMA.VIEWS
+WHERE TABLE_NAME LIKE '%%';

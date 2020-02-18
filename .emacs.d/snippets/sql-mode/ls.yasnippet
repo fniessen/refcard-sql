@@ -1,0 +1,8 @@
+# name: List Schemas
+# --
+SELECT
+    name,
+    schema_id,
+    principal_id
+FROM sys.schemas
+WHERE name LIKE '%%'

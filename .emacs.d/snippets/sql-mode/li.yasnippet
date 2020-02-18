@@ -1,0 +1,25 @@
+# name: List Indexes
+# --
+SELECT
+    t.name                              AS TableName,
+    i.name                              AS IndexName,
+    col.name                            AS ColumnName,
+    i.index_id                          AS IndexId,
+    ic.index_column_id                  AS ColumnId
+FROM sys.indexes                        i
+INNER JOIN sys.index_columns            ic
+    ON i.object_id = ic.object_id AND i.index_id = ic.index_id
+INNER JOIN sys.columns                  col
+    ON ic.object_id = col.object_id AND ic.column_id = col.column_id
+INNER JOIN sys.tables                   t
+    ON i.object_id = t.object_id
+WHERE /* i.is_primary_key = 0
+    AND i.is_unique = 0
+    AND i.is_unique_constraint = 0
+    AND */ t.is_ms_shipped = 0
+    AND i.name LIKE '%%'                -- Index name.
+ORDER BY
+    t.name,
+    i.name,
+    i.index_id,
+    ic.index_column_id;

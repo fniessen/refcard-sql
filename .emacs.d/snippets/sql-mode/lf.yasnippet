@@ -1,0 +1,11 @@
+# name: List Functions
+# --
+SELECT
+    name,
+    definition,
+    type_desc,
+    type
+FROM sys.sql_modules m
+INNER JOIN sys.objects o
+    ON m.object_id = o.object_id
+WHERE type IN ('FN', 'IF', 'TF');

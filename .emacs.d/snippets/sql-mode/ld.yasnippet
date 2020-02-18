@@ -1,0 +1,9 @@
+# name: List Databases
+# --
+SELECT
+    name,
+    create_date,
+    compatibility_level,
+    collation_name
+FROM sys.databases
+WHERE name LIKE '%%';
