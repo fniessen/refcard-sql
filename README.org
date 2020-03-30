@@ -10,7 +10,7 @@
 
 #+PROPERTY:  header-args :eval never :padline no :tangle yes
 
-#+SETUPFILE: ~/.dotfiles/org/theme-readtheorg.setup
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
 
 * Textual Search over All Fields In All Tables For A Specific Value!!! (for checking results of anonymization)
 
@@ -2776,10 +2776,6 @@ related question.
 SELECT @@version;
 #+end_src
 
-@EPO: Microsoft SQL Server 2012 (SP1) - 11.0.3000.0 (X64) Oct 19 2012 13:38:57
-(c) Microsoft Corporation Enterprise Edition (64-bit) on Windows NT 6.1 <X64>
-(Build 7601: Service Pack 1) (Hypervisor)
-
 *** Oracle
 
 #+begin_src sql
@@ -2787,8 +2783,6 @@ SELECT *
 FROM v$version
 WHERE banner LIKE 'Oracle%';
 #+end_src
-
-@CSPO: Oracle Database 11g Express Edition Release 11.2.0.2.0 - 64bit Production.
 
 ** List all columns (sfss, afm-fields, for all the fields in the SQL Database Schema)
 
