@@ -1,0 +1,701 @@
+#+TITLE:     Collection of tests for SQL DB
+#+AUTHOR:    Fabrice Niessen
+#+EMAIL:     (concat "fniessen" at-sign "pirilampo.org")
+#+DESCRIPTION:
+#+KEYWORDS:
+#+LANGUAGE:  en
+#+OPTIONS:   H:4 num:1 toc:t ^:{}
+
+#+SETUPFILE: https://fniessen.github.io/org-html-themes/setup/theme-readtheorg.setup
+
+#+PROPERTY:  header-args :eval never :engine msosql :cmdline -S localhost -U afm -P afm -d ARCHIBUS_PRD -n -w 700 :results output :exports both :noweb yes
+
+#+LaTeX_CLASS: aremis
+
+* SQL Cop
+
+The tests are categorized under 6 groups:
+
+1. Code,
+2. Column,
+3. Table/Views,
+4. Indexes,
+5. Configuration and
+6. Health.
+
+See Also:
+- http://sqlcop.lessthandot.com/screenshots.html
+- https://documentation.red-gate.com/sqt1/sql-cop-static-analysis-tests
+- https://www.red-gate.com/simple-talk/sql/sql-tools/sql-cop-review/
+
+** Code
+
+*** Decimal Size Problems
+
+*** Procedures with dynamic SQL
+
+*** Procedures using dynamic SQL without sp_executesql
+
+*** Procedures with SP_
+
+When SQL Server executes a stored procedure, it first checks to see if it is
+a built-in stored procedure (system supplied). It checks the master database for
+the existence of this procedure. If the procedure is not found, it will search
+the user database. It doesn’t sound like much, but in a high transaction
+environment, the slight performance hit will add up.
+
+Also, consider what would happen if Microsoft decides to ship a system stored
+procedure with the same name as the procedure you wrote. Suddenly, your
+procedure will stop working and the one supplied by Microsoft will be executed
+instead. To see what I mean, try creating a stored procedure in your database
+named sp_help. When you execute this stored procedure, SQL will actually execute
+the one in the master database instead.
+
+*How to detect this problem:*
+
+#+begin_src sql :tangle tests/SQL-Cop/01-code/dont-start-your-procedures-with-sp_for-sql-server.sql
+Select	*
+From	Information_Schema.Routines
+Where	Specific_Name Like 'sp[_]%'
+#+end_src
+
+*How to correct it:* To correct this problem, you will need to identify all
+procedures named this way, and then change the name of the procedure. There are
+far greater implications though. Some stored procedures are called by other
+stored procedures. In cases like this, you will need to change those stored
+procedures too. Additionally, you will also need to change your front end code
+to call the procedure with the new name.
+
+*Level of difficulty:* medium to high. The level of effort required to correct
+this problem can range from medium to high, depending on how many procedures you
+have than require a name change.
+
+One possible strategy you could use to help resolve this problem would be to
+rename the procedure, and then create a procedure with the original name. This
+procedure could write to a log file, and then call the original procedure. This
+strategy allows your application to continue working (albeit a little slower
+because of the logging). You can then determine which application ran the
+procedure and change the name of the call.
+
+*Level of severity:* Moderate
+
+*** Procedures without SET NOCOUNT ON
+
+*** Procedures with SET ROWCOUNT
+
+*** Procedures with @@Identity
+
+*** Undocumented Procedures
+
+When you use an undocumented stored procedure, you run the risk of not being
+able to upgrade your database to a new version. What’s worse... you could have
+broken functionality and not even know it. With undocumented stored procedures,
+Microsoft may not document when they decide to deprecate it, so you may not know
+about your broken functionality until it’s too late.
+
+Presented below is a hard coded list of undocumented stored procedures. By their
+very nature, it is hard to find documentation on undocumented
+procedures. Therefore, the procedures in the list below is likely to be
+incomplete.
+
+*How to detect this problem:*
+
+#+begin_src sql
+Declare @Temp Table(ProcedureName VarChar(50))
+
+Insert Into @Temp Values('sp_MStablespace')
+Insert Into @Temp Values('sp_who2')
+Insert Into @Temp Values('sp_tempdbspace')
+Insert Into @Temp Values('sp_MSkilldb')
+Insert Into @Temp Values('sp_MSindexspace')
+Insert Into @Temp Values('sp_MShelptype')
+Insert Into @Temp Values('sp_MShelpindex')
+Insert Into @Temp Values('sp_MShelpcolumns')
+Insert Into @Temp Values('sp_MSforeachtable')
+Insert Into @Temp Values('sp_MSforeachdb')
+Insert Into @Temp Values('sp_fixindex')
+Insert Into @Temp Values('sp_columns_rowset')
+Insert Into @Temp Values('sp_MScheck_uid_owns_anything')
+Insert Into @Temp Values('sp_MSgettools_path')
+Insert Into @Temp Values('sp_gettypestring')
+Insert Into @Temp Values('sp_MSdrop_object')
+Insert Into @Temp Values('sp_MSget_qualified_name')
+Insert Into @Temp Values('sp_MSgetversion')
+Insert Into @Temp Values('xp_dirtree')
+Insert Into @Temp Values('xp_subdirs')
+Insert Into @Temp Values('xp_enum_oledb_providers')
+Insert Into @Temp Values('xp_enumcodepages')
+Insert Into @Temp Values('xp_enumdsn')
+Insert Into @Temp Values('xp_enumerrorlogs')
+Insert Into @Temp Values('xp_enumgroups')
+Insert Into @Temp Values('xp_fileexist')
+Insert Into @Temp Values('xp_fixeddrives')
+Insert Into @Temp Values('xp_getnetname')
+Insert Into @Temp Values('xp_readerrorlog')
+Insert Into @Temp Values('sp_msdependencies')
+Insert Into @Temp Values('xp_qv')
+Insert Into @Temp Values('xp_delete_file')
+Insert Into @Temp Values('sp_checknames')
+Insert Into @Temp Values('sp_enumoledbdatasources')
+Insert Into @Temp Values('sp_MS_marksystemobject')
+Insert Into @Temp Values('sp_MSaddguidcolumn')
+Insert Into @Temp Values('sp_MSaddguidindex')
+Insert Into @Temp Values('sp_MSaddlogin_implicit_ntlogin')
+Insert Into @Temp Values('sp_MSadduser_implicit_ntlogin')
+Insert Into @Temp Values('sp_MSdbuseraccess')
+Insert Into @Temp Values('sp_MSdbuserpriv')
+Insert Into @Temp Values('sp_MSloginmappings')
+Insert Into @Temp Values('sp_MStablekeys')
+Insert Into @Temp Values('sp_MStablerefs')
+Insert Into @Temp Values('sp_MSuniquetempname')
+Insert Into @Temp Values('sp_MSuniqueobjectname')
+Insert Into @Temp Values('sp_MSuniquecolname')
+Insert Into @Temp Values('sp_MSuniquename')
+Insert Into @Temp Values('sp_MSunc_to_drive')
+Insert Into @Temp Values('sp_MSis_pk_col')
+Insert Into @Temp Values('xp_get_MAPI_default_profile')
+Insert Into @Temp Values('xp_get_MAPI_profiles')
+Insert Into @Temp Values('xp_regdeletekey')
+Insert Into @Temp Values('xp_regdeletevalue')
+Insert Into @Temp Values('xp_regread')
+Insert Into @Temp Values('xp_regenumvalues')
+Insert Into @Temp Values('xp_regaddmultistring')
+Insert Into @Temp Values('xp_regremovemultistring')
+Insert Into @Temp Values('xp_regwrite')
+Insert Into @Temp Values('xp_varbintohexstr')
+Insert Into @Temp Values('sp_MSguidtostr')
+
+Select Distinct Name
+From   sysobjects
+       Inner Join @Temp T
+         On Object_Definition(id) Like '%' + T.ProcedureName + '%'
+Where  XType = 'P'
+       And ObjectProperty(ID, N'IsMSShipped') = 0
+Order By Name;
+#+end_src
+
+*How to correct it:* Rewrite your functionality so that is does not rely upon
+undocumented procedures.
+
+*Level of severity:* moderate to high
+
+*Level of difficulty:* moderate to high. Undocumented stored procedures are often
+used because it’s easy. Replacing it is usually NOT easy.
+
+*** VarChar Size Problems
+
+** Column
+
+*** Column Data Types (Numeric vs Int)
+
+*Always include precision and scale with decimal and numeric*
+
+When you use the decimal (or numeric) data type, you should always identity the
+precision and scale for it. If you do not, the precision defaults to 18, and the
+scale defaults to 0. When scale is 0, you cannot store fractional numbers. If
+you do not want to store fractional numbers, then you should use a different
+data type, like bigint, int, smallint, or tinyint.
+
+*How to detect this problem:*
+
+#+begin_src sql :tangle tests/SQL-Cop/02-column/column-data-types-numeric-vs-int_for-sql-server.sql
+-- SQL 2005 +
+SELECT Name
+FROM sys.sysobjects
+WHERE XType = 'P'
+    AND (OBJECT_DEFINITION(ID) LIKE '%decimal[^(]%'
+         OR OBJECT_DEFINITION(ID) LIKE '%numeric[^(]%')
+    AND OBJECTPROPERTY(ID, N'IsMSShipped') = 0
+ORDER BY Name;
+#+end_src
+
+*How to correct it:* Use the query above to locate this problem with your
+code. Specify the precision and scale. This will often times require that you
+look up the proper precision and scale in a table definition.
+
+*Level of severity:* High
+
+*Level of difficulty:* Easy
+
+*** Column Name Problems
+
+*Do not use spaces or other invalid characters in your column names*
+
+Column names (and table names) should not have spaces or any other invalid
+characters in them. This is considered bad practice because it requires you to
+use square brackets around your names. Square brackets make the code harder to
+read and understand. The query (presented below) will also highlight columns and
+tables with numbers in the names. Most of the time, when there is a number in
+a column name, it represents a de-normalized database. There are exceptions to
+this rule, so not all occurrences of this problem need to be fixed.
+
+Based on a comment from Aaron Bertrand, I decided to modify the code
+below. I recognize that some organizations allow (and may even encourage) the
+use of the underscore character. In the newly modified code below, you can
+include a list of acceptable symbols. The code below allows the underscore
+symbol and the $ symbol. Modify this local variable to include any symbol that
+is acceptable within your organization.
+
+*How to detect this problem:*
+
+#+begin_src sql :tangle tests/SQL-Cop/02-column/column-name-problems_for-sql-server.sql
+DECLARE @AcceptableSymbols VarChar(100);
+SET @AcceptableSymbols = '_0123456789';
+
+SELECT
+    'ColumnName'                        AS Type,
+    Table_Name + '.' + Column_Name      AS Problem
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE Column_Name LIKE '%[^a-z' + @AcceptableSymbols + ']%'
+
+UNION ALL
+
+SELECT
+    'TableName',
+    Table_Name
+FROM INFORMATION_SCHEMA.TABLES
+WHERE Table_Name LIKE '%[^a-z' + @AcceptableSymbols + ']%';
+#+end_src
+
+*How to correct it:* If this is a number issue, you may need to redesign your
+database structure to include more tables. For example, if you have
+a StudentGrade table with (StudentId, Grade1, Grade2, Grade3, Grade4) you should
+change it to be StudentGrade with (StudentId, Grade, Identifier). Each student
+would have multiple rows in this table (one for each grade). You would need to
+add an identifier column to indicate what the grade is for (test on November 10,
+book report, etc).
+
+If this is a weird character issue, then you should change the name of the
+column so it is a simple word or phrase without any spaces, numbers, or
+symbols. When you do this, make sure you check all occurrences of where this is
+used from. This could include procedures, function, views, indexes, front end
+code, etc...
+
+Level of severity: mild
+
+Level of difficulty: moderate
+
+*** Columns with float data type
+
+*Do not use the float data type*
+
+That may seem a little harsh, and it’s not always true. However, most of the
+time, the float data type should be avoided. Unfortunately, the float (and real)
+data types are approximate data types that can lead to significant rounding
+errors.
+
+#+begin_src sql :tangle tests/SQL-Cop/02-column/column-with-float-data-type_for-sql-server.sql
+SELECT
+    Table_Name + '.' + Column_Name      AS Name,
+    'Table'                             AS ObjectType
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE Data_Type IN ('Float', 'Real')
+    -- Is ARCHIBUS Shipped.
+    AND Table_Name + '.' + Column_Name NOT IN (
+        'afm_atyp.atxt_ht',
+        'afm_atyp.atxt_ht_cm',
+        'afm_atyp.atxt_ht_in',
+        'afm_atyp.atxt_xoff_cm',
+        'afm_atyp.atxt_xoff_in',
+        'afm_atyp.atxt_yoff_cm',
+        'afm_atyp.atxt_yoff_in',
+        'afm_dwgpub.lgnd_txtheight',
+        'afm_dwgpub.lgnd_x',
+        'afm_dwgpub.lgnd_y',
+        'afm_dwgpub.qtxt_ht',
+        'afm_scmpref.afm_exe_version_num',
+        'afm_titlesheet.margin_bottom',
+        'afm_titlesheet.margin_left',
+        'afm_titlesheet.margin_right',
+        'afm_titlesheet.margin_top',
+        'afm_titlesheet.sheet_height',
+        'afm_titlesheet.sheet_width',
+        'rrmonrmcap.capacity_use')
+
+UNION ALL
+
+SELECT
+    Name,
+    Types.Description
+FROM
+(
+    SELECT
+        S.Name,
+        S.XType,
+        C.TEXT
+    FROM sysobjects                     S
+    INNER JOIN syscomments              C
+        ON S.id = C.id AND S.xtype IN('P', 'v', 'TF', 'FN')
+    WHERE OBJECTPROPERTY(S.ID, N'IsMSShipped') = 0
+    UNION ALL
+    SELECT
+        OBJECT_NAME(A.id),
+        s.XType,
+        LeftText + RightText
+    FROM sysobjects                     s
+    INNER JOIN
+    (
+        SELECT
+            Id,
+            RIGHT(TEXT, 10)             AS LeftText,
+            ColId
+        FROM syscomments
+    ) A
+    ON S.id = A.id
+        AND OBJECTPROPERTY(S.ID, N'IsMSShipped') = 0
+        AND S.xtype IN('P', 'v', 'TF', 'FN')
+    INNER JOIN
+    (
+        SELECT
+            Id,
+            LEFT(TEXT, 10)              AS RightText,
+            ColId
+        FROM syscomments
+    ) B
+    ON A.id = B.id
+        AND A.ColId = B.ColId - 1
+) A
+INNER JOIN
+(
+    SELECT
+        'FN' AS XType, 'Function' AS Description
+    UNION ALL
+    SELECT
+        'P' AS XType, 'Procedure' AS Description
+    UNION ALL
+    SELECT
+        'V' AS XType, 'View' AS Description
+    UNION ALL
+    SELECT
+        'TF' AS XType, 'Table Values Function' AS Description
+) Types
+    ON A.XType = Types.XType
+WHERE TEXT LIKE '%float[^(]%'
+ORDER BY Name;
+#+end_src
+
+*How to correct it:* Examine the data you are using and identify the precision and
+scale required. Change the data type (or code) to use a decimal with the
+precision and scale you require.
+
+*Level of severity:* Moderate
+
+*Level of difficulty:* Easy
+
+*** Columns with imagedata type
+
+*** Columns with text/ntext
+
+Don't use text datatype for SQL 2005 and up
+
+With SQL Server versions prior to SQL2005, the only way to store large amounts
+of data was to use the text, ntext, or image data types. SQL2005 introduced new
+data types that replace these data type, while also allowing all of the useful
+string handling functions to work. Changing the data types to the new SQL2005+
+equivalent should be relatively simple and quick to implement (depending on the
+size of your tables). So, why wait? Convert the data types now.
+
+The query presented below will display all the columns in all the tables within
+your database that are text, ntext or image.
+
+*How to detect this problem:*
+
+#+begin_src sql :tangle tests/SQL-Cop/02-column/tables-with-text-ntext_for-sql-server.sql
+SELECT
+    SCHEMA_NAME(o.uid) + '.' + o.name + '.' + col.name AS ProblemItem
+FROM syscolumns                         col
+INNER JOIN sysobjects                   o
+    ON col.id = o.id
+INNER JOIN systypes
+    ON col.xtype = systypes.xtype
+WHERE o.type = 'U'
+    AND OBJECTPROPERTY(o.id, N'IsMSShipped') = 0
+    AND systypes.name IN ('text', 'ntext')
+ORDER BY
+    SCHEMA_NAME(o.uid),
+    o.name,
+    col.name;
+
+Select  O.Name,
+        col.name as ColName,
+        systypes.name
+From    syscolumns col
+        Inner Join sysobjects O
+          On col.id = O.id
+        inner join systypes
+          On col.xtype = systypes.xtype
+Where   O.Type = 'U'
+        And ObjectProperty(o.ID, N'IsMSShipped') = 0
+        And systypes.name In ('text','ntext','image')
+Order By O.Name, Col.Name
+#+end_src
+
+*How to correct it:* Change the data type to a SQL2005+ version. Text should be
+converted to varchar(max), ntext should be converted to nvarchar(max) and image
+should be converted to varbinary(max).
+
+*Level of severity:* Low
+
+*Level of difficulty:* Easy
+
+*** Collation Mismatch
+
+*SQL Server collation conflicts: Column collation does not match database default*
+
+Collations control how strings are sorted and compared. Sorting is not usually
+a problem because it does not cause collation conflicts. It may not sort the way
+you want it to, but it won’t cause errors. The real problem here is when you
+compare data. Comparisons can occur several different ways. This can be a simple
+comparison in a where clause, or a comparison in a join condition. By having
+columns in your database that do not match the default collation of the
+database, you have a problem just waiting to happen.
+
+When you add a new column to an existing table or create a new table with string
+column(s), and you do NOT specify the collation, it will use the default
+collation of the database. If you then write queries that join with existing
+columns (that has a different collation) you will get collation conflict errors.
+
+Just to be clear here, I am NOT suggesting that every string column should have
+a collation that matches the default collation for the database. Instead, I am
+suggesting that when it is different, there should be a good reason for
+it. There are many successful databases out there where the developers never
+give any thought to the collation. In this circumstance, it’s best for the
+collations for each string column match the default collation for the database.
+
+*How to detect this problem:*
+
+#+begin_src sql :tangle tests/SQL-Cop/02-column/collation-mismatch_for-sql-server.sql
+SELECT
+    C.Table_Name,
+    Column_Name
+FROM INFORMATION_SCHEMA.COLUMNS         C
+INNER JOIN INFORMATION_SCHEMA.TABLES    T
+    ON C.Table_Name = T.Table_Name
+WHERE T.Table_Type = 'Base Table'
+    AND Collation_Name <> DATABASEPROPERTYEX(DB_NAME(), 'Collation')
+    AND COLUMNPROPERTY(OBJECT_ID(C.Table_Name), Column_Name, 'IsComputed') = 0
+ORDER BY
+    C.Table_Name,
+    C.Column_Name;
+#+end_src
+
+*How to correct it:* To correct this problem, you can modify the collation for
+your existing string columns.
+
+*Level of severity:* High
+
+*Level of difficulty:* Easy
+
+*** UniqueIdentifier with NewId
+
+** Table/Views
+
+*** tbl Table Prefix
+
+*** Table Name Problems
+
+*** Missing Foreign Keys
+
+References are at the heart of a database. It is possible to create a beautiful
+database with perfectly working front end code that always, 100% of the time,
+does the right thing with your data. But, writing code is hard. Very hard! Your
+data is often the most important asset you own. You need to protect it with
+every bit of technology you can find. At the heart of protecting your data is
+referential integrity. What does this mean? It means that you shouldn't be
+missing data, ever!
+
+The code below will check for columns that have ID in the name of the column
+where that column is not part of a primary key or foreign key constraint. Often
+times, this represents a missing constraint, but not always. The code presented
+below exists to highlight potential problems. You must still determine if this
+potential problem is real, and then act accordingly.
+
+How to detect this problem:
+
+#+begin_src sql :tangle tests/SQL-Cop/03-table-views/missing-foreign-key-constraints_for-sql-server.sql
+SELECT  C.TABLE_SCHEMA,C.TABLE_NAME,C.COLUMN_NAME
+FROM    INFORMATION_SCHEMA.COLUMNS C
+        INNER Join INFORMATION_SCHEMA.TABLES T
+          ON C.TABLE_NAME = T.TABLE_NAME
+          And T.TABLE_TYPE = 'Base Table'
+          AND T.TABLE_SCHEMA = C.TABLE_SCHEMA
+        LEFT Join INFORMATION_SCHEMA.CONSTRAINT_COLUMN_USAGE U
+          ON C.TABLE_NAME = U.TABLE_NAME
+          And C.COLUMN_NAME = U.COLUMN_NAME
+          And U.TABLE_SCHEMA = C.TABLE_SCHEMA
+WHERE   U.COLUMN_NAME IS Null
+        And C.COLUMN_NAME Like '%_id'
+ORDER BY C.TABLE_SCHEMA, C.TABLE_NAME, C.COLUMN_NAME;
+#+end_src
+
+How to correct it: Correcting this problem seems simple at first. Just declare
+your foreign keys, right? Well, it's not so simple. You see, there could be code
+running that deletes all the necessary data from the related tables. If you have
+code that deletes data in related tables in the wrong order, you will get
+referential constraint errors. Similar problems can occur with updates and
+inserts. The order in which you do things is important when you have referential
+constraints.
+
+Level of severity: High
+
+Level of difficulty: High
+
+*** Wide Tables
+
+*** Tables without a primary key
+
+Every table should (really) have a primary key.
+
+#+begin_src sql :tangle tests/SQL-Cop/03-table-views/tables-without-a-primary-key_for-sql-server.sql
+SELECT AllTables.Name
+FROM
+(
+    SELECT
+        Name,
+        id
+    FROM sysobjects
+    WHERE xtype = 'U'
+)                                       AllTables
+LEFT JOIN
+(
+    SELECT parent_obj
+    FROM sysobjects
+    WHERE xtype = 'PK'
+)                                       PrimaryKeys
+    ON AllTables.id = PrimaryKeys.parent_obj
+WHERE PrimaryKeys.Parent_Obj IS NULL
+ORDER BY AllTables.Name;
+#+end_src
+
+*** Empty Tables
+
+*** Unnamed Constraints
+
+*** Views with order by
+
+** Indexes
+
+*** Forwarded Records
+
+*** Fragmented indexes
+
+#+begin_src sql :tangle tests/SQL-Cop/04-indexes/fragmented-indexes_for-sql-server.sql
+IF EXISTS
+(
+    SELECT cmptlevel
+    FROM master.dbo.sysdatabases
+    WHERE dbid = DB_ID()
+        AND cmptlevel > 80
+)
+    IF EXISTS
+    (
+        SELECT 1
+        FROM fn_my_permissions(NULL, 'DATABASE')
+        WHERE permission_name = 'VIEW DATABASE STATE'
+    )
+        EXEC ('SELECT OBJECT_NAME(OBJECT_ID) + ''.'' + s.name As ProblemItem
+               FROM sys.dm_db_index_physical_stats (DB_ID(), NULL, NULL , NULL, N''LIMITED'') d
+               JOIN sysindexes s
+                   ON d.OBJECT_ID = s.id AND d.index_id = s.indid
+               WHERE avg_fragmentation_in_percent >= 30
+                   AND OBJECT_NAME(OBJECT_ID) + ''.'' + s.name > ''''
+                   AND page_count > 1000
+               ORDER BY OBJECT_NAME(OBJECT_ID), s.name')
+    ELSE
+        SELECT 'You do not have VIEW DATABASE STATE permissions within this database' AS ProblemItem
+ELSE
+    SELECT 'Unable to check index fragmentation when compatibility is set to 80 or below' AS ProblemItem;
+#+end_src
+
+*** Missing Foreign Key Indexes
+
+** Configuration
+
+*** Ad Hoc Distributed Queries
+
+*** Database Collation conflicts with temp tables and table variables
+
+When the collation of your user database does not match the collation of TempDB,
+you have a potential problem. Temp tables and table variables are created in
+TempDB. When you do not specify the collation for string columns in your table
+variables and temp tables, they will inherit the default collation for
+TempDB. Whenever you compare and/or join to the temp table or table variable,
+you may get a collation conflict.
+
+Under normal circumstances, it is best if all your collations match. This
+includes TempDB, Model (used for creating a new database), your user database,
+and all your string columns (varchar, nvarchar, char, nchar, text, ntext).
+
+*How to detect this problem:*
+
+#+begin_src sql :tangle tests/SQL-Cop/05-configuration/database-collation_for-sql-server.sql
+SELECT 'Warning: Collation conflict between user database and TempDB' AS Warning
+WHERE DATABASEPROPERTYEX('TempDB',  'Collation')
+   <> DATABASEPROPERTYEX(DB_NAME(), 'Collation');
+#+end_src
+
+*How to correct it:* There are several ways to correct this problem. The long term
+solution is to change the default collation for your database (affecting new
+string columns) and then change the collation for your existing
+columns. Alternatively, you could modify any code that creates a temp table or
+table variable so that it specifies a collation on your string columns. You can
+hard code the collation or use the default database collation.
+
+ex:
+
+#+begin_src sql :tangle no
+Create Table #AnyNameYouWant(Id Int, EyeColor VarChar(20) Collate Database_Default)
+#+end_src
+
+*Level of severity:* High. This is a hidden, hard to find bug, just waiting to
+happen.
+
+*Level of difficulty:* Moderate.
+
+*** Auto Close
+
+*** Auto Create
+
+*** Auto Shrink
+
+*** Auto Update
+
+*** CLR
+
+Check if the Common Language Runtime (CLR) is enabled.
+
+*** Compatibility Level
+
+*** Database and Log files on the same physical disk
+
+*** Login Language
+
+*** Max degree of parallelism
+
+Check the value of max degree of parallelism.
+
+*** Old Backups
+
+Find all databases that have not been backed up in the last 7 days.
+
+*** Ole Automation Procedures
+
+Check if Ole Automation procedures are enabled.
+
+*** Orphaned Users
+
+*** SMO and DMO
+
+Check if SMO and DMO procedures are enabled.
+
+*** User Aliases
+
+*** xp_cmdshell
+
+Check if ~xp_cmdshell~ is enabled.
+
+** Health
+
+*** Buffer cache hit ratio
+
+*** Page life expectancy
