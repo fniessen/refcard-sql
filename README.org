@@ -277,6 +277,12 @@ mssql-cli -E
 kinit.exe user@domain.com
 #+end_src
 
+* Data Diff
+
+- DBCompare
+- RedGate
+- DataGrip
+
 * Emacs YASnippets
 
 A *SQL "snippet"* (or *auto-replacement*) is a frequently used *code template* which
@@ -3813,3 +3819,48 @@ WHERE EXISTS
  AND (DUPE1.key_column_list LIKE LEFT(DUPE2.key_column_list, LEN(DUPE1.key_column_list)) OR DUPE2.key_column_list LIKE LEFT(DUPE1.key_column_list, LEN(DUPE2.key_column_list)))
  AND DUPE1.index_name <> DUPE2.index_name)
 #+end_src
+
+* Troubleshooting
+
+** SQL Server: No Process Is on the Other End of the Pipe (Error: 233) -- SQL Server not listening on 1433
+
+#+begin_src shell
+> telnet localhost 1433
+Trying 127.0.0.1...
+telnet: Unable to connect to remote host: Connection refused
+#+end_src
+
+*Cause:* The client protocol order is attempting to connect with the named pipes
+protocol before trying the TCP protocol, and named pipes are not enabled on the
+server.
+
+(For security reasons, *networking protocols* are *disabled* by default in SQL
+Server Express. Individual protocols can be enabled manually or during
+installation of SQL Server Express.)
+
+*Resolution:* Using *SQL Server Configuration Manager* on the client computer, move
+TCP before named pipes in the protocol order list.
+
+- Go to "SQL Server Network Configuration"
+
+- *Enable TCP/IP* in "Protocols for SQLEXPRESS"
+
+- In the Properties of TCP/IP > "*IP Addresses*", scroll down to *IPAll* and make
+  sure "TCP Dynamic Ports" is blank and that "*TCP Port*" is *set to 1433*.
+
+- Restart the "SQL Server (SQLEXPRESS)" service.
+
+- Make sure that port 1433 is enabled on your personal firewall.
+
+- Test:
+
+  #+begin_src shell
+  > telnet localhost 1433
+  Trying 127.0.0.1...
+  Connected to localhost.
+  Escape character is '^]'.
+  #+end_src
+
+  #+begin_src shell
+  > sqlcmd -S localhost -d myDB -E
+  #+end_src
