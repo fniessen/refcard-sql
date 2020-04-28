@@ -3822,6 +3822,13 @@ WHERE EXISTS
 
 * Troubleshooting
 
+** SQL Server: After first install of SQL Server
+
+Go to Properties of the Server, tab Security: Enable "SQL Server and Windows
+Authentication mode".
+
+Eventually, create the necessary logins...
+
 ** SQL Server: No Process Is on the Other End of the Pipe (Error: 233) -- SQL Server not listening on 1433
 
 #+begin_src shell
@@ -3841,6 +3848,17 @@ installation of SQL Server Express.)
 *Resolution:* Using *SQL Server Configuration Manager* on the client computer, move
 TCP before named pipes in the protocol order list.
 
+*** Change the default protocol or the protocol order for client computers
+
+- In SQL Server Configuration Manager, expand SQL Server Native Client
+  Configuration, right-click Client Protocols, and then click Properties.
+
+- In the Enabled Protocols box, click Move Up or Move Down, to change the order
+  in which protocols are tried, when attempting to connect to SQL Server. The
+  top protocol in the Enabled Protocols box is the default protocol.
+
+*** Add static port TCP/1433
+
 - Go to "SQL Server Network Configuration"
 
 - *Enable TCP/IP* in "Protocols for SQLEXPRESS"
@@ -3852,15 +3870,15 @@ TCP before named pipes in the protocol order list.
 
 - Make sure that port 1433 is enabled on your personal firewall.
 
-- Test:
+*** Test
 
-  #+begin_src shell
-  > telnet localhost 1433
-  Trying 127.0.0.1...
-  Connected to localhost.
-  Escape character is '^]'.
-  #+end_src
+#+begin_src shell
+> telnet localhost 1433
+Trying 127.0.0.1...
+Connected to localhost.
+Escape character is '^]'.
+#+end_src
 
-  #+begin_src shell
-  > sqlcmd -S localhost -d myDB -E
-  #+end_src
+#+begin_src shell
+> sqlcmd -S localhost -d myDB -E
+#+end_src
