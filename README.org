@@ -3606,6 +3606,21 @@ ORDER BY
     base_object_type;
 #+end_src
 
+*** Enable all triggers for Oracle
+
+#+begin_src sql
+BEGIN
+   FOR rec IN (SELECT trigger_name
+               FROM user_triggers)
+   LOOP
+      EXECUTE IMMEDIATE 'ALTER TRIGGER ' || rec.trigger_name || ' ENABLE' ;
+      DBMS_OUTPUT.put_line (
+         'Status of ' || rec.trigger_name || ' set to ENABLE'
+      );
+   END LOOP;
+END;
+#+end_src
+
 ** Using a DML trigger with a reminder e-mail message
 
 The following example sends an e-mail message to a specified person (MaryM) when
