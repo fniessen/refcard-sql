@@ -2216,6 +2216,20 @@ ALTER TABLE ${1:[schema].[table_name]}$0 ENABLE TRIGGER ALL;
 go
 #+end_src
 
+#+begin_src sql
+-- For Oracle.
+BEGIN
+   FOR rec IN (SELECT trigger_name
+               FROM user_triggers)
+   LOOP
+      EXECUTE IMMEDIATE 'ALTER TRIGGER ' || rec.trigger_name || ' ENABLE' ;
+      DBMS_OUTPUT.put_line (
+         'Status of ' || rec.trigger_name || ' set to ENABLE'
+      );
+   END LOOP;
+END;
+#+end_src
+
 **** Disable Trigger
 
 #+begin_src sql :tangle .emacs.d/snippets/sql-mode/atdt.yasnippet
@@ -3553,30 +3567,6 @@ ALTER DATABASE MyDataBase SET RECURSIVE_TRIGGERS ON
 go
 #+end_src
 
-*** For EPO cascading_update/delete triggers
-
-#+begin_src sql
-SELECT
-    'referenced_trigger'                AS trigger_type,
-    t.name
-FROM sys.triggers                       t
-WHERE t.name LIKE '%cascad%'
-
-UNION ALL
-
-SELECT
-    'referencing_trigger'               AS trigger_type,
-    t.name
-FROM sys.triggers                       t
-WHERE EXISTS
-(
-    SELECT 1
-    FROM sys.columns                    c
-    WHERE OBJECT_NAME(c.object_id) + '_' + c.name + '_t' = t.name
-)
-ORDER BY 1, 2;
-#+end_src
-
 *** For Oracle
 
 #+begin_src sql
@@ -3606,19 +3596,28 @@ ORDER BY
     base_object_type;
 #+end_src
 
-*** Enable all triggers for Oracle
+*** For AFM cascading_update/delete triggers
 
 #+begin_src sql
-BEGIN
-   FOR rec IN (SELECT trigger_name
-               FROM user_triggers)
-   LOOP
-      EXECUTE IMMEDIATE 'ALTER TRIGGER ' || rec.trigger_name || ' ENABLE' ;
-      DBMS_OUTPUT.put_line (
-         'Status of ' || rec.trigger_name || ' set to ENABLE'
-      );
-   END LOOP;
-END;
+SELECT
+    'referenced_trigger'                AS trigger_type,
+    t.name
+FROM sys.triggers                       t
+WHERE t.name LIKE '%cascad%'
+
+UNION ALL
+
+SELECT
+    'referencing_trigger'               AS trigger_type,
+    t.name
+FROM sys.triggers                       t
+WHERE EXISTS
+(
+    SELECT 1
+    FROM sys.columns                    c
+    WHERE OBJECT_NAME(c.object_id) + '_' + c.name + '_t' = t.name
+)
+ORDER BY 1, 2;
 #+end_src
 
 ** Using a DML trigger with a reminder e-mail message
