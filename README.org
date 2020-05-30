@@ -2217,12 +2217,12 @@ go
 #+end_src
 
 #+begin_src sql
--- For Oracle.
+-- Enable all triggers on all tables (For Oracle).
 BEGIN
    FOR rec IN (SELECT trigger_name
                FROM user_triggers)
    LOOP
-      EXECUTE IMMEDIATE 'ALTER TRIGGER ' || rec.trigger_name || ' ENABLE' ;
+      EXECUTE IMMEDIATE 'ALTER TRIGGER ' || rec.trigger_name || ' ENABLE';
       DBMS_OUTPUT.put_line (
          'Status of ' || rec.trigger_name || ' set to ENABLE'
       );
@@ -3007,7 +3007,7 @@ SELECT
     all_constraints.constraint_name
 FROM all_constraints, all_cons_columns
 WHERE
-    all_constraints.constraint_type = 'P'
+    all_constraints.constraint_type = 'P' -- Primary key.
     AND all_constraints.owner = all_cons_columns.owner
     AND all_constraints.constraint_name = all_cons_columns.constraint_name
     AND all_constraints.status = 'ENABLED'
@@ -3102,7 +3102,7 @@ SELECT
 FROM all_constraints
 WHERE
     table_name LIKE '%%'
-    AND UPPER(constraint_type) = 'R'
+    AND UPPER(constraint_type) = 'R'    -- Foreign key.
     AND UPPER(status) = 'ENABLED';
 #+end_src
 
@@ -3202,7 +3202,7 @@ WHERE
     DATEDIFF(DD, PK_TABLE_NAME.date_start, '2018-09-06') >= 380;
 #+end_src
 
-** Disable/enable all constraints in the database
+** Enable / disable all constraints in the database
 
 #+begin_src sql
 -- Disable all constraints for database.
@@ -3221,20 +3221,58 @@ I find it useful when populating data from one database to another.  It is much
 better approach than dropping constraints.  It comes handy when dropping all the
 data in the database and repopulating it (say, in test environment).
 
-** Disable/enable all constraints on a table
+** Enable / disable all constraints on a table
 
 #+begin_src sql
 -- Disable all table constraints.
-ALTER TABLE MyTable NOCHECK CONSTRAINT ALL
+ALTER TABLE ${1:[schema].[table_name]} NOCHECK CONSTRAINT ALL;
 
 -- Enable all table constraints.
-ALTER TABLE MyTable WITH CHECK CHECK CONSTRAINT ALL
+ALTER TABLE ${1:[schema].[table_name]} WITH CHECK CHECK CONSTRAINT ALL;
 
 -- Disable single constraint.
-ALTER TABLE MyTable NOCHECK CONSTRAINT MyConstraint
+ALTER TABLE ${1:[schema].[table_name]} NOCHECK CONSTRAINT $0;
 
 -- Enable single constraint.
-ALTER TABLE MyTable WITH CHECK CHECK CONSTRAINT MyConstraint
+ALTER TABLE ${1:[schema].[table_name]} WITH CHECK CHECK CONSTRAINT $0;
+#+end_src
+
+#+begin_src sql
+-- For Oracle.
+
+-- Enable primary key (constraint_type ='P') constraint.
+ALTER TABLE ${1:[schema].[table_name]} ENABLE CONSTRAINT $0;
+
+-- Enable all primary keys on all tables.
+BEGIN
+   FOR rec IN (SELECT owner, table_name, constraint_name
+               FROM all_constraints
+               WHERE UPPER(constraint_type) = 'P'
+                   AND UPPER(owner) IN ('AFM', 'AFM_SECURE')
+                   AND status = 'DISABLED')
+   LOOP
+      EXECUTE IMMEDIATE 'ALTER TABLE "' || rec.owner || '"."' || rec.table_name || '" ENABLE CONSTRAINT "' || rec.constraint_name || '"';
+   END LOOP;
+END;
+#+end_src
+
+#+begin_src sql
+-- For Oracle.
+
+-- Enable foreign key (constraint_type ='R') constraint without validation.
+ALTER TABLE ${1:[schema].[table_name]} ENABLE NOVALIDATE CONSTRAINT $0;
+
+-- Enable all foreign keys on all tables.
+BEGIN
+   FOR rec IN (SELECT owner, table_name, constraint_name
+               FROM all_constraints
+               WHERE UPPER(constraint_type) = 'R'
+                   AND UPPER(owner) IN ('AFM', 'AFM_SECURE')
+                   AND status = 'DISABLED')
+   LOOP
+      EXECUTE IMMEDIATE 'ALTER TABLE "' || rec.owner || '"."' || rec.table_name || '" ENABLE NOVALIDATE CONSTRAINT "' || rec.constraint_name || '"';
+   END LOOP;
+END;
 #+end_src
 
 ** List all non-NULLABLE columns
