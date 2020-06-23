@@ -2598,7 +2598,43 @@ WHERE rmpct_rank <= 10
 ORDER BY pct_id;
 #+end_src
 
-** Table spaces in Oracle
+** List table spaces in Oracle
+
+#+begin_src shell
+-- List of tablespaces (for Oracle).
+SELECT
+    TABLESPACE_NAME,
+    BLOCK_SIZE,
+    STATUS,
+    CONTENTS,
+    EXTENT_MANAGEMENT,
+    ALLOCATION_TYPE,
+    SEGMENT_SPACE_MANAGEMENT
+FROM DBA_TABLESPACES
+ORDER BY TABLESPACE_NAME;
+#+end_src
+
+#+begin_src shell
+-- List of tablespaces with the OS files (for Oracle).
+SELECT
+    TABLESPACE_NAME,
+    FILE_NAME,
+    FILE_ID,
+    BYTES,
+    STATUS,
+    MAXBYTES
+FROM DBA_DATA_FILES
+UNION
+SELECT
+    TABLESPACE_NAME,
+    FILE_NAME,
+    FILE_ID,
+    BYTES,
+    STATUS,
+    MAXBYTES
+FROM DBA_TEMP_FILES
+ORDER BY TABLESPACE_NAME, FILE_NAME;
+ #+end_src
 
 #+begin_src shell
 SELECT tablespace_name, file_name
