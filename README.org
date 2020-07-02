@@ -2486,6 +2486,12 @@ XXX Check out https://dataedo.com/kb/query/sql-server!!! (+ version for Oracle !
 
 - [[https://blogs.sentryone.com/aaronbertrand/backtobasics-ctes][Common Table Expressions (CTEs)]]
 
+** Set Oracle date display format (ISO 8601)
+
+#+begin_src sql
+ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS';
+#+end_src
+
 ** NULL-Aware comparison
 
 "Boolean" logic in SQL is a bit complicated, because it is a *three-valued logic*
@@ -2616,23 +2622,26 @@ ORDER BY TABLESPACE_NAME;
 
 #+begin_src shell
 -- List of tablespaces with the OS files (for Oracle).
-SELECT
-    TABLESPACE_NAME,
-    FILE_NAME,
-    FILE_ID,
-    BYTES,
-    STATUS,
-    MAXBYTES
-FROM DBA_DATA_FILES
-UNION
-SELECT
-    TABLESPACE_NAME,
-    FILE_NAME,
-    FILE_ID,
-    BYTES,
-    STATUS,
-    MAXBYTES
-FROM DBA_TEMP_FILES
+SELECT *
+FROM
+   (SELECT
+        TABLESPACE_NAME,
+        FILE_NAME,
+        FILE_ID,
+        BYTES,
+        STATUS,
+        MAXBYTES
+    FROM DBA_DATA_FILES
+    UNION
+    SELECT
+        TABLESPACE_NAME,
+        FILE_NAME,
+        FILE_ID,
+        BYTES,
+        STATUS,
+        MAXBYTES
+    FROM DBA_TEMP_FILES)
+WHERE TABLESPACE_NAME LIKE UPPER('%%')
 ORDER BY TABLESPACE_NAME, FILE_NAME;
  #+end_src
 
@@ -3909,6 +3918,15 @@ WHERE EXISTS
 #+end_src
 
 * Troubleshooting
+
+** Debug code
+
+To debug the code of views, for example,
+- simplify it (remove useless subqueries)
+- put a SELECT around some code, moving the WHERE conditions around
+- don't forget that missed lines are missed because of JOIN conditions or
+  because of WHERE conditions... and some conditions may have been written in
+  the wrong place!
 
 ** SQL Server: After first install of SQL Server
 
