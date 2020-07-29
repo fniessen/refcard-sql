@@ -66,7 +66,7 @@ CREATE TABLE ##file_list
      IsReadOnly           bit,
      IsPresent            bit,
      TDEThumbprint        varbinary(32)
-     -- , SnapshotURL     nvarchar(360) -- When using SQL Server 2017.
+     , SnapshotURL        nvarchar(360) -- When using SQL Server 2017.
     );
 
 SET @sql =
