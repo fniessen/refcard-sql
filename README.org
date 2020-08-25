@@ -1502,6 +1502,18 @@ WHERE TABLE_TYPE = 'BASE TABLE'
     AND TABLE_NAME LIKE '%%';
 #+end_src
 
+#+begin_src sql :tangle .emacs.d/snippets/sql-mode/ltora.yasnippet
+-- For Oracle.
+SELECT DISTINCT
+    OWNER,
+    OBJECT_NAME,
+    OBJECT_TYPE
+FROM ALL_OBJECTS
+WHERE OBJECT_TYPE = 'TABLE'
+    AND OWNER LIKE '%%'
+    AND OBJECT_NAME LIKE '%%';
+#+end_src
+
 **** [lv] List Views
 
 List views.
