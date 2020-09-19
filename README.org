@@ -1520,6 +1520,113 @@ WHERE OBJECT_TYPE = 'TABLE'
     AND OBJECT_NAME LIKE '%%';
 #+end_src
 
+**** List Columns (xss, afm-fields, for all the fields in the SQL Database Schema)
+
+#+begin_src sql :tangle no
+SELECT
+    sys.objects.name                    AS TABLE_NAME,
+    sys.columns.name                    AS COLUMN_NAME
+FROM sys.objects
+LEFT OUTER JOIN sys.columns
+    ON sys.objects.object_id = sys.columns.object_id
+WHERE type = 'U'
+    -- AND sys.objects.name LIKE 'int_%' -- Table name.
+ORDER BY sys.objects.name, sys.columns.name;
+#+end_src
+
+#+begin_note
+In SQL Server, column aliases should use brackets as using single quotes is
+deprecated (not to mention easily confused with string literals).
+
+But the only portable notation is using double quotes...
+#+end_note
+
+XXX Add referenced table but avoid duplicates (multi-columns FK)
+
+#+begin_src sql :tangle no
+-- xss. For SQL Server.
+SELECT
+    OBJECT_NAME(c.object_id)            AS TABLE_NAME,
+    c.name                              AS COLUMN_NAME,
+    CASE i.is_primary_key
+        WHEN 1 THEN '!'
+        ELSE ''
+    END                                 AS PRIMARY_KEY,
+    CASE c.is_nullable
+        WHEN 0 THEN '*'
+        ELSE ''
+    END                                 AS REQUIRED,
+    t.name                              AS DATA_TYPE,
+    CASE
+        WHEN t.name IN ('char', 'varchar', 'nvarchar', 'decimal') THEN c.max_length
+        ELSE NULL
+    END                                 AS "SIZE",
+    CASE
+        WHEN c.default_object_id = 0 OR OBJECT_DEFINITION(c.default_object_id) = '(NULL)' THEN ''
+        ELSE OBJECT_DEFINITION(c.default_object_id)
+    END                                 AS DEFAULT,
+    CASE c.is_identity
+        WHEN 1 THEN 'IDENTITY'
+        ELSE ''
+    END                                 AS IS_IDENTITY
+    -- XXX Add referenced table.
+    -- ,CASE
+    --     WHEN fk.name IS NOT NULL THEN '=> ' + OBJECT_NAME(fk.object_id) + '.' + fk.name
+    --     ELSE ''
+    -- END                                 AS Foreign_Key
+FROM sys.columns                        c
+INNER JOIN sys.objects                  o
+    ON (o.object_id = c.object_id
+        AND type IN ('U','V'))          -- User Tables and Views. XXX Test it!
+INNER JOIN sys.types                    t
+    ON c.user_type_id = t.user_type_id
+-- Remove the duplicate results (because some tables have more than one index
+-- with the same leading key column) by applying a filter in the JOIN to
+-- sys.indexes to only return the primary keys).
+-- https://stackoverflow.com/questions/21759295/get-list-of-all-columns-with-complete-details-identity-nullabel-primary-key-i
+LEFT OUTER JOIN (sys.index_columns      ic
+                INNER JOIN sys.indexes  i
+                    ON ic.object_id = i.object_id AND ic.index_id = i.index_id
+                    AND i.is_primary_key = 1)
+    ON ic.object_id = c.object_id AND ic.column_id = c.column_id
+-- LEFT JOIN sys.foreign_key_columns    fkc
+--     ON fkc.parent_object_id = c.object_id AND fkc.parent_column_id = c.column_id
+-- LEFT JOIN sys.columns                fk
+--     ON fk.object_id = fkc.referenced_object_id AND fk.column_id = fkc.referenced_column_id
+WHERE
+    OBJECT_NAME(c.object_id) LIKE '%%'  -- Table name.
+    AND c.name LIKE '%%'                -- Column name.
+    -- AND fk.name LIKE '%%'            -- Foreign column name.  (Limit to FK constraints only.)
+ORDER BY
+    OBJECT_NAME(c.object_id),
+    c.name;
+#+end_src
+
+#+begin_note
+Join to *user* ~_type_id~ in the ~sys.types~ table.  ~user_type_id~ is identical to
+~system_type_id~ for system types -- See
+https://msdn.microsoft.com/en-gb/library/ms188021.aspx
+#+end_note
+
+#+begin_src sql :tangle no
+-- For Oracle.
+SELECT
+    table_name,
+    column_name,
+    nullable,
+    data_type,
+    char_length,
+    data_default,
+    identity_column
+FROM user_tab_cols
+WHERE
+    table_name LIKE UPPER('%%')
+    AND column_name LIKE UPPER('%%')
+ORDER BY
+    table_name,
+    column_name;
+#+end_src
+
 **** [lv] List Views
 
 List views.
@@ -2867,113 +2974,6 @@ FROM v$version
 WHERE banner LIKE 'Oracle%';
 #+end_src
 
-** List all columns (sfss, afm-fields, for all the fields in the SQL Database Schema)
-
-#+begin_src sql
-SELECT
-    sys.objects.name                    AS TABLE_NAME,
-    sys.columns.name                    AS COLUMN_NAME
-FROM sys.objects
-LEFT OUTER JOIN sys.columns
-    ON sys.objects.object_id = sys.columns.object_id
-WHERE type = 'U'
-    -- AND sys.objects.name LIKE 'int_%' -- Table name.
-ORDER BY sys.objects.name, sys.columns.name;
-#+end_src
-
-#+begin_note
-In SQL Server, column aliases should use brackets as using single quotes is
-deprecated (not to mention easily confused with string literals).
-
-But the only portable notation is using double quotes...
-#+end_note
-
-XXX Add referenced table but avoid duplicates (multi-columns FK)
-
-#+begin_src sql
--- For SQL Server.
-SELECT
-    OBJECT_NAME(c.object_id)            AS TABLE_NAME,
-    c.name                              AS COLUMN_NAME,
-    CASE i.is_primary_key
-        WHEN 1 THEN '!'
-        ELSE ''
-    END                                 AS PRIMARY_KEY_DESC,
-    CASE c.is_nullable
-        WHEN 0 THEN '*'
-        ELSE ''
-    END                                 AS REQUIRED_DESC,
-    t.name                              AS DATA_TYPE,
-    CASE
-        WHEN t.name IN ('char', 'varchar', 'nvarchar', 'decimal') THEN c.max_length
-        ELSE NULL
-    END                                 AS "SIZE",
-    CASE
-        WHEN c.default_object_id = 0 OR OBJECT_DEFINITION(c.default_object_id) = '(NULL)' THEN ''
-        ELSE OBJECT_DEFINITION(c.default_object_id)
-    END                                 AS DEFAULT_DESC,
-    CASE c.is_identity
-        WHEN 1 THEN 'IDENTITY'
-        ELSE ''
-    END                                 AS IS_IDENTITY_DESC
-    -- XXX Add referenced table.
-    -- ,CASE
-    --     WHEN fk.name IS NOT NULL THEN '=> ' + OBJECT_NAME(fk.object_id) + '.' + fk.name
-    --     ELSE ''
-    -- END                                 AS Foreign_Key
-FROM sys.columns                        c
-INNER JOIN sys.objects                  o
-    ON (o.object_id = c.object_id
-        AND type IN ('U','V'))          -- User Tables and Views. XXX Test it!
-INNER JOIN sys.types                    t
-    ON c.user_type_id = t.user_type_id
--- Remove the duplicate results (because some tables have more than one index
--- with the same leading key column) by applying a filter in the JOIN to
--- sys.indexes to only return the primary keys).
--- https://stackoverflow.com/questions/21759295/get-list-of-all-columns-with-complete-details-identity-nullabel-primary-key-i
-LEFT OUTER JOIN (sys.index_columns      ic
-                INNER JOIN sys.indexes  i
-                    ON ic.object_id = i.object_id AND ic.index_id = i.index_id
-                    AND i.is_primary_key = 1)
-    ON ic.object_id = c.object_id AND ic.column_id = c.column_id
--- LEFT JOIN sys.foreign_key_columns    fkc
---     ON fkc.parent_object_id = c.object_id AND fkc.parent_column_id = c.column_id
--- LEFT JOIN sys.columns                fk
---     ON fk.object_id = fkc.referenced_object_id AND fk.column_id = fkc.referenced_column_id
-WHERE
-    OBJECT_NAME(c.object_id) LIKE '%%'  -- Table name.
-    AND c.name LIKE '%%'                -- Column name.
-    -- AND fk.name LIKE '%%'            -- Foreign column name.  (Limit to FK constraints only.)
-ORDER BY
-    OBJECT_NAME(c.object_id),
-    c.name;
-#+end_src
-
-#+begin_note
-Join to *user* ~_type_id~ in the ~sys.types~ table.  ~user_type_id~ is identical to
-~system_type_id~ for system types -- See
-https://msdn.microsoft.com/en-gb/library/ms188021.aspx
-#+end_note
-
-#+begin_src sql
--- For Oracle.
-SELECT
-    table_name,
-    column_name,
-    nullable,
-    data_type,
-    char_length,
-    data_default,
-    identity_column
-FROM user_tab_cols
-WHERE
-    table_name LIKE UPPER('%%')
-    AND column_name LIKE UPPER('%%')
-ORDER BY
-    table_name,
-    column_name;
-#+end_src
-
 ** 6 Useful SQL Server Data Dictionary Queries Every DBA Should Have
 
 https://dataedo.com/blog/useful-sql-server-data-dictionary-queries-every-dba-should-have
@@ -3353,7 +3353,7 @@ SELECT
         WHEN 0 THEN '0 = No'
         WHEN 1 THEN '1 = Yes'
         ELSE NULL
-    END                                 AS IS_NULLABLE_DESC
+    END                                 AS IS_NULLABLE
     -- XXX Add the default value
 FROM sys.columns
 WHERE
@@ -3787,7 +3787,7 @@ SELECT
     o.type_desc                         AS TYPE,
     referenced_schema_name              AS REFERENCED_SCHEMA,
     referenced_entity_name              AS REFERENCED_TABLE_NAME,
-    o1.type_desc                        AS REFERENCED_OBJECT_TYPE_DESC
+    o1.type_desc                        AS REFERENCED_OBJECT_TYPE
     --,sed.* -- Uncomment for all the columns.
 FROM sys.sql_expression_dependencies    sed
 INNER JOIN sys.objects                  o
