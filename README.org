@@ -79,6 +79,12 @@ See https://alessandroalpi.blog/2013/07/24/ssms-boost-another-cool-addin-for-sql
   a lot. You can also go to a definition/summary of an object in a popup
   (without changing tabs) and pick the columns in case of tables.
 
+** SQL Developer
+
+Shortcuts:
+- F5 :: execute a "whole" script by pressing.
+- F9 :: execute a statement (highlighted commands).
+
 ** DBeaver
 
 - Supports any database that has a JDBC or ODBC driver: *SQL Server*, *Oracle*,
