@@ -2341,7 +2341,7 @@ ALTER TABLE ${1:[schema].[table_name]}$0 ENABLE TRIGGER ALL;
 go
 #+end_src
 
-#+begin_src sql
+#+begin_src sql :tangle no
 -- Enable all triggers on all tables (For Oracle).
 BEGIN
    FOR rec IN (SELECT trigger_name
@@ -2610,6 +2610,20 @@ XXX Check out https://dataedo.com/kb/query/sql-server!!! (+ version for Oracle !
 - http://sqlblog.com/blogs/aaron_bertrand/archive/2008/10/30/my-stored-procedure-best-practices-checklist.aspx
 
 - [[https://blogs.sentryone.com/aaronbertrand/backtobasics-ctes][Common Table Expressions (CTEs)]]
+
+** Return the current version
+
+#+begin_src sql
+-- For SQL Server.
+SELECT @@VERSION AS "SQL Server Version";
+#+end_src
+
+#+begin_src sql
+-- For Oracle.
+SELECT banner AS "Oracle version"
+FROM v$version
+WHERE banner LIKE 'Oracle%';
+#+end_src
 
 ** Set Oracle date display format (ISO 8601)
 
@@ -2957,22 +2971,6 @@ SQL-Server is well know to do things in an order of execution one might not have
 expected. Here is a great article: Rusano.com:
 "t-sql-functions-do-no-imply-a-certain-order-of-execution" and here is the
 related question.
-
-** Retrieve DB version information
-
-*** SQL Server
-
-#+begin_src sql
-SELECT @@version;
-#+end_src
-
-*** Oracle
-
-#+begin_src sql
-SELECT *
-FROM v$version
-WHERE banner LIKE 'Oracle%';
-#+end_src
 
 ** 6 Useful SQL Server Data Dictionary Queries Every DBA Should Have
 
@@ -3955,7 +3953,7 @@ Eventually, create the necessary logins...
 
 ** SQL Server: No Process Is on the Other End of the Pipe (Error: 233) -- SQL Server not listening on 1433
 
-#+begin_src shell
+#+begin_src shell :tangle no
 > telnet localhost 1433
 Trying 127.0.0.1...
 telnet: Unable to connect to remote host: Connection refused
@@ -3996,13 +3994,13 @@ TCP before named pipes in the protocol order list.
 
 *** Test
 
-#+begin_src shell
+#+begin_src shell :tangle no
 > telnet localhost 1433
 Trying 127.0.0.1...
 Connected to localhost.
 Escape character is '^]'.
 #+end_src
 
-#+begin_src shell
+#+begin_src shell :tangle no
 > sqlcmd -S localhost -d myDB -E
 #+end_src
