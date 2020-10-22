@@ -65,7 +65,7 @@ BEGIN
     FROM dba_users
     WHERE username = UPPER('$AFM_SECURE_SCHEMA');
     IF (user_exists = 1) THEN
-        dbms_output.put_line('.......... user exists XXX this is not visible ..............................');
+        dbms_output.put_line('INFO- User $AFM_SECURE_SCHEMA already exists -- Drop it!');
         EXECUTE IMMEDIATE 'DROP USER $AFM_SECURE_SCHEMA CASCADE';
     END IF;
 END;
@@ -80,6 +80,7 @@ BEGIN
     FROM dba_users
     WHERE username = UPPER('$AFM_SCHEMA');
     IF (user_exists = 1) THEN
+        dbms_output.put_line('INFO- User $AFM_SCHEMA already exists -- Drop it!');
         EXECUTE IMMEDIATE 'DROP USER $AFM_SCHEMA CASCADE';
     END IF;
 END;
