@@ -1,4 +1,26 @@
 #!/usr/bin/env bash
+#? restoredb, Time-stamp: <20200729.1604>
+#? Copyright (C) 2020 Fabrice Niessen
+#?
+#? License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+#? This is free software: you are free to change and redistribute it.
+#? There is NO WARRANTY, to the extent permitted by law.
+
+##? Usage: restoredb [options] BACKUP_PATH DB_NAME
+##?
+##? Restore DB.
+##?
+##? Arguments:
+##?   BACKUP_PATH                   path to backup file
+##?   DB_NAME                       database name
+##?
+##? Options:
+##?   -h, --help                    display this help and exit
+##?   -V, --version                 display version information and exit
+##?
+##? Example:
+##?   restoredb "D:/Dev/BAK/MSSQL/20190211_DB.bak" "20190211_DB"
+
 usage() {
     cat << EOF 1>&2
 Usage: $CMD BACKUP_PATH DB_NAME
