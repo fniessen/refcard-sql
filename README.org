@@ -96,6 +96,14 @@ Shortcuts:
 - C-S-SPC for words completion (so-called "hippie autocomplete") -- it completes
   word trying to find any identifiers matching you input in all open editors.
 
+*** Settings
+
+- Preferences
+  + Editors
+    - SQL Editor
+      + SQL Completion
+        Insert case (https://dbeaver.io/forum/, Possibility to disable auto content assist)
+
 ** Sqsh
 
 #+name: current-year
