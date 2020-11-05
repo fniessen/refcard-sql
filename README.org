@@ -665,7 +665,29 @@ ORDER BY $0
 #+begin_src sql :tangle .emacs.d/snippets/sql-mode/rwn.yasnippet
 # name: ROW_NUMBER fragment
 # --
-ROW_NUMBER() OVER(PARTITION BY  ORDER BY )
+ROW_NUMBER() OVER(PARTITION BY $0 ORDER BY )
+#+end_src
+
+Example:
+
+#+begin_src sql :tangle no
+cteEtpNumBCEDernNom AS
+(
+    SELECT etpSiegeExpNumBCE, etpNom
+    FROM
+    (
+        SELECT
+            etpSiegeExpNumBCE,
+            etpNom,
+            SUBSTRING(pfiID, 4, 11)     AS date_part,
+            ROW_NUMBER() OVER(PARTITION BY etpSiegeExpNumBCE
+                              ORDER BY SUBSTRING(pfiID, 4, 11) DESC)
+                                        AS rn
+        FROM entreprise
+        WHERE etpSiegeExpNumBCE IS NOT NULL
+    ) data
+    WHERE rn = 1
+)
 #+end_src
 
 **** [up] Update
