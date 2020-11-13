@@ -1,14 +1,34 @@
 #!/usr/bin/env bash
-usage() {
-    cat << EOF 1>&2
-Usage: $CMD DATA_PUMP_FILE AFM_SCHEMA
-EOF
-    exit 2
-}
+#? restoredbora, Time-stamp: 20201113.1026
+#? Copyright (C) 2019-2020 Fabrice Niessen
+#?
+#? License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
+#? This is free software: you are free to change and redistribute it.
+#? There is NO WARRANTY, to the extent permitted by law.
 
-CMD=$(basename "$0")                    # Command name.
-DATA_PUMP_FILE=$1
-AFM_SCHEMA=$2
+##? Usage: restoredbora [options] DATA_PUMP_FILE AFM_SCHEMA
+##?
+##? Restore Oracle database using impdp.
+##?
+##? Arguments:
+##?   DATA_PUMP_FILE                dump file
+##?   AFM_SCHEMA                    main schema
+##?
+##? Options:
+##?   -h, --help                    display this help and exit
+##?   -V, --version                 display version information and exit
+##?
+##? Example:
+##?   restoredbora PRD-20191213.dpump PRD_20191213
+##?                                 restore database from dump file
+##?                                 PRD-20191213.dpump to schemas
+##?                                 PRD_20191213 and PRD_20191213_SECURE
+
+help=$(grep "^##?" "$0" | cut -c 5-)
+version=$(grep "^#?"  "$0" | cut -c 4-)
+parsed="$(docopts -h "$help" -V "$version" : "$@")"
+eval "$parsed"
+
 AFM_SECURE_SCHEMA=$2_SECURE
 
 DBAUSER="system"
@@ -17,10 +37,6 @@ HOSTSTRING="ORCL1252"
 ROOT="D:\app\f.niessen\oradata\\$HOSTSTRING"
 ADMINROOT="D:\app\f.niessen\admin\\$HOSTSTRING"
 # See regedit for variable names.
-
-if [[ $# -ne 2 ]]; then
-    usage
-fi
 
 echo "Data Pump File:      $DATA_PUMP_FILE"
 if [ ! -f "$ADMINROOT"/dpdump/"$DATA_PUMP_FILE" ]; then
