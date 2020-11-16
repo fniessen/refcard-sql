@@ -2318,6 +2318,12 @@ go
 BEGIN TRANSACTION $0
 #+end_src
 
+When opening a new query window, you could specify:
+
+: BEGIN TRAN
+:
+: ROLLBACK
+
 **** [ctr] Commit Transaction
 
 #+begin_src sql :tangle .emacs.d/snippets/sql-mode/ctr.yasnippet
