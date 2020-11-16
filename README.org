@@ -85,6 +85,27 @@ Shortcuts:
 - F5 :: execute a "whole" script by pressing.
 - F9 :: execute a statement (highlighted commands).
 
+*** How to export query result to CSV in Oracle SQL Developer?
+
+To export results to CSV from SQL Developer:
+
+1. Run a query
+
+2. Right-click and select "Export...".  See
+   http://stackoverflow.com/questions/4168398/how-to-export-query-result-to-csv-in-oracle-sql-developer#4169011
+
+3. Select "XLS" from the format drop down ("CSV" produces results over multiple
+   lines!)
+
+4. In Excel, convert to CSV (as well over multiple lines!)
+
+5. In Emacs, replace end-of-lines ~^M~ by ~^M^J^J~ so that you have clear paragraphs
+   to work on
+
+6. Change ~fill-column~ to ~10000~
+
+7. Apply ~M-q~ on all paragraphs via a macro
+
 ** DBeaver
 
 - Supports any database that has a JDBC or ODBC driver: *SQL Server*, *Oracle*,
