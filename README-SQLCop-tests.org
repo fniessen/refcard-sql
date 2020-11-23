@@ -1,4 +1,4 @@
-#+TITLE:     Collection of tests for SQL DB
+#+TITLE:     SQL Cop -- Collection of tests for SQL DB
 #+AUTHOR:    Fabrice Niessen
 #+EMAIL:     (concat "fniessen" at-sign "pirilampo.org")
 #+DESCRIPTION:
@@ -12,9 +12,7 @@
 
 #+LaTeX_CLASS: aremis
 
-* SQL Cop
-
-The tests are categorized under 6 groups:
+The *SQL Cop* tests are categorized under 6 groups:
 
 1. Code,
 2. Column,
@@ -28,15 +26,15 @@ See Also:
 - https://documentation.red-gate.com/sqt1/sql-cop-static-analysis-tests
 - https://www.red-gate.com/simple-talk/sql/sql-tools/sql-cop-review/
 
-** Code
+* Code
 
-*** Decimal Size Problems
+** Decimal Size Problems
 
-*** Procedures with dynamic SQL
+** Procedures with dynamic SQL
 
-*** Procedures using dynamic SQL without sp_executesql
+** Procedures using dynamic SQL without sp_executesql
 
-*** Procedures with SP_
+** Procedures with SP_
 
 When SQL Server executes a stored procedure, it first checks to see if it is
 a built-in stored procedure (system supplied). It checks the master database for
@@ -79,13 +77,13 @@ procedure and change the name of the call.
 
 *Level of severity:* Moderate
 
-*** Procedures without SET NOCOUNT ON
+** Procedures without SET NOCOUNT ON
 
-*** Procedures with SET ROWCOUNT
+** Procedures with SET ROWCOUNT
 
-*** Procedures with @@Identity
+** Procedures with @@Identity
 
-*** Undocumented Procedures
+** Undocumented Procedures
 
 When you use an undocumented stored procedure, you run the risk of not being
 able to upgrade your database to a new version. What’s worse... you could have
@@ -182,11 +180,11 @@ undocumented procedures.
 *Level of difficulty:* moderate to high. Undocumented stored procedures are often
 used because it’s easy. Replacing it is usually NOT easy.
 
-*** VarChar Size Problems
+** VarChar Size Problems
 
-** Column
+* Column
 
-*** Column Data Types (Numeric vs Int)
+** Column Data Types (Numeric vs Int)
 
 *Always include precision and scale with decimal and numeric*
 
@@ -217,7 +215,7 @@ look up the proper precision and scale in a table definition.
 
 *Level of difficulty:* Easy
 
-*** Column Name Problems
+** Column Name Problems
 
 *Do not use spaces or other invalid characters in your column names*
 
@@ -275,7 +273,7 @@ Level of severity: mild
 
 Level of difficulty: moderate
 
-*** Columns with float data type
+** Columns with float data type
 
 *Do not use the float data type*
 
@@ -382,9 +380,9 @@ precision and scale you require.
 
 *Level of difficulty:* Easy
 
-*** Columns with imagedata type
+** Columns with imagedata type
 
-*** Columns with text/ntext
+** Columns with text/ntext
 
 Don't use text datatype for SQL 2005 and up
 
@@ -438,7 +436,7 @@ should be converted to varbinary(max).
 
 *Level of difficulty:* Easy
 
-*** Collation Mismatch
+** Collation Mismatch
 
 *SQL Server collation conflicts: Column collation does not match database default*
 
@@ -486,15 +484,15 @@ your existing string columns.
 
 *Level of difficulty:* Easy
 
-*** UniqueIdentifier with NewId
+** UniqueIdentifier with NewId
 
-** Table/Views
+* Table/Views
 
-*** tbl Table Prefix
+** tbl Table Prefix
 
-*** Table Name Problems
+** Table Name Problems
 
-*** Missing Foreign Keys
+** Missing Foreign Keys
 
 References are at the heart of a database. It is possible to create a beautiful
 database with perfectly working front end code that always, 100% of the time,
@@ -540,9 +538,9 @@ Level of severity: High
 
 Level of difficulty: High
 
-*** Wide Tables
+** Wide Tables
 
-*** Tables without a primary key
+** Tables without a primary key
 
 Every table should (really) have a primary key.
 
@@ -567,17 +565,17 @@ WHERE PrimaryKeys.Parent_Obj IS NULL
 ORDER BY AllTables.Name;
 #+end_src
 
-*** Empty Tables
+** Empty Tables
 
-*** Unnamed Constraints
+** Unnamed Constraints
 
-*** Views with order by
+** Views with order by
 
-** Indexes
+* Indexes
 
-*** Forwarded Records
+** Forwarded Records
 
-*** Fragmented indexes
+** Fragmented indexes
 
 #+begin_src sql :tangle tests/SQL-Cop/04-indexes/fragmented-indexes_for-sql-server.sql
 IF EXISTS
@@ -607,13 +605,13 @@ ELSE
     SELECT 'Unable to check index fragmentation when compatibility is set to 80 or below' AS ProblemItem;
 #+end_src
 
-*** Missing Foreign Key Indexes
+** Missing Foreign Key Indexes
 
-** Configuration
+* Configuration
 
-*** Ad Hoc Distributed Queries
+** Ad Hoc Distributed Queries
 
-*** Database Collation conflicts with temp tables and table variables
+** Database Collation conflicts with temp tables and table variables
 
 When the collation of your user database does not match the collation of TempDB,
 you have a potential problem. Temp tables and table variables are created in
@@ -652,50 +650,50 @@ happen.
 
 *Level of difficulty:* Moderate.
 
-*** Auto Close
+** Auto Close
 
-*** Auto Create
+** Auto Create
 
-*** Auto Shrink
+** Auto Shrink
 
-*** Auto Update
+** Auto Update
 
-*** CLR
+** CLR
 
 Check if the Common Language Runtime (CLR) is enabled.
 
-*** Compatibility Level
+** Compatibility Level
 
-*** Database and Log files on the same physical disk
+** Database and Log files on the same physical disk
 
-*** Login Language
+** Login Language
 
-*** Max degree of parallelism
+** Max degree of parallelism
 
 Check the value of max degree of parallelism.
 
-*** Old Backups
+** Old Backups
 
 Find all databases that have not been backed up in the last 7 days.
 
-*** Ole Automation Procedures
+** Ole Automation Procedures
 
 Check if Ole Automation procedures are enabled.
 
-*** Orphaned Users
+** Orphaned Users
 
-*** SMO and DMO
+** SMO and DMO
 
 Check if SMO and DMO procedures are enabled.
 
-*** User Aliases
+** User Aliases
 
-*** xp_cmdshell
+** xp_cmdshell
 
 Check if ~xp_cmdshell~ is enabled.
 
-** Health
+* Health
 
-*** Buffer cache hit ratio
+** Buffer cache hit ratio
 
-*** Page life expectancy
+** Page life expectancy
