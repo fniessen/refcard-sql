@@ -2668,6 +2668,299 @@ XXX Check out https://dataedo.com/kb/query/sql-server!!! (+ version for Oracle !
 
 - [[https://blogs.sentryone.com/aaronbertrand/backtobasics-ctes][Common Table Expressions (CTEs)]]
 
+** SQL / Primary language statements
+
+*Data Definition Language (DDL)* statements are used to define the database
+structure or schema. Some examples:
+
+- CREATE - to create objects in the database
+- ALTER - alters the structure of the database
+- DROP - delete objects from the database
+- RENAME - rename an object
+
+*Data Manipulation Language (DML)* statements are used for managing data within
+schema objects. Some examples:
+
+- SELECT - retrieve data from the a database
+- INSERT - insert data into a table
+- UPDATE - updates existing data within a table
+- DELETE - deletes all records from a table, the space for the records remain
+
+** Constraint on a view
+
+A normal view is just a saved query, nothing more. The data isn't saved on the
+disk -- it isn't materialized. Thus, you cannot have integrity constraints
+(check constraints, foreign keys, or primary keys) on a view: there's nothing to
+constrain.
+
+Even an index view -- which is materialized -- does not allow for constraints.
+
+** Meaning of the prefix N in T-SQL statements
+
+It's declaring the string as ~nvarchar~ data type, rather than ~varchar~.
+
+#+begin_verse
+You may have seen Transact-SQL code that passes strings around using an
+N prefix. This denotes that the subsequent string is in Unicode (the N actually
+stands for National language character set). Which means that you are passing an
+NCHAR, NVARCHAR or NTEXT value, as opposed to CHAR, VARCHAR or TEXT.
+#+end_verse
+
+To quote from Microsoft:
+
+#+begin_verse
+Prefix Unicode character string constants with the letter N. Without the
+N prefix, the string is converted to the default code page of the database. *This
+default code page may not recognize certain characters.*
+#+end_verse
+
+** All fields (for Oracle)
+
+Add an alias for ~bl~ like this:
+
+#+begin_src sql
+SELECT bl_id, b.*
+FROM bl b
+#+end_src
+
+** (In)equality tests
+
+Testing (in)equality of ~a~ and ~b~:
+
+- Equality:
+
+  #+begin_src sql
+  (a = b)
+  OR (a IS NULL AND b IS NULL)
+  #+end_src
+
+- Inequality:
+
+  #+begin_src sql
+  (a <> b)
+  OR (a IS NULL AND b IS NOT NULL)
+  OR (a IS NOT NULL AND b IS NULL)
+
+  -- = ISNULL(a, ' ') <> ISNULL(b, ' ')?
+  -- Je pense que ce n'est pas équivalent, sauf si a et b ne peuvent jamais valoir ' '...
+  #+end_src
+
+About NULL:
+- https://www.xaprb.com/blog/2006/05/18/why-null-never-compares-false-to-anything-in-sql/
+- http://sqlmag.com/t-sql/coalesce-vs-isnull
+
+** PRINT output not shown/displayed
+
+If the variable is null, the entire *print* statement is rendering as null, and
+*not printing at all*.
+
+This will print:
+
+#+begin_src sql
+PRINT 'Output: ' + COALESCE(@myVar, '@myVar is null')
+#+end_src
+
+** Common operator for concatenation in Oracle and SQL Server
+
+See http://stackoverflow.com/questions/1373238/string-concatenation-operator-in-oracle-postgres-and-sql-server
+
+** Pattern Matching in Search Conditions (wildcards)
+
+The ~LIKE~ keyword searches for character string, date, or time values that match
+a specified pattern. For more information, see Data Types (Transact-SQL). The
+~LIKE~ keyword uses a regular expression to contain the pattern that the values
+are matched against. The pattern contains the character string to search for,
+which can contain any combination of four wildcards.
+
+| Wildcard | Meaning                                                                                                      |
+|----------+--------------------------------------------------------------------------------------------------------------|
+| %        | Any string of zero or more characters.                                                                       |
+| _        | Any single character.                                                                                        |
+| [ ]      | Any single character within the specified range (for example, [a-f]) or set (for example, [abcdef]).         |
+| [^]      | Any single character not within the specified range (for example, [^a - f]) or set (for example, [^abcdef]). |
+
+To escape underscore:
+- Use brackets: ~[_]~
+- Use ~LIKE '%\_xyz%' ESCAPE '\'~
+
+** Select from the result of a union
+
+https://www.pdrcorp.net/archibus/help/system/Content/wc_views/simple_views_techniques/Use_a_UNION_of_two_tables.htm
+
+You should give an /alias/ to your table:
+
+#+begin_src sql
+SELECT A
+FROM
+(
+    SELECT A, B FROM TableA
+    UNION
+    SELECT A, B FROM TableB
+) AS tbl
+WHERE B > 'some value'
+#+end_src
+
+** UNION vs UNION ALL
+
+~DISTINCT~ isn't necessary because of the ~UNION~, which removes duplicates.
+
+~UNION ALL~ does not remove duplicates.
+
+** For each; avoid CURSOR, keep set logic
+
+http://stackoverflow.com/questions/18513986/how-to-write-a-foreach-in-sql-server
+
+** Different SQL JOINs
+
+Different types of the SQL JOINs you can use:
+
+- *[INNER] JOIN* (or older "comma join" with the JOIN condition in the WHERE clause) ::
+     Returns all rows when there is at least one match in *both* tables
+
+- *LEFT [OUTER] JOIN* ::
+     Return all rows from the left table, and the matched rows from the right
+     table
+
+- *RIGHT [OUTER] JOIN* ::
+     Return all rows from the right table, and the matched rows from the left
+     table
+
+- *FULL [OUTER] JOIN* ::
+     Return all rows when there is a match in *one* of the tables
+
+- *CROSS JOIN* ::
+     Return every possible combination of rows from both tables (Cartesian
+     product).
+
+XXX
+
+ Use an inner join when you want matching rows from both tables.
+ Use a left or right outer join when you want to preserve all rows from one table and return only matching rows from the other.
+ Use a left or right outer join with exclusions when you're looking for something in one table that doesn't exist in another table.
+ Use a full outer join when you want all the rows from both sides, with nulls where they don't match.
+ Use a cross join when you want to create a Cartesian product from two tables.
+
+
+
+It is recommended that you not use RIGHT OUTER JOIN since a query can always be
+rewritten to use LEFT OUTER JOIN which tends to be more portable and easier to
+read.
+
+
+http://stackoverflow.com/questions/448023/what-is-the-difference-between-left-right-outer-and-inner-joins
+
+** Get index of last record in group of records
+
+#+begin_src sql
+  -- Get index of last record in group of prs records (same YYYY-MM).
+  LastPrsCTE AS (
+      SELECT
+          prestations.prsPfiID_fk,
+          prestations.prsAnnee,
+          prestations.prsMois,
+          prsIdx                        AS last_prsIdx
+      FROM prestations
+      INNER JOIN
+      (   SELECT
+              prsPfiID_fk,
+              prsAnnee,
+              prsMois,
+              MAX(prsIdx)               AS max_prs_idx
+          FROM prestations
+          GROUP BY
+              prsPfiID_fk,
+              prsAnnee,
+              prsMois
+      ) AS last_prs
+          ON prestations.prsPfiID_fk = last_prs.prsPfiID_fk
+              AND prestations.prsIdx = last_prs.max_prs_idx
+  ),
+#+end_src
+
+** Duplicate (some) rows
+
+Déboubler les rows (autrement que par un ~JOIN~) :
+
+#+begin_src sql
+SELECT date_start AS meeting_date, 'AM' AS meeting_time_of_day
+FROM reserve_rm
+WHERE CONVERT(varchar(5), time_start, 108) < '13:00'
+
+UNION ALL
+
+SELECT date_start AS meeting_date, 'PM' AS meeting_time_of_day
+FROM reserve_rm
+WHERE CONVERT(varchar(5), time_end, 108) > '13:00'
+#+end_src
+
+** SQL WHERE.. IN clause multiple columns
+
+http://stackoverflow.com/questions/1136380/sql-where-in-clause-multiple-columns
+
+#+begin_src sql
+SELECT *
+FROM table
+INNER JOIN otherTable ON (table.x = otherTable.a AND table.y = otherTable.b)
+#+end_src
+
+or use the ~WHERE EXISTS~ syntax instead.
+
+** COUNT DISTINCT sur 2 champs
+
+Concaténer les 2 champs pour ensuite faire le ~COUNT~.
+
+#+begin_src sql
+SELECT COUNT(DISTINCT commande + CAST(produit AS nvarchar)) AS test
+FROM produits
+WHERE ....
+#+end_src
+
+#+begin_warning
+*Séparateur recommandé dans la concaténation.* Sinon 10-1500 sera identique
+à 101-500 (idem avec les lettres).
+#+end_warning
+
+** How can I do an UPDATE statement with JOIN in SQL?
+
+http://stackoverflow.com/questions/1293330/how-can-i-do-an-update-statement-with-join-in-sql
+
+** Common Table Expressions
+
+This feature is great for breaking the problem down into easily understood
+chunks. It helps make queries easier to understand. For example:
+
+#+begin_src sql
+WITH
+    payment_notes_xml AS (
+        SELECT
+            id                                    AS payment_id,
+            unnest(xpath('//NOTE', notes :: XML)) AS note_xml
+        FROM payments
+    )
+INSERT INTO payment_notes (payment_id, note, type)
+    SELECT
+        payment_id,
+        xpath('//TEXT/text()') AS note,
+        xpath('//TYPE/text()') AS type
+    FROM payment_notes_xml
+#+end_src
+
+Common table expressions (CTE) allow you to name a query for later use in your
+SQL. CTE's can be read from (and joined to) as if they were a table in your
+database.
+
+A CTE is basically a disposable view. It only persists for a single statement,
+and then automatically disappears.
+
+The options to *use one CTE many times* (in many statements) include:
+
+- Redefine the CTE a second time. This is as simple as copy-paste from ~WITH...~
+  through the end of the definition.
+
+- Put the results into a ~#temp~ table or a ~@table~ variable.
+
+- Materialize the results into a real table and reference that.
+
 ** Return the current version
 
 #+begin_src sql
