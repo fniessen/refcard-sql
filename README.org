@@ -125,6 +125,10 @@ To export results to CSV from SQL Developer:
       + SQL Completion
         Insert case (https://dbeaver.io/forum/, Possibility to disable auto content assist)
 
+*** Windows Authentication for SQL Server
+
+See [[https://github.com/dbeaver/dbeaver/issues/8251][Error resolving driver dependencies mssql-jdbc_auth]].
+
 ** Sqsh
 
 #+name: current-year
