@@ -3454,6 +3454,7 @@ Reversely, ~EXEC sp_fkeys~ retrieves a list of *foreign keys REFERENCING* a tabl
 #+end_tip
 
 #+begin_src sql
+-- For SQL Server.
 -- This query finds the constraint rm_rm_std in EPO.  Other flavors don't.
 SELECT
     SCHEMA_NAME(fkt.schema_id)          AS FK_TABLE_SCHEMA_NAME,
@@ -3517,6 +3518,7 @@ SELECT
 FROM all_constraints
 WHERE
     table_name LIKE '%%'
+    AND UPPER(constraint_name) LIKE UPPER('%%')
     AND UPPER(constraint_type) = 'R'    -- Foreign key.
     AND UPPER(status) = 'ENABLED';
 #+end_src
