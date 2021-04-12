@@ -1563,7 +1563,7 @@ WHERE TABLE_TYPE = 'BASE TABLE'
     AND TABLE_NAME LIKE '%%';
 #+end_src
 
-#+begin_src sql :tangle .emacs.d/snippets/sql-mode/ltorcl.yasnippet
+#+begin_src sql :tangle .emacs.d/snippets/sql-mode/ltora.yasnippet
 -- For Oracle.
 SELECT DISTINCT
     OWNER,
@@ -1697,7 +1697,7 @@ FROM INFORMATION_SCHEMA.VIEWS
 WHERE TABLE_NAME LIKE '%%';
 #+end_src
 
-#+begin_src sql :tangle .emacs.d/snippets/sql-mode/lvorcl.yasnippet
+#+begin_src sql :tangle .emacs.d/snippets/sql-mode/lvora.yasnippet
 -- For Oracle.
 SELECT
     owner,
