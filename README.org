@@ -2998,6 +2998,8 @@ ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS';
 with ~true~, ~false~, and ~NULL~.  ~NULL~ fails basically all comparisons, so it fails
 ~a = b~ and ~a <> b~.
 
+*NOTE --* Not always true; see [[https://docs.microsoft.com/fr-fr/sql/t-sql/statements/set-ansi-nulls-transact-sql?view=sql-server-ver15][SETANSI_NULLS (Transact-SQL)]] for more information.
+
 #+begin_warning
 In SQL, ~NULL~ is *not equal* (~=~) to anything -- not even to another ~NULL~.
 According to the three-valued logic of SQL, the result of ~NULL = NULL~ is not the
