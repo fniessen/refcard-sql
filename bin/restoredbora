@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 #? restoredbora, Time-stamp: 20201113.1026
-#? Copyright (C) 2019-2020 Fabrice Niessen
+#? Copyright (C) 2019-2023 Fabrice Niessen
 #?
 #? License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 #? This is free software: you are free to change and redistribute it.
@@ -29,20 +29,25 @@ version=$(grep "^#?"  "$0" | cut -c 4-)
 parsed="$(docopts -h "$help" -V "$version" : "$@")"
 eval "$parsed"
 
-AFM_SECURE_SCHEMA=$2_SECURE
-
-DBAUSER="system"
-DBAPASS="iamadba"
-HOSTSTRING="ORCL1252"
-ROOT="D:\app\f.niessen\oradata\\$HOSTSTRING"
-ADMINROOT="D:\app\f.niessen\admin\\$HOSTSTRING"
+# Define constants.
+readonly DBAUSER="system"
+readonly DBAPASS="iamadba"
+readonly HOSTSTRING="ORCL1252"
+readonly ROOT="D:\app\f.niessen\oradata\\$HOSTSTRING"
+readonly ADMINROOT="D:\app\f.niessen\admin\\$HOSTSTRING"
 # See regedit for variable names.
 
-echo "Data Pump File:      $DATA_PUMP_FILE"
-if [ ! -f "$ADMINROOT"/dpdump/"$DATA_PUMP_FILE" ]; then
-    echo "Data Pump File $ADMINROOT/dpdump/$DATA_PUMP_FILE not found!" > /dev/stderr
+# Set variable from parameter.
+AFM_SECURE_SCHEMA="${AFM_SCHEMA}_SECURE"
+
+# Check for Data Pump file.
+if [[ ! -f "$ADMINROOT"/dpdump/"$DATA_PUMP_FILE" ]]; then
+    echo "ERROR: Data Pump file $ADMINROOT/dpdump/$DATA_PUMP_FILE not found" >&2
     exit 2
 fi
+
+# Confirm action.
+echo "Data Pump File:      $DATA_PUMP_FILE"
 echo "AFM Schema:          $AFM_SCHEMA"
 echo "AFM_SECURE Schema:   $AFM_SECURE_SCHEMA"
 echo "@Database:           $HOSTSTRING"
