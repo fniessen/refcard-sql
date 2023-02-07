@@ -35,7 +35,10 @@ readonly DBAPASS="iamadba"
 readonly HOSTSTRING="ORCL1252"
 readonly ROOT="D:\app\f.niessen\oradata\\$HOSTSTRING"
 readonly ADMINROOT="D:\app\f.niessen\admin\\$HOSTSTRING"
-# See regedit for variable names.
+                                        # See regedit for variable names.
+
+# Convert AFM schema name to uppercase.
+AFM_SCHEMA=${AFM_SCHEMA^^}
 
 # Set variable from parameter.
 AFM_SECURE_SCHEMA="${AFM_SCHEMA}_SECURE"
@@ -263,23 +266,32 @@ if [[ $? -ne 0 ]]; then
 fi
 printf '\n--------------------------------------------------------------------------------\n\n'
 
-# 2. Restore the backup.
-printf 'INFO- Restoring Database...\n'
-impdp $DBAUSER/$DBAPASS@$HOSTSTRING \
-      directory=DATA_PUMP_DIR \
-      dumpfile="$DATA_PUMP_FILE" \
-      logfile=impdp_"${DATA_PUMP_FILE%.*}"_"$(date '+%Y%m%d_%H%M')".log \
-      remap_schema=afm:"$AFM_SCHEMA",afm_secure:"$AFM_SECURE_SCHEMA" \
-      remap_tablespace=AFM_P1:tbs_"$AFM_SCHEMA"_data,TS_AFM01:tbs_"$AFM_SCHEMA"_data,AFMDOCMGMT_BLOB:tbs_"$AFM_SCHEMA"_blob \
-      2>&1
-if [[ $? -ne 0 ]]; then
-    echo "impdp: Command exited with a non-zero status" > /dev/stderr
-    read -p "Do you want to continue? " -n 1 -r
-    echo                                # Move to a new line.
-    if [[ ! $REPLY =~ ^[Yy]$ ]]; then
-        exit 1
+# Restore database backup.
+restore_database() {
+    printf 'INFO- Restoring Database...\n'
+
+    # Call the impdp command.
+    impdp $DBAUSER/$DBAPASS@$HOSTSTRING \
+          directory=DATA_PUMP_DIR \
+          dumpfile="$DATA_PUMP_FILE" \
+          logfile=impdp_"${DATA_PUMP_FILE%.*}"_"$(date '+%Y%m%d_%H%M')".log \
+          remap_schema=afm:"$AFM_SCHEMA",afm_secure:"$AFM_SECURE_SCHEMA" \
+          remap_tablespace=AFM_P1:tbs_"$AFM_SCHEMA"_data,TS_AFM01:tbs_"$AFM_SCHEMA"_data,AFMDOCMGMT_BLOB:tbs_"$AFM_SCHEMA"_blob \
+          2>&1
+
+    # Check if the impdp command was successful.
+    if [[ $? -ne 0 ]]; then
+        echo "impdp: Command exited with a non-zero status" > /dev/stderr
+        read -p "Do you want to continue anyway? [y/N] " -n 1 -r
+        echo                            # Move to a new line.
+        if [[ ! $REPLY =~ ^[Yy]$ ]]; then
+            exit 1
+        fi
     fi
-fi
+}
+
+restore_database
+
 printf '\n--------------------------------------------------------------------------------\n\n'
 
 # 3.
