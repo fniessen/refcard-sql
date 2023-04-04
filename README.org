@@ -12,7 +12,7 @@
 
 #+SETUPFILE: ~/org/theme-readtheorg.setup
 
-* Textual Search over All Fields In All Tables For A Specific Value!!! (for checking results of anonymization)
+* Perform a textual search over all fields in all tables for a specific value!!! (for checking results of anonymization)
 
 https://stackoverflow.com/questions/208493/search-all-fields-in-all-tables-for-a-specific-value-oracle
 
@@ -316,11 +316,17 @@ mssql-cli -E
 kinit.exe user@domain.com
 #+end_src
 
-* Data Diff
+* Database Comparison Tools
 
-- DBCompare
-- RedGate
-- DataGrip
+- DBCompare: a database comparison tool that allows you to compare and
+  synchronize database structures and data.
+
+- RedGate: a suite of tools for database management and administration,
+  including backup and recovery, monitoring, and performance tuning.
+
+- DataGrip: a multi-engine database IDE that supports multiple databases such as
+  MySQL, PostgreSQL, Oracle, and SQL Server, and provides advanced coding
+  assistance, schema navigation, and data analysis features.
 
 * Emacs YASnippets
 
