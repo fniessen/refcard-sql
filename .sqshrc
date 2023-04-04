@@ -1,5 +1,5 @@
 # Hey Emacs, this is a -*- conf -*- file
-## .sqshrc - My sqsh initialization file
+## .sqshrc - Configuration settings and aliases for sqsh.
 
 # Copyright (C) 2010-<<current-year()>> Fabrice Niessen
 
@@ -15,7 +15,7 @@
 \set username="sa"
 \set password="mysecret"
 \set hostname="localhost"
-\set database=[ARCHIBUS_23_2_HQ]
+\set database=[ARCHIBUS_26_3_HQ]
 
 #* Aliasing
 
@@ -33,6 +33,7 @@
 # - pretty (*), and
 # - none.
 
+# Define aliases for different display styles.
 \alias goh='\go -m horiz | ${PAGER}'
 
 \alias gov='\go -m vert | ${PAGER}'
@@ -41,7 +42,7 @@
 # re-direction directly to a file!
 \alias gob='\go -m bcp | ${PAGER}'
 
-# Firefox.
+# Open the sqsh output in Firefox.
 \alias gof='\go -m html | (cat > /tmp/sqsh-output.html; /mnt/c/Windows/explorer.exe file:///tmp/sqsh-output.html)'
 
 \alias gom='\go -m meta | ${PAGER}'
