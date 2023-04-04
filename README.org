@@ -2656,6 +2656,16 @@ BEGIN
 END
  #+end_src
 
+* Tips & Tricks
+
+** For Oracle
+
+- You can't use ~PROMPT~ in PL/SQL blocks, so you need to use ~DBMS_OUTPUT.PUT_LINE~
+  instead to display the message.
+
+  Note that you also need to add the ~SET SERVEROUTPUT ON~ command at the
+  beginning to enable the display of DBMS output.
+
 * General SQL
 :PROPERTIES:
 :header-args+: :tangle no
@@ -2679,32 +2689,40 @@ XXX Check out https://dataedo.com/kb/query/sql-server!!! (+ version for Oracle !
 
 - [[https://blogs.sentryone.com/aaronbertrand/backtobasics-ctes][Common Table Expressions (CTEs)]]
 
-** SQL / Primary language statements
+** Data Definition and Manipulation Language
 
-*Data Definition Language (DDL)* statements are used to define the database
-structure or schema. Some examples:
+*Data Definition Language (DDL)* statements are responsible for defining the
+structure or schema of a database. These statements are used for creating,
+modifying, or deleting database objects. Here are some examples of DDL
+statements:
 
-- CREATE - to create objects in the database
-- ALTER - alters the structure of the database
-- DROP - delete objects from the database
-- RENAME - rename an object
+- ~CREATE~: used to create objects in the database, such as tables, views,
+  indexes, and stored procedures.
+- ~ALTER~: used to modify the structure of the database, such as adding,
+  modifying, or dropping columns, constraints, or indexes.
+- ~DROP~: used to delete objects from the database, such as tables, views, or
+  indexes.
+- ~RENAME~: used to rename an object in the database, such as a table or a column.
 
-*Data Manipulation Language (DML)* statements are used for managing data within
-schema objects. Some examples:
+On the other hand, *Data Manipulation Language (DML)* statements are responsible
+for managing data within the schema objects. These statements allow you to
+retrieve, insert, update, or delete data from tables. Here are some examples of
+DML statements:
 
-- SELECT - retrieve data from the a database
-- INSERT - insert data into a table
-- UPDATE - updates existing data within a table
-- DELETE - deletes all records from a table, the space for the records remain
+- ~SELECT~: used to retrieve data from one or more tables in the database.
+- ~INSERT~: used to insert data into a table.
+- ~UPDATE~: used to modify existing data within a table.
+- ~DELETE~: used to delete records from a table.
 
-** Constraint on a view
+** Constraints on a view
 
-A normal view is just a saved query, nothing more. The data isn't saved on the
-disk -- it isn't materialized. Thus, you cannot have integrity constraints
-(check constraints, foreign keys, or primary keys) on a view: there's nothing to
-constrain.
+A normal view is essentially a stored query that doesn't persist any data on
+disk. Therefore, it's *not possible to enforce integrity constraints* like check
+constraints, foreign keys, or primary keys *on a view* because there is no data to
+be constrained.
 
-Even an index view -- which is materialized -- does not allow for constraints.
+Even if you use an indexed view, which does materialize data, it still doesn't
+allow for the enforcement of constraints.
 
 ** Meaning of the prefix N in T-SQL statements
 
@@ -2811,11 +2829,12 @@ FROM
 WHERE B > 'some value'
 #+end_src
 
-** UNION vs UNION ALL
+** Use of DISTINCT and UNION
 
-~DISTINCT~ isn't necessary because of the ~UNION~, which removes duplicates.
+The use of ~DISTINCT~ is redundant when ~UNION~ is used since it already removes
+duplicates.
 
-~UNION ALL~ does not remove duplicates.
+However, ~UNION ALL~ does not eliminate duplicates.
 
 ** For each; avoid CURSOR, keep set logic
 
@@ -4297,6 +4316,8 @@ WHERE EXISTS
  AND (DUPE1.key_column_list LIKE LEFT(DUPE2.key_column_list, LEN(DUPE1.key_column_list)) OR DUPE2.key_column_list LIKE LEFT(DUPE1.key_column_list, LEN(DUPE2.key_column_list)))
  AND DUPE1.index_name <> DUPE2.index_name)
 #+end_src
+
+*
 
 * Troubleshooting
 
