@@ -15,24 +15,6 @@
 Welcome to Refcard SQL!  This project provides a concise and handy reference for
 SQL syntax and commands, designed to improve your productivity and proficiency.
 
-* Tasks                                                               :noexport:
-
-** TODO Perform a textual search over all fields in all tables for a specific value!!! (for checking results of anonymization)
-
-https://stackoverflow.com/questions/208493/search-all-fields-in-all-tables-for-a-specific-value-oracle
-
-** TODO Watch video of SQL Prompt
-
-http://www.red-gate.com/products/sql-development/sql-prompt/
-
-** TODO Look at RedGate snippets
-
-=/cygdrive/c/Users/f.niessen/AppData/Local/Red Gate/SQL Prompt 7/Snippets/=
-
-** TODO Look at SQL Query syntax checker & validator
-
-https://www.eversql.com/sql-syntax-check-validator/
-
 * SQL Clients
 
 ** SQL Server Management Studio
@@ -2810,11 +2792,11 @@ a specified pattern. For more information, see Data Types (Transact-SQL). The
 are matched against. The pattern contains the character string to search for,
 which can contain any combination of four wildcards.
 
-| Wildcard | Meaning                                                                                                      |
-|----------+--------------------------------------------------------------------------------------------------------------|
-| %        | Any string of zero or more characters.                                                                       |
-| _        | Any single character.                                                                                        |
-| [ ]      | Any single character within the specified range (for example, [a-f]) or set (for example, [abcdef]).         |
+| Wildcard | Meaning                                                                                                |
+|----------+--------------------------------------------------------------------------------------------------------|
+| %        | Any string of zero or more characters.                                                                 |
+| _        | Any single character.                                                                                  |
+| [ ]      | Any single character within the specified range (for example, [a-f]) or set (for example, [abcdef]).   |
 | [^]      | Any single character not within the specified range (for example, [^a - f]) or set (for example, [^abcdef]). |
 
 To escape underscore:

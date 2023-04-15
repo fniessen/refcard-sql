@@ -1,0 +1,32 @@
+# Hey Emacs, this is a -*- org -*- file ...
+#+TITLE:     TODO
+#+AUTHOR:    Fabrice Niessen
+#+EMAIL:     (concat "fniessen" at-sign "pirilampo.org")
+#+DESCRIPTION: SQL cheat sheet for quick reference
+#+KEYWORDS:  SQL, database, quick reference, SQL Server, Oracle, Emacs, snippets, code templates
+#+LANGUAGE:  en
+#+OPTIONS:   H:4 num:nil toc:3
+#+EXCLUDE_TAGS: noexport
+
+#+PROPERTY:  header-args :eval never :padline no :tangle yes
+
+#+SETUPFILE: ~/org/theme-readtheorg.setup
+
+* Tasks
+
+** TODO Perform a textual search over all fields in all tables for a specific value!!! (for checking results of anonymization)
+
+https://stackoverflow.com/questions/208493/search-all-fields-in-all-tables-for-a-specific-value-oracle
+
+** TODO Watch video of SQL Prompt
+
+http://www.red-gate.com/products/sql-development/sql-prompt/
+
+** TODO Look at RedGate snippets
+
+=/cygdrive/c/Users/f.niessen/AppData/Local/Red Gate/SQL Prompt 7/Snippets/=
+
+** TODO Look at SQL Query syntax checker & validator
+
+https://www.eversql.com/sql-syntax-check-validator/
+
