@@ -2,8 +2,8 @@
 #+TITLE:     Refcard SQL
 #+AUTHOR:    Fabrice Niessen
 #+EMAIL:     (concat "fniessen" at-sign "pirilampo.org")
-#+DESCRIPTION:
-#+KEYWORDS:  sql, emacs, yasnippet, snippets, code templates
+#+DESCRIPTION: SQL cheat sheet for quick reference
+#+KEYWORDS:  SQL, database, quick reference, SQL Server, Oracle, Emacs, snippets, code templates
 #+LANGUAGE:  en
 #+OPTIONS:   H:4 num:nil toc:3
 #+EXCLUDE_TAGS: noexport
@@ -12,11 +12,14 @@
 
 #+SETUPFILE: ~/org/theme-readtheorg.setup
 
-* Perform a textual search over all fields in all tables for a specific value!!! (for checking results of anonymization)
-
-https://stackoverflow.com/questions/208493/search-all-fields-in-all-tables-for-a-specific-value-oracle
+Welcome to Refcard SQL!  This project provides a concise and handy reference for
+SQL syntax and commands, designed to improve your productivity and proficiency.
 
 * Tasks                                                               :noexport:
+
+** TODO Perform a textual search over all fields in all tables for a specific value!!! (for checking results of anonymization)
+
+https://stackoverflow.com/questions/208493/search-all-fields-in-all-tables-for-a-specific-value-oracle
 
 ** TODO Watch video of SQL Prompt
 
