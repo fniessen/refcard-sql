@@ -1,8 +1,8 @@
-#+TITLE:     SQL Cop -- Collection of tests for SQL DB
+#+TITLE:     SQL Cop -- Collection of tests
 #+AUTHOR:    Fabrice Niessen
 #+EMAIL:     (concat "fniessen" at-sign "pirilampo.org")
 #+DESCRIPTION:
-#+KEYWORDS:
+#+KEYWORDS: SQL, database, quality, tests, performance, optimization
 #+LANGUAGE:  en
 #+OPTIONS:   H:4 num:1 toc:t ^:{}
 
@@ -11,6 +11,9 @@
 #+PROPERTY:  header-args :eval never :engine msosql :cmdline -S localhost -U afm -P afm -d ARCHIBUS_PRD -n -w 700 :results output :exports both :noweb yes
 
 #+LaTeX_CLASS: aremis
+
+Collection of tests to ensure the quality of your SQL database. Catch errors and
+optimize performance with ease.
 
 The *SQL Cop* tests are categorized under 6 groups:
 
