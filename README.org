@@ -3360,6 +3360,8 @@ https://dataedo.com/blog/useful-sql-server-data-dictionary-queries-every-dba-sho
 
 https://www.mssqltips.com/sqlservertip/3402/over-40-queries-to-find-sql-server-tables-with-or-without-a-certain-property/
 
+* DB Schema queries
+
 ** List all constraints
 
 #+begin_src sql
