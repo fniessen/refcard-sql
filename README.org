@@ -2647,7 +2647,10 @@ BEGIN
 END
  #+end_src
 
-* Tips & Tricks
+* Best Practices
+
+By following these best practices, you can write Bash scripts that are easier to
+understand, maintain, and debug.
 
 ** For Oracle
 
@@ -2792,11 +2795,11 @@ a specified pattern. For more information, see Data Types (Transact-SQL). The
 are matched against. The pattern contains the character string to search for,
 which can contain any combination of four wildcards.
 
-| Wildcard | Meaning                                                                                                |
-|----------+--------------------------------------------------------------------------------------------------------|
-| %        | Any string of zero or more characters.                                                                 |
-| _        | Any single character.                                                                                  |
-| [ ]      | Any single character within the specified range (for example, [a-f]) or set (for example, [abcdef]).   |
+| Wildcard | Meaning                                                                                                      |
+|----------+--------------------------------------------------------------------------------------------------------------|
+| %        | Any string of zero or more characters.                                                                       |
+| _        | Any single character.                                                                                        |
+| [ ]      | Any single character within the specified range (for example, [a-f]) or set (for example, [abcdef]).         |
 | [^]      | Any single character not within the specified range (for example, [^a - f]) or set (for example, [^abcdef]). |
 
 To escape underscore:
