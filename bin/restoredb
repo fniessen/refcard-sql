@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-#? restoredb, Time-stamp: <20200729.1604>
+#? restoredb, Time-stamp: <2023-08-25 Fri 08:56>
 #? Copyright (C) 2020 Fabrice Niessen
 #?
 #? License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
@@ -23,12 +23,12 @@
 
 usage() {
     cat << EOF 1>&2
-Usage: $CMD BACKUP_PATH DB_NAME
+Usage: $SCRIPT_NAME BACKUP_PATH DB_NAME
 EOF
     exit 2
 }
 
-CMD=$(basename "$0")                    # Command name.
+SCRIPT_NAME=$(basename "$0")
 BACKUP_PATH=$1
 DB_NAME=$2
 
@@ -51,7 +51,7 @@ fi
     # Use sqlcmd with scripting variables.
     bakPath="$BACKUP_PATH" \
         sqlcmd.exe -E -S localhost -b -i restorebak.sql -v dbName = "$DB_NAME" \
-        || { echo "$CMD: Command exited with a non-zero status" > /dev/stderr; exit 2; }
+        || { echo "$SCRIPT_NAME: Command exited with a non-zero status" > /dev/stderr; exit 2; }
     #! In order to NOT interpret the colon in bakPath ("D:\...") as a command,
     #! pass it as an environment variable.
 

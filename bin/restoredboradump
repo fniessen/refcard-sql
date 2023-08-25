@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
 usage() {
     cat << EOF 1>&2
-Usage: $CMD DUMP_FILE AFM_SCHEMA
+Usage: $SCRIPT_NAME DUMP_FILE AFM_SCHEMA
 EOF
     exit 2
 }
 
-CMD=$(basename "$0")                    # Command name.
+SCRIPT_NAME=$(basename "$0")
 DUMP_FILE=$1
 AFM_SCHEMA=$2
 AFM_SECURE_SCHEMA=$2_SECURE
