@@ -3138,27 +3138,20 @@ ORDER BY TABLESPACE_NAME;
 #+begin_src shell
 -- List of tablespaces with the OS files (for Oracle).
 SELECT *
-FROM
-   (SELECT
-        TABLESPACE_NAME,
-        FILE_NAME,
-        FILE_ID,
-        BYTES,
-        STATUS,
-        MAXBYTES
+FROM (
+    SELECT TABLESPACE_NAME, FILE_NAME, FILE_ID, BYTES, STATUS, MAXBYTES
     FROM DBA_DATA_FILES
     UNION
-    SELECT
-        TABLESPACE_NAME,
-        FILE_NAME,
-        FILE_ID,
-        BYTES,
-        STATUS,
-        MAXBYTES
-    FROM DBA_TEMP_FILES)
-WHERE TABLESPACE_NAME LIKE UPPER('%%')
+    SELECT TABLESPACE_NAME, FILE_NAME, FILE_ID, BYTES, STATUS, MAXBYTES
+    FROM DBA_TEMP_FILES
+)
+WHERE UPPER(TABLESPACE_NAME) LIKE UPPER('%%')
 ORDER BY TABLESPACE_NAME, FILE_NAME;
- #+end_src
+#+end_src
+
+#+begin_src sql
+DROP TABLESPACE tablespace_name INCLUDING CONTENTS AND DATAFILES;
+#+end_src
 
 #+begin_src shell
 SELECT tablespace_name, file_name
@@ -3177,12 +3170,90 @@ WHERE property_name='DEFAULT_TEMP_TABLESPACE';
 DROP TABLESPACE temp3 INCLUDING CONTENTS AND DATAFILES;
 #+end_src
 
+#+begin_src shell
+SELECT USERNAME
+FROM DBA_USERS -- or ALL_USERS
+WHERE USERNAME LIKE UPPER('%%');
+#+end_src
+
+#+begin_src shell
+DROP USER username CASCADE;
+#+end_src
+
 ** Debug - See line giving error in Oracle
 
 #+begin_src shell
 EXEC dbms_output.ENABLE(99999999);
 SET serveroutput on format wrapped;
 #+end_src
+
+** Deadlock
+
+Il existe plusieurs façons de vérifier si un interblocage (deadlock) se produit
+dans une base de données Oracle. Vous pouvez :
+
+1. *Vérifier le fichier de trace généré par Oracle* : Lorsqu'un interblocage se
+   produit, Oracle génère un fichier de trace dans le répertoire UDUMP. Ce
+   fichier contient les informations de l'interblocage, y compris les SQL qui
+   ont causé l'interblocage.
+
+2. *Utiliser la vue dynamique de performance (V$) d'Oracle* : Oracle fournit
+   plusieurs vues dynamiques de performance pour aider à diagnostiquer les
+   problèmes de performance, y compris les interblocages.
+
+   Par exemple, vous pouvez utiliser la vue V$LOCK pour voir les verrous
+   actuellement détenus dans la base de données, ce qui peut vous aider
+   à identifier les interblocages. Vous pouvez exécuter une requête comme
+   celle-ci pour voir tous les verrous :
+
+   De plus, la vue V$SESSION_WAIT peut vous aider à voir si des sessions
+   attendent des verrous qui sont détenus par d'autres sessions.
+
+3. *Utiliser des outils de surveillance de base de données* : Il existe des outils
+   de surveillance de base de données, comme Oracle Enterprise Manager, qui
+   peuvent vous aider à identifier et à résoudre les interblocages.
+
+4. *Utiliser la vue DBA_BLOCKERS et DBA_WAITERS* : Ces vues donnent des
+   informations sur les sessions qui bloquent et celles qui attendent un verrou.
+
+   Vous pouvez utiliser la commande suivante pour voir les sessions bloqueuses :
+
+   Et cette commande pour voir les sessions en attente :
+
+N'oubliez pas qu'il est important de comprendre la cause sous-jacente de
+l'interblocage et de résoudre ce problème, plutôt que de simplement résoudre
+l'interblocage lui-même. Dans de nombreux cas, les interblocages sont le
+résultat de problèmes de conception de l'application ou de la base de données.
+
+#+begin_src sql
+SELECT *
+FROM DBA_WAITERS;
+#+end_src
+
+#+begin_src sql
+SELECT *
+FROM DBA_BLOCKERS;
+#+end_src
+
+#+begin_src sql
+SELECT *
+FROM V$LOCK;
+#+end_src
+
+#+begin_src sql
+SELECT a.sid, a.serial#, a.username, b.sql_text, TO_CHAR(b.last_active_time, 'YYYY-MM-DD HH24:MI:SS') as last_active_time
+FROM v$session a
+JOIN v$sql b ON a.sql_id = b.sql_id
+WHERE a.sid IN (
+    SELECT blocking_session
+    FROM v$session
+    WHERE blocking_session IS NOT NULL
+);
+#+end_src
+
+Cela devrait vous donner la date et l'heure de la dernière activité pour chaque
+commande SQL en cours d'exécution par une session bloqueuse, formatées de la
+façon que vous voulez.
 
 ** SQL Server - Trace SQL
 
