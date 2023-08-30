@@ -123,7 +123,7 @@ See [[https://github.com/dbeaver/dbeaver/issues/8251][Error resolving driver dep
 
 #+begin_src conf :tangle .sqshrc
 # Hey Emacs, this is a -*- conf -*- file
-## .sqshrc - My sqsh initialization file
+## .sqshrc - Configuration settings and aliases for sqsh.
 
 # Copyright (C) 2010-<<current-year()>> Fabrice Niessen
 
@@ -139,7 +139,7 @@ See [[https://github.com/dbeaver/dbeaver/issues/8251][Error resolving driver dep
 \set username="sa"
 \set password="mysecret"
 \set hostname="localhost"
-\set database=[ARCHIBUS_23_2_HQ]
+\set database=[ARCHIBUS_26_3_HQ]
 
 #* Aliasing
 
@@ -157,6 +157,7 @@ See [[https://github.com/dbeaver/dbeaver/issues/8251][Error resolving driver dep
 # - pretty (*), and
 # - none.
 
+# Define aliases for different display styles.
 \alias goh='\go -m horiz | ${PAGER}'
 
 \alias gov='\go -m vert | ${PAGER}'
@@ -165,7 +166,7 @@ See [[https://github.com/dbeaver/dbeaver/issues/8251][Error resolving driver dep
 # re-direction directly to a file!
 \alias gob='\go -m bcp | ${PAGER}'
 
-# Firefox.
+# Open the sqsh output in Firefox.
 \alias gof='\go -m html | (cat > /tmp/sqsh-output.html; /mnt/c/Windows/explorer.exe file:///tmp/sqsh-output.html)'
 
 \alias gom='\go -m meta | ${PAGER}'
@@ -2795,11 +2796,11 @@ a specified pattern. For more information, see Data Types (Transact-SQL). The
 are matched against. The pattern contains the character string to search for,
 which can contain any combination of four wildcards.
 
-| Wildcard | Meaning                                                                                                      |
-|----------+--------------------------------------------------------------------------------------------------------------|
-| %        | Any string of zero or more characters.                                                                       |
-| _        | Any single character.                                                                                        |
-| [ ]      | Any single character within the specified range (for example, [a-f]) or set (for example, [abcdef]).         |
+| Wildcard | Meaning                                                                                                 |
+|----------+---------------------------------------------------------------------------------------------------------|
+| %        | Any string of zero or more characters.                                                                  |
+| _        | Any single character.                                                                                   |
+| [ ]      | Any single character within the specified range (for example, [a-f]) or set (for example, [abcdef]).    |
 | [^]      | Any single character not within the specified range (for example, [^a - f]) or set (for example, [^abcdef]). |
 
 To escape underscore:
