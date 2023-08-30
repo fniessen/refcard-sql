@@ -2796,11 +2796,11 @@ a specified pattern. For more information, see Data Types (Transact-SQL). The
 are matched against. The pattern contains the character string to search for,
 which can contain any combination of four wildcards.
 
-| Wildcard | Meaning                                                                                                 |
-|----------+---------------------------------------------------------------------------------------------------------|
-| %        | Any string of zero or more characters.                                                                  |
-| _        | Any single character.                                                                                   |
-| [ ]      | Any single character within the specified range (for example, [a-f]) or set (for example, [abcdef]).    |
+| Wildcard | Meaning                                                                                                      |
+|----------+--------------------------------------------------------------------------------------------------------------|
+| %        | Any string of zero or more characters.                                                                       |
+| _        | Any single character.                                                                                        |
+| [ ]      | Any single character within the specified range (for example, [a-f]) or set (for example, [abcdef]).         |
 | [^]      | Any single character not within the specified range (for example, [^a - f]) or set (for example, [^abcdef]). |
 
 To escape underscore:
@@ -4386,6 +4386,18 @@ WHERE EXISTS
 #+end_src
 
 *
+
+** List columns in table
+
+Display the list of columns in an Oracle table:
+
+#+begin_src sql
+-- Retrieve the list of column names from an Oracle table.
+SELECT table_name, column_name
+FROM all_tab_columns
+WHERE table_name LIKE UPPER('%%')
+ORDER BY column_name;
+#+end_src
 
 * Troubleshooting
 
