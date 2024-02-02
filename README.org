@@ -2918,6 +2918,41 @@ FROM reserve_rm
 WHERE CONVERT(varchar(5), time_end, 108) > '13:00'
 #+end_src
 
+** Checking existence (EXISTS) in Oracle trigger
+
+In Oracle, ~EXISTS~ is a SQL construct and cannot be used directly in
+PL/SQL.
+
+#+begin_src sql
+-- Check if the equipment standard is found in the mapping table.
+IF NOT EXISTS (SELECT 1 FROM equipment_standard_mapping WHERE eq_std = :NEW.eq_std) THEN
+     -- If not found, set eq_id to the original value and exit.
+    :NEW.eq_id := :NEW.eq_id;
+    RETURN;
+END IF;
+#+end_src
+
+Instead, you need to use a ~SELECT ... INTO~ statement to check whether a row
+exists.
+
+Here's the equivalent form:
+
+#+begin_src sql
+DECLARE v_count NUMBER;
+
+-- Check if the equipment standard is found in the mapping table.
+SELECT COUNT(*)
+INTO v_count
+FROM equipment_standard_mapping
+WHERE eq_std = :NEW.eq_std;
+
+-- If not found, set eq_id to the original value and exit.
+IF v_count = 0 THEN
+    :NEW.eq_id := :NEW.eq_id;
+    RETURN;
+END IF;
+#+end_src
+
 ** SQL WHERE.. IN clause multiple columns
 
 http://stackoverflow.com/questions/1136380/sql-where-in-clause-multiple-columns
