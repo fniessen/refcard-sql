@@ -4227,16 +4227,19 @@ go
 ** List all stored procedures and functions
 
 #+begin_src sql
+-- For SQL Server.
 SELECT
     name,
     type
 FROM dbo.sysobjects
-WHERE type IN (
-    'P',                                -- Stored Procedures.
-    'TF',                               -- Table-valued Functions.
-    'FN',                               -- Scalar-valued Functions.
-    'IF'                                -- Inline table-valued Functions.
-)
+WHERE
+    type IN (
+        'P',                                -- Stored Procedures.
+        'TF',                               -- Table-valued Functions.
+        'FN',                               -- Scalar-valued Functions.
+        'IF'                                -- Inline table-valued Functions.
+    )
+    AND name LIKE '%%'
 ORDER BY
     type,
     name;
