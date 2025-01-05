@@ -125,7 +125,7 @@ See [[https://github.com/dbeaver/dbeaver/issues/8251][Error resolving driver dep
 # Hey Emacs, this is a -*- conf -*- file
 ## .sqshrc - Configuration settings and aliases for sqsh.
 
-# Copyright (C) 2010-<<current-year()>> Fabrice Niessen
+# Copyright (C) 2010-<<current-year()>> Fabrice Niessen. All rights reserved.
 
 # Author: Fabrice Niessen <(concat "fni" at-symbol "pirilampo.org")>
 # Keywords: sqsh, dotfile, config

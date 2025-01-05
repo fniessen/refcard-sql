@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-#? restoredb, Time-stamp: <2023-08-25 Fri 08:56>
-#? Copyright (C) 2020 Fabrice Niessen
+#? restoredb, Time-stamp: <2025-01-05 Sun 12:03>
+#? Copyright (C) 2020 Fabrice Niessen. All rights reserved.
 #?
 #? License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 #? This is free software: you are free to change and redistribute it.
