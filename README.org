@@ -1555,6 +1555,9 @@ WHERE TABLE_TYPE = 'BASE TABLE'
     AND TABLE_NAME LIKE '%%';
 #+end_src
 
+NOTE -- It's a common convention to capitalize system schema & metadata tables
+for SQL Server.
+
 #+begin_src sql :tangle .emacs.d/snippets/sql-mode/ltora.yasnippet
 -- For Oracle.
 SELECT DISTINCT
