@@ -4028,42 +4028,8 @@ https://stackoverflow.com/questions/4305691/need-to-list-all-triggers-in-sql-ser
 to *list database triggers* as well!
 
 #+begin_src sql
-SELECT
-    OBJECT_NAME(so.parent_obj)          AS TABLE_NAME,
-    so.name                             AS TRIGGER_NAME,
-    OBJECTPROPERTY(so.id, 'ExecIsInsertTrigger')    AS "INSERT",
-    OBJECTPROPERTY(so.id, 'ExecIsUpdateTrigger')    AS "UPDATE",
-    OBJECTPROPERTY(so.id, 'ExecIsDeleteTrigger')    AS "DELETE",
-    OBJECTPROPERTY(so.id, 'ExecIsAfterTrigger')     AS AFTER,
-    OBJECTPROPERTY(so.id, 'ExecIsInsteadOfTrigger') AS INSTEAD_OF,
-    OBJECTPROPERTY(so.id, 'ExecIsTriggerDisabled')  AS DISABLED
-FROM sysobjects                         so
-INNER JOIN sysobjects                   so2
-    ON so.parent_obj = so2.Id
-WHERE
-    so.type = 'TR'
-    AND OBJECT_NAME(so.parent_obj) LIKE '%%'
-    AND so.name LIKE '%%'
-ORDER BY
-    OBJECT_NAME(so.parent_obj),
-    so.name;
-#+end_src
-
-#+begin_src sql
-SELECT
-    OBJECT_NAME(parent_id)              AS TABLE_NAME,
-    name                                AS TRIGGER_NAME,
-    is_instead_of_trigger               AS INSTEAD_OF,
-    is_disabled                         AS DISABLED
-FROM sys.triggers
-WHERE name LIKE '%%'
-ORDER BY
-    OBJECT_NAME(parent_id),
-    sys.triggers.name;
-#+end_src
-
-#+begin_src sql
--- List triggers.
+-- List all triggers with detailed information including activation, events,
+-- type, status, and full definition.
 SELECT
     tbl.name                            AS "TABLE",
     trg.name                            AS TRIGGER_NAME,
