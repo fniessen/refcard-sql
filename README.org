@@ -8,7 +8,7 @@
 #+OPTIONS:   H:4 num:nil toc:3
 #+EXCLUDE_TAGS: noexport
 
-#+PROPERTY:  header-args :eval never :padline no :tangle yes
+#+PROPERTY:  header-args :eval never :padline no :tangle no
 
 #+SETUPFILE: ~/org/theme-readtheorg.setup
 
@@ -121,7 +121,7 @@ See [[https://github.com/dbeaver/dbeaver/issues/8251][Error resolving driver dep
 (format-time-string "%Y")
 #+end_src
 
-#+begin_src conf :tangle .sqshrc
+#+begin_src conf :tangle .sqshrc :noweb yes
 # Hey Emacs, this is a -*- conf -*- file
 ## .sqshrc - Configuration settings and aliases for sqsh.
 
