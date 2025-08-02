@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-#? restoredb, Time-stamp: <2025-01-05 Sun 12:03>
-#? Copyright (C) 2020 Fabrice Niessen. All rights reserved.
+#? restoredb, Time-stamp: <2025-06-05 Thu 11:35>
+#? Copyright (C) 2020, 2025 Fabrice Niessen. All rights reserved.
 #?
 #? License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>.
 #? This is free software: you are free to change and redistribute it.
@@ -51,7 +51,7 @@ fi
     # Use sqlcmd with scripting variables.
     bakPath="$BACKUP_PATH" \
         sqlcmd.exe -E -S localhost -b -i restorebak.sql -v dbName = "$DB_NAME" \
-        || { echo "$SCRIPT_NAME: Command exited with a non-zero status" > /dev/stderr; exit 2; }
+        || { echo >&2 "$SCRIPT_NAME: Command exited with a non-zero status"; exit 2; }
     #! In order to NOT interpret the colon in bakPath ("D:\...") as a command,
     #! pass it as an environment variable.
 

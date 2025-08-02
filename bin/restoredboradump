@@ -24,7 +24,7 @@ fi
 
 echo "Dump File:           $DUMP_FILE"
 if [ ! -f "$ADMINROOT"/dpdump/"$DUMP_FILE" ]; then
-    echo "Dump File $ADMINROOT/dpdump/$DUMP_FILE not found!" > /dev/stderr
+    echo >&2 "Dump File $ADMINROOT/dpdump/$DUMP_FILE not found!"
     exit 2
 fi
 echo "AFM Schema:          $AFM_SCHEMA"
@@ -217,7 +217,7 @@ EXIT
 EOF
 
 if [[ $? -ne 0 ]]; then
-    echo "sqlplus: Command exited with a non-zero status" > /dev/stderr
+    echo >&2 "sqlplus: Command exited with a non-zero status"
     read -p "Do you want to continue? " -n 1 -r
     echo                                # Move to a new line.
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
@@ -236,7 +236,7 @@ imp $DBAUSER/$DBAPASS@$HOSTSTRING \
     2>&1
 
 if [[ $? -ne 0 ]]; then
-    echo "imp: Command exited with a non-zero status" > /dev/stderr
+    echo >&2 "imp: Command exited with a non-zero status"
     read -p "Do you want to continue? " -n 1 -r
     echo                                # Move to a new line.
     if [[ ! $REPLY =~ ^[Yy]$ ]]; then
@@ -282,6 +282,6 @@ EXIT;
 EOF
 
 if [[ $? -ne 0 ]]; then
-    echo "sqlplus: Command exited with a non-zero status" > /dev/stderr
+    echo >&2 "sqlplus: Command exited with a non-zero status"
     exit 2
 fi
