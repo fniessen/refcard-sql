@@ -3475,6 +3475,22 @@ https://www.mssqltips.com/sqlservertip/3402/over-40-queries-to-find-sql-server-t
 
 * DB Schema queries
 
+** Total row count across all user tables
+
+#+begin_src sql
+-- Calculate the total number of rows across all user tables (excluding system tables) (for SQL Server).
+SELECT SUM(p.row_count) AS total_rows
+FROM sys.dm_db_partition_stats AS p
+JOIN sys.tables AS t ON p.object_id = t.object_id
+WHERE p.index_id IN (0,1);
+#+end_src
+
+#+begin_src sql
+-- Calculate the total number of rows across all user tables (for Oracle).
+SELECT SUM(num_rows) AS total_rows
+FROM user_tables;
+#+end_src
+
 ** List all constraints
 
 #+begin_src sql
