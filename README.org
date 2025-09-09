@@ -2764,12 +2764,16 @@ Testing (in)equality of ~a~ and ~b~:
 - Inequality:
 
   #+begin_src sql
+  -- For int (if -32768 can't be a real value).
+  ISNULL(a, -32768) <> ISNULL(b, -32768)
+
+  -- For varchar (if '' can't be a real value).
+  ISNULL(a, '') <> ISNULL(b, '')
+
+  -- Null-safe comparison.
   (a <> b)
   OR (a IS NULL AND b IS NOT NULL)
   OR (a IS NOT NULL AND b IS NULL)
-
-  -- = ISNULL(a, ' ') <> ISNULL(b, ' ')?
-  -- Je pense que ce n'est pas équivalent, sauf si a et b ne peuvent jamais valoir ' '...
   #+end_src
 
 About NULL:
