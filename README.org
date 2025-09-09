@@ -2750,7 +2750,7 @@ SELECT bl_id, b.*
 FROM bl b
 #+end_src
 
-** (In)equality tests
+** Handling NULL values in SQL comparisons
 
 Testing (in)equality of ~a~ and ~b~:
 
