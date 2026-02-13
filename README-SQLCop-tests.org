@@ -6,11 +6,11 @@
 #+LANGUAGE:  en
 #+OPTIONS:   H:4 num:1 toc:t ^:{}
 
-#+SETUPFILE: ~/org/theme-readtheorg.setup
+#+SETUPFILE: ~/org/html-theme-readtheorg.setup
 
 #+PROPERTY:  header-args :eval never :engine msosql :cmdline -S localhost -U afm -P afm -d ARCHIBUS_PRD -n -w 700 :results output :exports both :noweb yes
 
-#+LaTeX_CLASS: aremis
+#+LATEX_CLASS: aremis
 
 Collection of tests to ensure the quality of your SQL database. Catch errors and
 optimize performance with ease.

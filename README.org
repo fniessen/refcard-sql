@@ -10,7 +10,7 @@
 
 #+PROPERTY:  header-args :eval never :padline no :tangle no
 
-#+SETUPFILE: ~/org/theme-readtheorg.setup
+#+SETUPFILE: ~/org/html-theme-readtheorg.setup
 
 Welcome to Refcard SQL!  This project provides a concise and handy reference for
 SQL syntax and commands, designed to improve your productivity and proficiency.
@@ -3073,11 +3073,11 @@ They both return *no* rows!
 
 The right way to think about ~NULL~ -- The correct way to understand NULL is that
 it is not a value.  Not "this is a ~NULL~ value" but "this ~NULL~ is not a value."
-Everything either is a value, or it isn’t.  When something is a value, it is
-"1," or "hello," or "green," or "$5.00" etc -- but when something isn’t a value,
-*it just isn’t anything at all*.  SQL represents "this has no value" by the
+Everything either is a value, or it isn't.  When something is a value, it is
+"1," or "hello," or "green," or "$5.00" etc -- but when something isn't a value,
+*it just isn't anything at all*.  SQL represents "this has no value" by the
 special non-value ~NULL~.  When someone says "the ~NULL~ value," one should mentally
-disagree, because there’s *no such thing*.  ~NULL~ is the complete, total absence of
+disagree, because there's *no such thing*.  ~NULL~ is the complete, total absence of
 any value whatsoever.
 #+end_warning
 
@@ -3138,7 +3138,7 @@ section, followed by:
 
 #+begin_src shell
 # Remove leading and trailing spaces in cells.
-grep -v -- ----- table_rmpct.csv | sed 's/; */;/g' | sed 's/ *;/;/g' | sponge table_rmpct.csv
+grep -v -- ----- table_rmpct.csv | sed 's_; *_;_g' | sed 's_ *;_;_g' | sponge table_rmpct.csv
 #+end_src
 
 ** TODO Tips and Tricks to Make SQL Server Management Studio Awesome
